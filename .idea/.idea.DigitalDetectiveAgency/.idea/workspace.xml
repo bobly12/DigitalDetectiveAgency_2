@@ -14,7 +14,17 @@
     <configurations />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7521a7d0-2c8e-4ea1-937e-91e7ca6298b6" name="Changes" comment="" />
+    <list default="true" id="7521a7d0-2c8e-4ea1-937e-91e7ca6298b6" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.DigitalDetectiveAgency/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.DigitalDetectiveAgency/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DigitalDetectiveAgency/DigitalDetectiveAgency.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/DigitalDetectiveAgency/DigitalDetectiveAgency.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DigitalDetectiveAgency/Models/ViewModels/CaseDetailViewModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/DigitalDetectiveAgency/Models/ViewModels/CaseDetailViewModel.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DigitalDetectiveAgency/Models/ViewModels/CaseListItemViewModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/DigitalDetectiveAgency/Models/ViewModels/CaseListItemViewModel.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DigitalDetectiveAgency/Models/ViewModels/CaseListViewModel.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/DigitalDetectiveAgency/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/DigitalDetectiveAgency/Program.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DigitalDetectiveAgency/Repositories/Implementations/CaseService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/DigitalDetectiveAgency/Services/Implementations/CaseService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DigitalDetectiveAgency/Repositories/Interfaces/ICaseService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/DigitalDetectiveAgency/Services/Interfaces/ICaseService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DigitalDetectiveAgency/Views/Case/Index.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/DigitalDetectiveAgency/Views/Case/Index.cshtml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -29,6 +39,18 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
+  "lastFilter": {
+    "state": "OPEN",
+    "assignee": "bobly12"
+  }
+}]]></component>
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/bobly12/DigitalDetectiveAgency_2.git",
+    "accountId": "a59df6ff-8a08-4eff-b805-ab7380de31db"
+  }
+}]]></component>
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/8d3190b728c21bca391a5b9c190e86f42b86c8e1bb5f4e177de4df75c52152/MigrationsEndPointExtensions.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/Controllers/CaseController.cs" root0="FORCE_HIGHLIGHTING" />
@@ -201,7 +223,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1784507984145</updated>
-      <workItem from="1784507985321" duration="15490000" />
+      <workItem from="1784507985321" duration="16406000" />
     </task>
     <servers />
   </component>
@@ -228,19 +250,6 @@
           <properties exception="System.Threading.ThreadAbortException" breakIfHandledByOtherCode="false" displayValue="System.Threading.ThreadAbortException" />
           <option name="timeStamp" value="3" />
         </breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/DigitalDetectiveAgency/Repositories/Implementations/CaseService.cs</url>
-          <line>61</line>
-          <properties documentPath="$PROJECT_DIR$/DigitalDetectiveAgency/Repositories/Implementations/CaseService.cs" containingFunctionPresentation="Lambda expression inside Method 'OpenCaseAsync'">
-            <startOffsets>
-              <option value="2166" />
-            </startOffsets>
-            <endOffsets>
-              <option value="2423" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="4" />
-        </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
   </component>

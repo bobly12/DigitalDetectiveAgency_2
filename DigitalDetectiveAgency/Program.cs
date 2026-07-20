@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using DigitalDetectiveAgency.Data;
-using DigitalDetectiveAgency.Models.Entities; // <-- Add this line
+using DigitalDetectiveAgency.Models.Entities;
 using DigitalDetectiveAgency.Repositories.Interfaces;
 using DigitalDetectiveAgency.Repositories.Implementations;
 using DigitalDetectiveAgency.Services.Interfaces;
@@ -31,23 +31,24 @@ if (app.Environment.IsDevelopment())
 else
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
 app.UseHttpsRedirection();
 app.UseRouting();
 
+// Authentication MUST be registered before Authorization
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapStaticAssets();
 
 app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}")
+        name: "default",
+        pattern: "{controller=Home}/{action=Index}/{id?}")
     .WithStaticAssets();
 
 app.MapRazorPages()
-   .WithStaticAssets();
+    .WithStaticAssets();
 
 app.Run();

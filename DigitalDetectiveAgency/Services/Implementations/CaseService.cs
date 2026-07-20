@@ -39,7 +39,6 @@ public class CaseService : ICaseService
 
         await _caseRepository.MarkOpenedAsync(playerCase);
 
-        // Fetch all related entities for the case
         var evidence = await _caseRepository.GetEvidenceForCaseAsync(caseId);
         var suspects = await _caseRepository.GetSuspectsForCaseAsync(caseId);
         var witnesses = await _caseRepository.GetWitnessesForCaseAsync(caseId);
