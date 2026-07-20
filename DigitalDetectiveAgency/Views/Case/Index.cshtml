@@ -1,0 +1,38 @@
+@* Views/Case/Index.cshtml *@
+@model List<DigitalDetectiveAgency.Models.ViewModels.CaseListItemViewModel>
+
+<h1>🕵️ Your Assigned Cases</h1>
+
+@if (!Model.Any())
+{
+    <p>No cases have been assigned to you yet. Check back soon, detective.</p>
+}
+else
+{
+    <div class="row">
+        @foreach (var c in Model)
+        {
+            <div class="col-md-4 mb-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">@c.Title</h5>
+                        <p class="card-text">Difficulty: @c.Difficulty</p>
+                        @if (c.IsCompleted)
+                        {
+                            <span class="badge bg-success">Completed - Score: @c.Score</span>
+                        }
+                        else if (c.IsOpened)
+                        {
+                            <span class="badge bg-warning text-dark">In Progress</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-primary">New</span>
+                        }
+                        <a asp-action="Details" asp-route-id="@c.CaseId" class="btn btn-outline-dark mt-2">Open Case</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
