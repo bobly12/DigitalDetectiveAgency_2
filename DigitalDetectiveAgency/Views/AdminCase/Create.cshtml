@@ -1,0 +1,26 @@
+@* Views/AdminCase/Create.cshtml *@
+@model DigitalDetectiveAgency.Models.ViewModels.CaseFormViewModel
+
+<div class="container mt-4">
+    <h1>New Case</h1>
+    <form asp-action="Create" method="post">
+        <div class="mb-3">
+            <label asp-for="Title" class="form-label"></label>
+            <input asp-for="Title" class="form-control" required />
+        </div>
+        <div class="mb-3">
+            <label asp-for="Description" class="form-label"></label>
+            <textarea asp-for="Description" class="form-control" rows="4" required></textarea>
+        </div>
+        <div class="mb-3">
+            <label asp-for="Difficulty" class="form-label"></label>
+            <select asp-for="Difficulty" class="form-select" asp-items="Html.GetEnumSelectList<DigitalDetectiveAgency.Models.Entities.CaseDifficulty>()"></select>
+        </div>
+        <div class="form-check mb-3">
+            <input asp-for="IsPublished" class="form-check-input" />
+            <label asp-for="IsPublished" class="form-check-label">Publish immediately (assigns to all players)</label>
+        </div>
+        <button type="submit" class="btn btn-primary">Create</button>
+        <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>

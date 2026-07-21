@@ -15,15 +15,25 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="7521a7d0-2c8e-4ea1-937e-91e7ca6298b6" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.DigitalDetectiveAgency/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.DigitalDetectiveAgency/.idea/dataSources.local.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.DigitalDetectiveAgency/.idea/dataSources.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.DigitalDetectiveAgency/.idea/dataSources.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.DigitalDetectiveAgency/.idea/dataSources/7df75ee2-76cc-4421-8143-4cde6f081f49.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.DigitalDetectiveAgency/.idea/dataSources/7df75ee2-76cc-4421-8143-4cde6f081f49.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.DigitalDetectiveAgency/.idea/dataSources/data_sources_history.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.DigitalDetectiveAgency/.idea/dataSources/data_sources_history.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.DigitalDetectiveAgency/.idea/db-forest-config.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.DigitalDetectiveAgency/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.DigitalDetectiveAgency/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DigitalDetectiveAgency/Areas/Identity/Pages/Account/Register.cshtml.cs" beforeDir="false" afterPath="$PROJECT_DIR$/DigitalDetectiveAgency/Areas/Identity/Pages/Account/Register.cshtml.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DigitalDetectiveAgency/Data/ApplicationDbContext.cs" beforeDir="false" afterPath="$PROJECT_DIR$/DigitalDetectiveAgency/Data/ApplicationDbContext.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/DigitalDetectiveAgency/DigitalDetectiveAgency.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/DigitalDetectiveAgency/DigitalDetectiveAgency.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DigitalDetectiveAgency/Models/ViewModels/CaseDetailViewModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/DigitalDetectiveAgency/Models/ViewModels/CaseDetailViewModel.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DigitalDetectiveAgency/Models/ViewModels/CaseListItemViewModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/DigitalDetectiveAgency/Models/ViewModels/CaseListItemViewModel.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DigitalDetectiveAgency/Models/ViewModels/CaseListViewModel.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/DigitalDetectiveAgency/Migrations/ApplicationDbContextModelSnapshot.cs" beforeDir="false" afterPath="$PROJECT_DIR$/DigitalDetectiveAgency/Migrations/ApplicationDbContextModelSnapshot.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DigitalDetectiveAgency/Models/Entities/Case.cs" beforeDir="false" afterPath="$PROJECT_DIR$/DigitalDetectiveAgency/Models/Entities/Case.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/DigitalDetectiveAgency/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/DigitalDetectiveAgency/Program.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DigitalDetectiveAgency/Repositories/Implementations/CaseService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/DigitalDetectiveAgency/Services/Implementations/CaseService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DigitalDetectiveAgency/Repositories/Interfaces/ICaseService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/DigitalDetectiveAgency/Services/Interfaces/ICaseService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DigitalDetectiveAgency/Views/Case/Index.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/DigitalDetectiveAgency/Views/Case/Index.cshtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DigitalDetectiveAgency/Repositories/Implementations/CaseRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/DigitalDetectiveAgency/Repositories/Implementations/CaseRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DigitalDetectiveAgency/Repositories/Interfaces/ICaseRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/DigitalDetectiveAgency/Repositories/Interfaces/ICaseRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DigitalDetectiveAgency/Views/Case/Details.cshtml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/DigitalDetectiveAgency/Views/Case/Details.cshtml.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/DigitalDetectiveAgency/Views/Case/Index.cshtml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/DigitalDetectiveAgency/Views/Case/Index.cshtml.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/DigitalDetectiveAgency/Views/Shared/_Layout.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/DigitalDetectiveAgency/Views/Shared/_Layout.cshtml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -35,6 +45,13 @@
   </component>
   <component name="EmbeddingIndexingInfo">
     <option name="cachedIndexableFilesCount" value="1" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="JavaScript File" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -53,28 +70,93 @@
 }]]></component>
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/8d3190b728c21bca391a5b9c190e86f42b86c8e1bb5f4e177de4df75c52152/MigrationsEndPointExtensions.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/Controllers/AccusationController.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/Controllers/AdminCaseController.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/Controllers/AdminEvidenceController.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/Controllers/AdminWitnessController.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/Controllers/BoardController.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/Controllers/CaseController.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/Models/DTOs/AccusationSubmitDto.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/Models/DTOs/ConnectionRequestDto.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/Models/Entities/Accusation.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/Models/Entities/ApplicationUser.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/Models/Entities/Case.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/Models/Entities/CaseConnection.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/Models/Entities/CaseDifficulty.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/Models/Entities/ClueConnection.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/Models/Entities/Evidence.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/Models/Entities/PlayerCase.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/Models/Entities/Suspect.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/Models/Entities/Witness.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/Models/ViewModels/AccusationFormViewModel.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/Models/ViewModels/AccusationResultViewModel.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/Models/ViewModels/BoardConnectionViewModel.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/Models/ViewModels/BoardNodeViewModel.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/Models/ViewModels/BoardViewModel.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/Models/ViewModels/CaseDetailViewModel.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/Models/ViewModels/CaseFormViewModel.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/Models/ViewModels/CaseListItemViewModel.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/Models/ViewModels/CaseListViewModel.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/Models/ViewModels/EvidenceFormViewModel.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/Models/ViewModels/EvidenceViewModel.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/Models/ViewModels/SuspectFormViewModel.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/Models/ViewModels/SuspectOptionViewModel.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/Models/ViewModels/SuspectViewModel.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/Models/ViewModels/WitnessFormViewModel.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/Models/ViewModels/WitnessViewModel.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/Repositories/Implementations/AccusationRepository.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/Repositories/Implementations/BoardRepository.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/Repositories/Implementations/CaseRepository.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/Repositories/Implementations/CaseService.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/Repositories/Implementations/EvidenceRepository.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/Repositories/Implementations/SuspectRepository.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/Repositories/Implementations/WitnessRepository.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/Repositories/Interfaces/IAccusationRepository.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/Repositories/Interfaces/IBoardRepository.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/Repositories/Interfaces/ICaseRepository.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/Repositories/Interfaces/ICaseService.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/Repositories/Interfaces/IEvidenceRepository.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/Repositories/Interfaces/ISuspectRepository.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/Repositories/Interfaces/IWitnessRepository.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/Services/Implementations/AccusationService.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/Services/Implementations/AdminCaseService.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/Services/Implementations/AdminEvidenceService.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/Services/Implementations/AdminSuspectService.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/Services/Implementations/AdminWitnessService.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/Services/Implementations/BoardService.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/Services/Implementations/CaseAssignmentSyncService.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/Services/Implementations/ScoringService.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/Services/Interfaces/IAccusationService.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/Services/Interfaces/IAdminCaseService.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/Services/Interfaces/IAdminEvidenceService.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/Services/Interfaces/IAdminSuspectService.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/Services/Interfaces/IAdminWitnessService.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/Services/Interfaces/IBoardService.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/Services/Interfaces/ICaseAssignmentSyncService.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/Services/Interfaces/IScoringService.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/Views/Accusation/Create.cshtml" root0="FORCE_HIGHLIGHTING" root1="FORCE_HIGHLIGHTING" root2="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/Views/Accusation/Create.cshtml.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/Views/Accusation/Result.cshtml" root0="FORCE_HIGHLIGHTING" root1="FORCE_HIGHLIGHTING" root2="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/Views/Accusation/Result.cshtml.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/Views/AdminCase/Create.cshtml" root0="FORCE_HIGHLIGHTING" root1="FORCE_HIGHLIGHTING" root2="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/Views/AdminCase/Create.cshtml.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/Views/AdminCase/Index.cshtml" root0="FORCE_HIGHLIGHTING" root1="FORCE_HIGHLIGHTING" root2="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/Views/AdminCase/Index.cshtml.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/Views/AdminCase/edit.cshtml" root0="FORCE_HIGHLIGHTING" root1="FORCE_HIGHLIGHTING" root2="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/Views/AdminCase/edit.cshtml.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/Views/AdminEvidence/Create.cshtml" root0="FORCE_HIGHLIGHTING" root1="FORCE_HIGHLIGHTING" root2="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/Views/AdminEvidence/Create.cshtml.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/Views/AdminEvidence/Edit.cshtml" root0="FORCE_HIGHLIGHTING" root1="FORCE_HIGHLIGHTING" root2="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/Views/AdminEvidence/Edit.cshtml.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/Views/AdminSuspect/Create.cshtml" root0="FORCE_HIGHLIGHTING" root1="FORCE_HIGHLIGHTING" root2="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/Views/AdminSuspect/Create.cshtml.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/Views/AdminSuspect/Edit.cshtml" root0="FORCE_HIGHLIGHTING" root1="FORCE_HIGHLIGHTING" root2="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/Views/AdminSuspect/Edit.cshtml.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/Views/AdminWitness/Create.cshtml" root0="FORCE_HIGHLIGHTING" root1="FORCE_HIGHLIGHTING" root2="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/Views/AdminWitness/Create.cshtml.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/Views/AdminWitness/Edit.cshtml" root0="FORCE_HIGHLIGHTING" root1="FORCE_HIGHLIGHTING" root2="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/Views/AdminWitness/Edit.cshtml.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/Views/Board/Index.cshtml" root0="FORCE_HIGHLIGHTING" root1="FORCE_HIGHLIGHTING" root2="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/Views/Board/Index.cshtml.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/Views/Case/Details.cshtml" root0="FORCE_HIGHLIGHTING" root1="FORCE_HIGHLIGHTING" root2="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/Views/Case/Details.cshtml.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/Views/Case/Index.cshtml" root0="FORCE_HIGHLIGHTING" root1="FORCE_HIGHLIGHTING" root2="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/Views/Case/Index.cshtml.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="jar://$APPLICATION_HOME_DIR$/lib/intellij.relaxng.jar!/resources/html5-schema/html5/block.rnc" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="KubernetesApiPersistence">{}</component>
@@ -88,61 +170,61 @@
   <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="true" />
   <component name="NextEditCompletionFeaturesState">
     <decayedCancelled>
-      <entry key="MS100" value="1.4577316120395063" />
-      <entry key="MS500" value="3.5138668493035756" />
-      <entry key="S2" value="6.819935442187237" />
-      <entry key="S5" value="9.59613851854372" />
-      <entry key="S10" value="11.763282489266196" />
-      <entry key="S30" value="15.599782265911818" />
-      <entry key="S60" value="17.455998620549725" />
-      <entry key="M2" value="18.69394798690168" />
-      <entry key="M5" value="19.946080457933643" />
-      <entry key="M10" value="20.72989552207941" />
-      <entry key="M15" value="21.08277598517719" />
-      <entry key="M30" value="21.503958281798543" />
-      <entry key="H1" value="21.836521824264963" />
-      <entry key="H2" value="22.407144970341392" />
-      <entry key="H4" value="23.205966391781782" />
-      <entry key="D1" value="24.589384132736168" />
-      <entry key="W1" value="24.937788048077312" />
+      <entry key="MS100" value="1.626513456988918" />
+      <entry key="MS500" value="3.169506421036067" />
+      <entry key="S2" value="5.031503432801133" />
+      <entry key="S5" value="7.541122502162761" />
+      <entry key="S10" value="9.757761615964634" />
+      <entry key="S30" value="12.25540785144061" />
+      <entry key="S60" value="13.125328888538041" />
+      <entry key="M2" value="14.578343134782191" />
+      <entry key="M5" value="20.53473772998304" />
+      <entry key="M10" value="26.649714390141167" />
+      <entry key="M15" value="29.942498937795534" />
+      <entry key="M30" value="34.4351569482421" />
+      <entry key="H1" value="37.37521854351185" />
+      <entry key="H2" value="39.13432367207467" />
+      <entry key="H4" value="41.42853224323175" />
+      <entry key="D1" value="65.5615740216535" />
+      <entry key="W1" value="81.49548545172976" />
     </decayedCancelled>
     <decayedSelected>
       <entry key="MS100" value="0.0" />
       <entry key="MS500" value="0.0" />
-      <entry key="S2" value="1.1290937887882013E-269" />
-      <entry key="S5" value="2.6575077760480077E-108" />
-      <entry key="S10" value="1.7674575003396916E-54" />
-      <entry key="S30" value="1.6990629339071596E-18" />
-      <entry key="S60" value="1.807806634707695E-9" />
-      <entry key="M2" value="5.982728680681952E-5" />
-      <entry key="M5" value="0.03096327289635861" />
-      <entry key="M10" value="0.24879964637900195" />
-      <entry key="M15" value="0.498375625266452" />
-      <entry key="M30" value="0.9983516459605929" />
-      <entry key="H1" value="1.4130395017638815" />
-      <entry key="H2" value="1.6810922002981372" />
-      <entry key="H4" value="1.833625375028147" />
-      <entry key="D1" value="1.9712577331827552" />
-      <entry key="W1" value="1.9958684428325422" />
+      <entry key="S2" value="0.0" />
+      <entry key="S5" value="0.0" />
+      <entry key="S10" value="0.0" />
+      <entry key="S30" value="0.0" />
+      <entry key="S60" value="0.0" />
+      <entry key="M2" value="1.0085616607464821E-184" />
+      <entry key="M5" value="3.815646381911637E-74" />
+      <entry key="M10" value="2.7619155053550212E-37" />
+      <entry key="M15" value="5.343148114062137E-25" />
+      <entry key="M30" value="1.0337219736391595E-12" />
+      <entry key="H1" value="1.437852734512418E-6" />
+      <entry key="H2" value="0.0016957881089951466" />
+      <entry key="H4" value="0.0582372201645547" />
+      <entry key="D1" value="1.1093240139753964" />
+      <entry key="W1" value="1.838495733632768" />
     </decayedSelected>
     <decayedShown>
-      <entry key="MS100" value="1.3921714593756171" />
-      <entry key="MS500" value="3.473752453057791" />
-      <entry key="S2" value="6.801793411686431" />
-      <entry key="S5" value="9.586041632741601" />
-      <entry key="S10" value="11.756823392265158" />
-      <entry key="S30" value="15.596575456010543" />
-      <entry key="S60" value="17.454120186476878" />
-      <entry key="M2" value="18.692974501099425" />
-      <entry key="M5" value="19.976515559261166" />
-      <entry key="M10" value="20.97815217905245" />
-      <entry key="M15" value="21.580582671687242" />
-      <entry key="M30" value="22.50181989531353" />
-      <entry key="H1" value="23.24923106550412" />
-      <entry key="H2" value="24.088043803164584" />
-      <entry key="H4" value="25.03948659135859" />
-      <entry key="D1" value="26.560622952649496" />
-      <entry key="W1" value="26.933653751323654" />
+      <entry key="MS100" value="1.571110123772208" />
+      <entry key="MS500" value="3.1334836355216265" />
+      <entry key="S2" value="5.017105842415586" />
+      <entry key="S5" value="7.531573999820829" />
+      <entry key="S10" value="9.750925952768126" />
+      <entry key="S30" value="12.252303574515693" />
+      <entry key="S60" value="13.1236311388137" />
+      <entry key="M2" value="14.577385894975967" />
+      <entry key="M5" value="20.534125242818718" />
+      <entry key="M10" value="26.64900303696309" />
+      <entry key="M15" value="29.941696970675373" />
+      <entry key="M30" value="34.43439479979468" />
+      <entry key="H1" value="37.374676611653584" />
+      <entry key="H2" value="39.13569202769611" />
+      <entry key="H4" value="41.486577406225436" />
+      <entry key="D1" value="66.67083024924436" />
+      <entry key="W1" value="83.33396829321342" />
     </decayedShown>
   </component>
   <component name="ProjectColorInfo">{
@@ -223,7 +305,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1784507984145</updated>
-      <workItem from="1784507985321" duration="16406000" />
+      <workItem from="1784507985321" duration="26022000" />
     </task>
     <servers />
   </component>

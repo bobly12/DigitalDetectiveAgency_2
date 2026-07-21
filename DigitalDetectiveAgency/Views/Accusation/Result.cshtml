@@ -1,0 +1,35 @@
+@* Views/Accusation/Result.cshtml *@
+@model DigitalDetectiveAgency.Models.ViewModels.AccusationResultViewModel
+
+@{
+    ViewData["Title"] = "Case Closed";
+}
+
+<div class="container mt-4 text-center">
+    @if (Model.WasCorrect)
+    {
+        <h1 class="text-success">✅ Case Solved!</h1>
+        <p class="lead">You correctly identified <strong>@Model.AccusedSuspectName</strong> as the culprit in "@Model.CaseTitle."</p>
+    }
+    else
+    {
+        <h1 class="text-danger">❌ Case Unsolved</h1>
+        <p class="lead">You accused <strong>@Model.AccusedSuspectName</strong>, but that wasn't the culprit in "@Model.CaseTitle."</p>
+    }
+
+    <div class="card mx-auto" style="max-width: 400px;">
+        <div class="card-body">
+            <h5 class="card-title">Final Score</h5>
+            <div class="display-4 fw-bold @(Model.Score >= 70 ? "text-success" : Model.Score >= 40 ? "text-warning" : "text-danger")">
+                @Model.Score / 100
+            </div>
+
+            <hr />
+
+            <p class="mb-1"><strong>Case Strength:</strong> @Model.CaseStrengthPercent%</p>
+            <p class="text-muted small">Score = 70% accusation accuracy + 30% investigation board accuracy.</p>
+        </div>
+    </div>
+
+    <a asp-controller="Case" asp-action="Index" class="btn btn-primary mt-4">Back to Cases</a>
+</div>

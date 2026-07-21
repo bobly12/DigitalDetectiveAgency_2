@@ -1,91 +1,100 @@
 @model DigitalDetectiveAgency.Models.ViewModels.CaseDetailViewModel
 
-<h1>@Model.Title</h1>
-<p><strong>Difficulty:</strong> @Model.Difficulty</p>
-<p>@Model.Description</p>
-
-@if (Model.IsCompleted)
-{
-    <div class="alert alert-success">Case closed. Your score: @Model.Score</div>
+@{
+    ViewData["Title"] = Model.Title;
 }
 
-<hr />
+<div class="container mt-4">
+    <h1>@Model.Title</h1>
+    <p><strong>Difficulty:</strong> @Model.Difficulty</p>
+    <p>@Model.Description</p>
 
-<h3>🔍 Evidence</h3>
+    @if (Model.IsCompleted)
+    {
+        <div class="alert alert-success">Case closed. Your score: @Model.Score</div>
+    }
 
-@if (!Model.Evidence.Any())
-{
-    <p class="text-muted">No evidence has been logged for this case yet.</p>
-}
-else
-{
-    <div class="row">
-        @foreach (var item in Model.Evidence)
-        {
-            <div class="col-md-4 mb-3">
-                <div class="card h-100">
-                    <img src="@item.ImageUrl" class="card-img-top" alt="@item.Name" style="height:200px;object-fit:cover;" />
-                    <div class="card-body">
-                        <h5 class="card-title">@item.Name</h5>
-                        <p class="card-text">@item.Description</p>
+    <a asp-controller="Board" asp-action="Index" asp-route-id="@Model.CaseId" class="btn btn-dark mb-3">
+        🧵 Open Investigation Board
+    </a>
+
+    <hr />
+
+    <h3>🔍 Evidence</h3>
+    @if (!Model.Evidence.Any())
+    {
+        <p class="text-muted">No evidence has been logged for this case yet.</p>
+    }
+    else
+    {
+        <div class="row">
+            @foreach (var item in Model.Evidence)
+            {
+                <div class="col-md-4 mb-3">
+                    <div class="card h-100">
+                        <img src="@item.ImageUrl" class="card-img-top" alt="@item.Name" style="height:200px;object-fit:cover;" />
+                        <div class="card-body">
+                            <h5 class="card-title">@item.Name</h5>
+                            <p class="card-text">@item.Description</p>
+                        </div>
                     </div>
                 </div>
-            </div>
-        }
-    </div>
-}
+            }
+        </div>
+    }
 
-<hr />
-<a asp-action="Index" class="btn btn-secondary">Back to Cases</a>
+    <hr />
 
-<hr />
-<h3>🕴️ Suspects</h3>
-
-@if (!Model.Suspects.Any())
-{
-    <p class="text-muted">No suspects identified yet.</p>
-}
-else
-{
-    <div class="row">
-        @foreach (var s in Model.Suspects)
-        {
-            <div class="col-md-4 mb-3">
-                <div class="card h-100">
-                    <img src="@s.ImageUrl" class="card-img-top" alt="@s.Name" style="height:200px;object-fit:cover;" />
-                    <div class="card-body">
-                        <h5 class="card-title">@s.Name</h5>
-                        <p class="card-text">@s.Description</p>
-                        <p><strong>Motive:</strong> @s.Motive</p>
-                        <p><strong>Alibi:</strong> @s.Alibi</p>
+    <h3>🕴️ Suspects</h3>
+    @if (!Model.Suspects.Any())
+    {
+        <p class="text-muted">No suspects identified yet.</p>
+    }
+    else
+    {
+        <div class="row">
+            @foreach (var s in Model.Suspects)
+            {
+                <div class="col-md-4 mb-3">
+                    <div class="card h-100">
+                        <img src="@s.ImageUrl" class="card-img-top" alt="@s.Name" style="height:200px;object-fit:cover;" />
+                        <div class="card-body">
+                            <h5 class="card-title">@s.Name</h5>
+                            <p class="card-text">@s.Description</p>
+                            <p><strong>Motive:</strong> @s.Motive</p>
+                            <p><strong>Alibi:</strong> @s.Alibi</p>
+                        </div>
                     </div>
                 </div>
-            </div>
-        }
-    </div>
-}
+            }
+        </div>
+    }
 
-<hr />
-<h3>🗣️ Witnesses</h3>
+    <hr />
 
-@if (!Model.Witnesses.Any())
-{
-    <p class="text-muted">No witnesses have come forward.</p>
-}
-else
-{
-    <div class="row">
-        @foreach (var w in Model.Witnesses)
-        {
-            <div class="col-md-4 mb-3">
-                <div class="card h-100">
-                    <img src="@w.ImageUrl" class="card-img-top" alt="@w.Name" style="height:200px;object-fit:cover;" />
-                    <div class="card-body">
-                        <h5 class="card-title">@w.Name</h5>
-                        <p class="card-text">"@w.Statement"</p>
+    <h3>🗣️ Witnesses</h3>
+    @if (!Model.Witnesses.Any())
+    {
+        <p class="text-muted">No witnesses have come forward.</p>
+    }
+    else
+    {
+        <div class="row">
+            @foreach (var w in Model.Witnesses)
+            {
+                <div class="col-md-4 mb-3">
+                    <div class="card h-100">
+                        <img src="@w.ImageUrl" class="card-img-top" alt="@w.Name" style="height:200px;object-fit:cover;" />
+                        <div class="card-body">
+                            <h5 class="card-title">@w.Name</h5>
+                            <p class="card-text">"@w.Statement"</p>
+                        </div>
                     </div>
                 </div>
-            </div>
-        }
-    </div>
-}
+            }
+        </div>
+    }
+
+    <hr />
+    <a asp-action="Index" class="btn btn-secondary">Back to Cases</a>
+</div>

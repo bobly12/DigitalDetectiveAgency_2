@@ -20,10 +20,4 @@
         <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="11.0.0-preview.1.26230.3" />
     </ItemGroup>
 
-    <ItemGroup>
-        <Folder Include="Models\DTOs\" />
-        <Folder Include="Services\Implementations\" />
-        <Folder Include="Services\Interfaces\" />
-    </ItemGroup>
-
 </Project>

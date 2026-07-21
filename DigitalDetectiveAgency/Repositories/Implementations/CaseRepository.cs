@@ -64,4 +64,60 @@ public class CaseRepository : ICaseRepository
             .Where(w => w.CaseId == caseId)
             .ToListAsync();
     }
+    // CaseRepository.cs — add:
+    // CaseRepository.cs — replace MarkCompletedAsync with:
+    public async Task CompleteWithScoreAsync(PlayerCase playerCase, int score)
+    {
+        playerCase.IsCompleted = true;
+        playerCase.CompletedAt = DateTime.UtcNow;
+        playerCase.Score = score;
+        await _context.SaveChangesAsync();
+    }
+    // CaseRepository.cs — add:
+    public async Task SaveScoreAsync(PlayerCase playerCase, int score)
+    {
+        playerCase.Score = score;
+        await _context.SaveChangesAsync();
+    }
+    // CaseRepository.cs — add:
+    public async Task<List<Case>> GetAllAsync() =>
+        await _context.Cases.ToListAsync();
+
+    public async Task<Case> CreateAsync(Case caseEntity)
+    {
+        _context.Cases.Add(caseEntity);
+        await _context.SaveChangesAsync();
+        return caseEntity;
+    }
+
+    public async Task UpdateAsync(Case caseEntity)
+    {
+        _context.Cases.Update(caseEntity);
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task DeleteAsync(Case caseEntity)
+    {
+        _context.Cases.Remove(caseEntity);
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task<List<string>> GetAllUserIdsAsync() =>
+        await _context.Users.Select(u => u.Id).ToListAsync();
+
+    public async Task<bool> UserHasPlayerCaseAsync(string userId, int caseId) =>
+        await _context.PlayerCases.AnyAsync(pc => pc.ApplicationUserId == userId && pc.CaseId == caseId);
+
+    public async Task CreatePlayerCaseAsync(string userId, int caseId)
+    {
+        _context.PlayerCases.Add(new PlayerCase
+        {
+            ApplicationUserId = userId,
+            CaseId = caseId
+        });
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task<List<int>> GetPublishedCaseIdsAsync() =>
+        await _context.Cases.Where(c => c.IsPublished).Select(c => c.Id).ToListAsync();
 }

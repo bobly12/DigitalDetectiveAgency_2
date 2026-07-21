@@ -22,6 +22,38 @@ namespace DigitalDetectiveAgency.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("DigitalDetectiveAgency.Models.Entities.Accusation", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("AccusedSuspectId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ApplicationUserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("CaseId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("SubmittedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AccusedSuspectId");
+
+                    b.HasIndex("ApplicationUserId");
+
+                    b.HasIndex("CaseId");
+
+                    b.ToTable("Accusations");
+                });
+
             modelBuilder.Entity("DigitalDetectiveAgency.Models.Entities.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
@@ -134,6 +166,99 @@ namespace DigitalDetectiveAgency.Migrations
                             IsPublished = true,
                             Title = "Silence at Blackwood Manor"
                         });
+                });
+
+            modelBuilder.Entity("DigitalDetectiveAgency.Models.Entities.CaseConnection", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CaseId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("FromId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("FromType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ToId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ToType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CaseId");
+
+                    b.ToTable("CaseConnections");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CaseId = 1,
+                            FromId = 2,
+                            FromType = "Evidence",
+                            ToId = 2,
+                            ToType = "Suspect"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            CaseId = 1,
+                            FromId = 2,
+                            FromType = "Witness",
+                            ToId = 2,
+                            ToType = "Suspect"
+                        });
+                });
+
+            modelBuilder.Entity("DigitalDetectiveAgency.Models.Entities.ClueConnection", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ApplicationUserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("CaseId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("FromId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("FromType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ToId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ToType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ApplicationUserId");
+
+                    b.HasIndex("CaseId");
+
+                    b.ToTable("ClueConnections");
                 });
 
             modelBuilder.Entity("DigitalDetectiveAgency.Models.Entities.Evidence", b =>
@@ -484,6 +609,63 @@ namespace DigitalDetectiveAgency.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("DigitalDetectiveAgency.Models.Entities.Accusation", b =>
+                {
+                    b.HasOne("DigitalDetectiveAgency.Models.Entities.Suspect", "AccusedSuspect")
+                        .WithMany()
+                        .HasForeignKey("AccusedSuspectId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("DigitalDetectiveAgency.Models.Entities.ApplicationUser", "ApplicationUser")
+                        .WithMany()
+                        .HasForeignKey("ApplicationUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DigitalDetectiveAgency.Models.Entities.Case", "Case")
+                        .WithMany("Accusations")
+                        .HasForeignKey("CaseId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("AccusedSuspect");
+
+                    b.Navigation("ApplicationUser");
+
+                    b.Navigation("Case");
+                });
+
+            modelBuilder.Entity("DigitalDetectiveAgency.Models.Entities.CaseConnection", b =>
+                {
+                    b.HasOne("DigitalDetectiveAgency.Models.Entities.Case", "Case")
+                        .WithMany("CaseConnections")
+                        .HasForeignKey("CaseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Case");
+                });
+
+            modelBuilder.Entity("DigitalDetectiveAgency.Models.Entities.ClueConnection", b =>
+                {
+                    b.HasOne("DigitalDetectiveAgency.Models.Entities.ApplicationUser", "ApplicationUser")
+                        .WithMany()
+                        .HasForeignKey("ApplicationUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DigitalDetectiveAgency.Models.Entities.Case", "Case")
+                        .WithMany("ClueConnections")
+                        .HasForeignKey("CaseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ApplicationUser");
+
+                    b.Navigation("Case");
+                });
+
             modelBuilder.Entity("DigitalDetectiveAgency.Models.Entities.Evidence", b =>
                 {
                     b.HasOne("DigitalDetectiveAgency.Models.Entities.Case", "Case")
@@ -589,6 +771,12 @@ namespace DigitalDetectiveAgency.Migrations
 
             modelBuilder.Entity("DigitalDetectiveAgency.Models.Entities.Case", b =>
                 {
+                    b.Navigation("Accusations");
+
+                    b.Navigation("CaseConnections");
+
+                    b.Navigation("ClueConnections");
+
                     b.Navigation("EvidenceItems");
 
                     b.Navigation("PlayerCases");
