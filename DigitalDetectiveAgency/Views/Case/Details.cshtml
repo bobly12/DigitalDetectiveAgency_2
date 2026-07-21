@@ -4,97 +4,108 @@
     ViewData["Title"] = Model.Title;
 }
 
-<div class="container mt-4">
-    <h1>@Model.Title</h1>
-    <p><strong>Difficulty:</strong> @Model.Difficulty</p>
-    <p>@Model.Description</p>
+@section PageStyles {
+    <link rel="stylesheet" href="~/css/pages/case-details.css" asp-append-version="true" />
+}
+
+<div class="container-dossier">
 
     @if (Model.IsCompleted)
     {
-        <div class="alert alert-success">Case closed. Your score: @Model.Score</div>
+        <div class="dossier-completed-banner">📁 Case Closed — Score: @Model.Score</div>
     }
 
-    <a asp-controller="Board" asp-action="Index" asp-route-id="@Model.CaseId" class="btn btn-dark mb-3">
-        🧵 Open Investigation Board
-    </a>
+    <div class="dossier-sheet">
+        <div class="dossier-sheet__photo">
+            <img src="https://placehold.co/240x300?text=Case+File" alt="@Model.Title" />
+        </div>
+        <div>
+            <h1 class="dossier-sheet__title">@Model.Title</h1>
+            <div class="dossier-sheet__difficulty">Difficulty: @Model.Difficulty</div>
+            <p class="dossier-sheet__description">@Model.Description</p>
+        </div>
+    </div>
 
-    <hr />
+    <div class="dossier-actions">
+        <a asp-controller="Board" asp-action="Index" asp-route-id="@Model.CaseId" class="btn-stamp btn-stamp--ghost">
+            🧵 Open Investigation Board
+        </a>
+        @if (!Model.IsCompleted)
+        {
+            <a asp-controller="Accusation" asp-action="Create" asp-route-id="@Model.CaseId" class="btn-stamp btn-stamp--danger">
+                ⚖️ Make Accusation
+            </a>
+        }
+    </div>
 
-    <h3>🔍 Evidence</h3>
+    <div class="dossier-section-title">🔍 Evidence</div>
     @if (!Model.Evidence.Any())
     {
         <p class="text-muted">No evidence has been logged for this case yet.</p>
     }
     else
     {
-        <div class="row">
+        <div class="dossier-grid">
             @foreach (var item in Model.Evidence)
             {
-                <div class="col-md-4 mb-3">
-                    <div class="card h-100">
-                        <img src="@item.ImageUrl" class="card-img-top" alt="@item.Name" style="height:200px;object-fit:cover;" />
-                        <div class="card-body">
-                            <h5 class="card-title">@item.Name</h5>
-                            <p class="card-text">@item.Description</p>
-                        </div>
+                <div class="dossier-item-card">
+                    <img src="@item.ImageUrl" alt="@item.Name" />
+                    <div class="dossier-item-card__body">
+                        <h6>@item.Name</h6>
+                        <p>@item.Description</p>
                     </div>
                 </div>
             }
         </div>
     }
 
-    <hr />
-
-    <h3>🕴️ Suspects</h3>
+    <div class="dossier-section-title">🕴 Suspects</div>
     @if (!Model.Suspects.Any())
     {
         <p class="text-muted">No suspects identified yet.</p>
     }
     else
     {
-        <div class="row">
+        <div class="dossier-grid">
             @foreach (var s in Model.Suspects)
             {
-                <div class="col-md-4 mb-3">
-                    <div class="card h-100">
-                        <img src="@s.ImageUrl" class="card-img-top" alt="@s.Name" style="height:200px;object-fit:cover;" />
-                        <div class="card-body">
-                            <h5 class="card-title">@s.Name</h5>
-                            <p class="card-text">@s.Description</p>
-                            <p><strong>Motive:</strong> @s.Motive</p>
-                            <p><strong>Alibi:</strong> @s.Alibi</p>
-                        </div>
+                <div class="dossier-item-card">
+                    <img src="@s.ImageUrl" alt="@s.Name" />
+                    <div class="dossier-item-card__body">
+                        <h6>@s.Name</h6>
+                        <p>@s.Description</p>
+                        <p class="tag">Motive:</p>
+                        <p>@s.Motive</p>
+                        <p class="tag">Alibi:</p>
+                        <p>@s.Alibi</p>
                     </div>
                 </div>
             }
         </div>
     }
 
-    <hr />
-
-    <h3>🗣️ Witnesses</h3>
+    <div class="dossier-section-title">🗣 Witnesses</div>
     @if (!Model.Witnesses.Any())
     {
         <p class="text-muted">No witnesses have come forward.</p>
     }
     else
     {
-        <div class="row">
+        <div class="dossier-grid">
             @foreach (var w in Model.Witnesses)
             {
-                <div class="col-md-4 mb-3">
-                    <div class="card h-100">
-                        <img src="@w.ImageUrl" class="card-img-top" alt="@w.Name" style="height:200px;object-fit:cover;" />
-                        <div class="card-body">
-                            <h5 class="card-title">@w.Name</h5>
-                            <p class="card-text">"@w.Statement"</p>
-                        </div>
+                <div class="dossier-item-card">
+                    <img src="@w.ImageUrl" alt="@w.Name" />
+                    <div class="dossier-item-card__body">
+                        <h6>@w.Name</h6>
+                        <p style="font-style: italic;">"@w.Statement"</p>
                     </div>
                 </div>
             }
         </div>
     }
 
-    <hr />
-    <a asp-action="Index" class="btn btn-secondary">Back to Cases</a>
+    <div style="margin-top: var(--space-lg);">
+        <a asp-action="Index" class="btn-stamp btn-stamp--ghost">← Back to Case Archive</a>
+    </div>
 </div>

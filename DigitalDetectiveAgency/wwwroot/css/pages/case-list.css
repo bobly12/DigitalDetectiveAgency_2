@@ -1,0 +1,61 @@
+/* case-list.css — Case Archive Room */
+
+.archive-title {
+    font-family: var(--font-display);
+    letter-spacing: 0.03em;
+    margin-bottom: var(--space-lg);
+}
+
+.archive-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-md);
+}
+
+.case-folder {
+    background-color: var(--color-paper);
+    color: var(--color-text-on-paper);
+    border-radius: var(--radius-paper) var(--radius-paper) 0 0;
+    box-shadow: var(--shadow-paper);
+    padding: var(--space-md);
+    position: relative;
+    transform: rotate(-1deg);
+    transition: transform 0.15s ease;
+}
+
+.case-folder:nth-child(3n+2) { transform: rotate(1deg); }
+.case-folder:nth-child(3n)   { transform: rotate(-0.5deg); }
+
+.case-folder:hover {
+    transform: rotate(0deg) translateY(-4px);
+}
+
+.case-folder__tab {
+    font-family: var(--font-display);
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--color-paper-shadow);
+    margin-bottom: var(--space-xs);
+}
+
+.case-folder h5 {
+    font-family: var(--font-display);
+    margin: 0 0 var(--space-xs) 0;
+}
+
+.case-folder p {
+    font-size: 0.85rem;
+    color: #4a4a4a;
+    margin-bottom: var(--space-sm);
+}
+
+.case-folder .stamp-badge {
+    margin-bottom: var(--space-sm);
+}
+
+@media (max-width: 900px) {
+    .archive-grid {
+        grid-template-columns: 1fr;
+    }
+}

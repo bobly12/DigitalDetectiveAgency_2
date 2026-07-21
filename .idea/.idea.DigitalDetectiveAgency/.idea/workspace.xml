@@ -15,25 +15,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="7521a7d0-2c8e-4ea1-937e-91e7ca6298b6" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.DigitalDetectiveAgency/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.DigitalDetectiveAgency/.idea/dataSources.local.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.DigitalDetectiveAgency/.idea/dataSources.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.DigitalDetectiveAgency/.idea/dataSources.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.DigitalDetectiveAgency/.idea/dataSources/7df75ee2-76cc-4421-8143-4cde6f081f49.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.DigitalDetectiveAgency/.idea/dataSources/7df75ee2-76cc-4421-8143-4cde6f081f49.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.DigitalDetectiveAgency/.idea/dataSources/data_sources_history.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.DigitalDetectiveAgency/.idea/dataSources/data_sources_history.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.DigitalDetectiveAgency/.idea/db-forest-config.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.DigitalDetectiveAgency/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.DigitalDetectiveAgency/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DigitalDetectiveAgency/Areas/Identity/Pages/Account/Register.cshtml.cs" beforeDir="false" afterPath="$PROJECT_DIR$/DigitalDetectiveAgency/Areas/Identity/Pages/Account/Register.cshtml.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DigitalDetectiveAgency/Data/ApplicationDbContext.cs" beforeDir="false" afterPath="$PROJECT_DIR$/DigitalDetectiveAgency/Data/ApplicationDbContext.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DigitalDetectiveAgency/DigitalDetectiveAgency.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/DigitalDetectiveAgency/DigitalDetectiveAgency.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DigitalDetectiveAgency/Migrations/ApplicationDbContextModelSnapshot.cs" beforeDir="false" afterPath="$PROJECT_DIR$/DigitalDetectiveAgency/Migrations/ApplicationDbContextModelSnapshot.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DigitalDetectiveAgency/Models/Entities/Case.cs" beforeDir="false" afterPath="$PROJECT_DIR$/DigitalDetectiveAgency/Models/Entities/Case.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DigitalDetectiveAgency/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/DigitalDetectiveAgency/Program.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DigitalDetectiveAgency/Repositories/Implementations/CaseRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/DigitalDetectiveAgency/Repositories/Implementations/CaseRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DigitalDetectiveAgency/Repositories/Interfaces/ICaseRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/DigitalDetectiveAgency/Repositories/Interfaces/ICaseRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DigitalDetectiveAgency/Views/Case/Details.cshtml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/DigitalDetectiveAgency/Views/Case/Details.cshtml.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/DigitalDetectiveAgency/Views/Case/Index.cshtml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/DigitalDetectiveAgency/Views/Case/Index.cshtml.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/DigitalDetectiveAgency/Views/Case/Details.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/DigitalDetectiveAgency/Views/Case/Details.cshtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DigitalDetectiveAgency/Views/Case/Index.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/DigitalDetectiveAgency/Views/Case/Index.cshtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DigitalDetectiveAgency/Views/Home/Index.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/DigitalDetectiveAgency/Views/Home/Index.cshtml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/DigitalDetectiveAgency/Views/Shared/_Layout.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/DigitalDetectiveAgency/Views/Shared/_Layout.cshtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wwwroot/js/board.js" beforeDir="false" afterPath="$PROJECT_DIR$/DigitalDetectiveAgency/wwwroot/js/board.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -50,6 +37,8 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="JavaScript File" />
+        <option value="TypeScript File" />
+        <option value="CSS File" />
       </list>
     </option>
   </component>
@@ -170,23 +159,23 @@
   <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="true" />
   <component name="NextEditCompletionFeaturesState">
     <decayedCancelled>
-      <entry key="MS100" value="1.626513456988918" />
-      <entry key="MS500" value="3.169506421036067" />
-      <entry key="S2" value="5.031503432801133" />
-      <entry key="S5" value="7.541122502162761" />
-      <entry key="S10" value="9.757761615964634" />
-      <entry key="S30" value="12.25540785144061" />
-      <entry key="S60" value="13.125328888538041" />
-      <entry key="M2" value="14.578343134782191" />
-      <entry key="M5" value="20.53473772998304" />
-      <entry key="M10" value="26.649714390141167" />
-      <entry key="M15" value="29.942498937795534" />
-      <entry key="M30" value="34.4351569482421" />
-      <entry key="H1" value="37.37521854351185" />
-      <entry key="H2" value="39.13432367207467" />
-      <entry key="H4" value="41.42853224323175" />
-      <entry key="D1" value="65.5615740216535" />
-      <entry key="W1" value="81.49548545172976" />
+      <entry key="MS100" value="1.0" />
+      <entry key="MS500" value="1.0" />
+      <entry key="S2" value="1.0" />
+      <entry key="S5" value="1.0" />
+      <entry key="S10" value="1.000000007802048" />
+      <entry key="S30" value="1.0019833660299549" />
+      <entry key="S60" value="1.0445349978102032" />
+      <entry key="M2" value="1.211033167582907" />
+      <entry key="M5" value="1.5371039432872735" />
+      <entry key="M10" value="1.8492208155325447" />
+      <entry key="M15" value="2.6137257062163224" />
+      <entry key="M30" value="7.533833557332368" />
+      <entry key="H1" value="17.065141002239777" />
+      <entry key="H2" value="26.861818046923602" />
+      <entry key="H4" value="35.024873169847915" />
+      <entry key="D1" value="65.13250454008214" />
+      <entry key="W1" value="83.05721583385719" />
     </decayedCancelled>
     <decayedSelected>
       <entry key="MS100" value="0.0" />
@@ -196,36 +185,39 @@
       <entry key="S10" value="0.0" />
       <entry key="S30" value="0.0" />
       <entry key="S60" value="0.0" />
-      <entry key="M2" value="1.0085616607464821E-184" />
-      <entry key="M5" value="3.815646381911637E-74" />
-      <entry key="M10" value="2.7619155053550212E-37" />
-      <entry key="M15" value="5.343148114062137E-25" />
-      <entry key="M30" value="1.0337219736391595E-12" />
-      <entry key="H1" value="1.437852734512418E-6" />
-      <entry key="H2" value="0.0016957881089951466" />
-      <entry key="H4" value="0.0582372201645547" />
-      <entry key="D1" value="1.1093240139753964" />
-      <entry key="W1" value="1.838495733632768" />
+      <entry key="M2" value="1.6181493399946966E-196" />
+      <entry key="M5" value="7.30625082418827E-79" />
+      <entry key="M10" value="1.2085750302507475E-39" />
+      <entry key="M15" value="1.4294622778213455E-26" />
+      <entry key="M30" value="1.690797087743317E-13" />
+      <entry key="H1" value="5.815114617543216E-7" />
+      <entry key="H2" value="0.0010784338755792135" />
+      <entry key="H4" value="0.04644207382737368" />
+      <entry key="D1" value="1.0682598576666007" />
+      <entry key="W1" value="1.8286155617246982" />
     </decayedSelected>
     <decayedShown>
-      <entry key="MS100" value="1.571110123772208" />
-      <entry key="MS500" value="3.1334836355216265" />
-      <entry key="S2" value="5.017105842415586" />
-      <entry key="S5" value="7.531573999820829" />
-      <entry key="S10" value="9.750925952768126" />
-      <entry key="S30" value="12.252303574515693" />
-      <entry key="S60" value="13.1236311388137" />
-      <entry key="M2" value="14.577385894975967" />
-      <entry key="M5" value="20.534125242818718" />
-      <entry key="M10" value="26.64900303696309" />
-      <entry key="M15" value="29.941696970675373" />
-      <entry key="M30" value="34.43439479979468" />
-      <entry key="H1" value="37.374676611653584" />
-      <entry key="H2" value="39.13569202769611" />
-      <entry key="H4" value="41.486577406225436" />
-      <entry key="D1" value="66.67083024924436" />
-      <entry key="W1" value="83.33396829321342" />
+      <entry key="MS100" value="0.8766057213160351" />
+      <entry key="MS500" value="0.974004268543241" />
+      <entry key="S2" value="0.9934367347173356" />
+      <entry key="S5" value="0.9973695065410157" />
+      <entry key="S10" value="0.9986838949842083" />
+      <entry key="S30" value="1.0015434612545215" />
+      <entry key="S60" value="1.0443042079825458" />
+      <entry key="M2" value="1.2108966095470421" />
+      <entry key="M5" value="1.5370327524620444" />
+      <entry key="M10" value="1.8491771341107608" />
+      <entry key="M15" value="2.6136758486302414" />
+      <entry key="M30" value="7.533693943615325" />
+      <entry key="H1" value="17.064914148387665" />
+      <entry key="H2" value="26.862684357731617" />
+      <entry key="H4" value="35.07116012513488" />
+      <entry key="D1" value="66.20069879208864" />
+      <entry key="W1" value="84.88581852573446" />
     </decayedShown>
+  </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 5,
@@ -239,31 +231,32 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;.NET Launch Settings Profile.DigitalDetectiveAgency: http.executor&quot;: &quot;Run&quot;,
-    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.MCP Project settings loaded&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.cidr.known.project.marker&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.readMode.enableVisualFormatting&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
-    &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
-    &quot;codeWithMe.voiceChat.enabledByDefault&quot;: &quot;false&quot;,
-    &quot;com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;to.speed.mode.migration.done&quot;: &quot;true&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    ".NET Launch Settings Profile.DigitalDetectiveAgency: http.executor": "Run",
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.MCP Project settings loaded": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.cidr.known.project.marker": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "RunOnceActivity.readMode.enableVisualFormatting": "true",
+    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
+    "cidr.known.project.marker": "true",
+    "codeWithMe.voiceChat.enabledByDefault": "false",
+    "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
+    "git-widget-placeholder": "main",
+    "junie.onboarding.icon.badge.shown": "true",
+    "list.type.of.created.stylesheet": "CSS",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "to.speed.mode.migration.done": "true",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RunManager" selected=".NET Launch Settings Profile.DigitalDetectiveAgency: http">
     <configuration name="DigitalDetectiveAgency: http" type="LaunchSettings" factoryName=".NET Launch Settings Profile">
       <option name="LAUNCH_PROFILE_PROJECT_FILE_PATH" value="$PROJECT_DIR$/DigitalDetectiveAgency/DigitalDetectiveAgency.csproj" />
@@ -305,7 +298,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1784507984145</updated>
-      <workItem from="1784507985321" duration="26022000" />
+      <workItem from="1784507985321" duration="30671000" />
     </task>
     <servers />
   </component>
