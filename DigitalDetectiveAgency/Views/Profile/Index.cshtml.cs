@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace DigitalDetectiveAgency.Views.AdminCase;
+namespace DigitalDetectiveAgency.Views.Profile;
 
-public class Edit : PageModel
+public class Index : PageModel
 {
     public void OnGet()
     {

@@ -21,6 +21,7 @@
                 🕵️ Digital Detective Agency
             </a>
             <ul class="dossier-nav__links">
+                <li><a asp-controller="Profile" asp-action="Index">Profile</a></li>
                 <li><a asp-controller="Case" asp-action="Index">Case Files</a></li>
                 <li><a asp-controller="Home" asp-action="Privacy">Privacy</a></li>
                 @if (User.IsInRole("Admin"))

@@ -1,50 +1,66 @@
-@* Views/Accusation/Create.cshtml *@
 @model DigitalDetectiveAgency.Models.ViewModels.AccusationFormViewModel
 
 @{
     ViewData["Title"] = "Make Your Accusation";
 }
 
-<div class="container mt-4">
-    <h1>⚖️ Make Your Accusation</h1>
-    <p class="text-muted">Case: @Model.CaseTitle</p>
-    <div class="alert alert-warning">This is final — you cannot change your accusation once submitted.</div>
+@section PageStyles {
+    <link rel="stylesheet" href="~/css/pages/accusation.css" asp-append-version="true" />
+}
 
-    @if (!ViewData.ModelState.IsValid)
-    {
-        <div class="alert alert-danger">
-            <ul class="mb-0">
-                @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+<div class="container-interrogation">
+    <div class="interrogation-panel">
+        <h1 class="interrogation-title">Who Is the Culprit?</h1>
+        <div class="interrogation-warning">⚠ This accusation is final. Choose carefully, Detective.</div>
+
+        @if (!ViewData.ModelState.IsValid)
+        {
+            <div class="validation-summary-errors">
+                <ul style="margin:0; padding-left: 1.2rem;">
+                    @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                    {
+                        <li>@error.ErrorMessage</li>
+                    }
+                </ul>
+            </div>
+        }
+
+        <form asp-action="Create" method="post" id="accusation-form">
+            <input type="hidden" name="CaseId" value="@Model.CaseId" />
+
+            <div class="suspect-lineup">
+                @foreach (var suspect in Model.Suspects)
                 {
-                    <li>@error.ErrorMessage</li>
-                }
-            </ul>
-        </div>
-    }
-
-    <form asp-action="Create" method="post">
-        <input type="hidden" name="CaseId" value="@Model.CaseId" />
-
-        <div class="row">
-            @foreach (var suspect in Model.Suspects)
-            {
-                <div class="col-md-4 mb-3">
-                    <label class="card h-100" style="cursor:pointer;">
-                        <img src="@suspect.ImageUrl" class="card-img-top" alt="@suspect.Name" style="height:200px;object-fit:cover;" />
-                        <div class="card-body">
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="SuspectId" value="@suspect.Id" required />
-                                <label class="form-check-label"><strong>@suspect.Name</strong></label>
-                            </div>
-                            <p class="card-text mt-2">@suspect.Description</p>
+                    <label class="suspect-select-card" data-suspect-card>
+                        <img src="@suspect.ImageUrl" alt="@suspect.Name" />
+                        <div class="suspect-select-card__body">
+                            <input type="radio" name="SuspectId" value="@suspect.Id" required />
+                            <strong>@suspect.Name</strong>
+                            <p>@suspect.Description</p>
                         </div>
                     </label>
-                </div>
-            }
+                }
+            </div>
+
+            <button type="submit" class="btn-stamp btn-stamp--danger">Submit Accusation</button>
+        </form>
+
+        <div style="margin-top: var(--space-md);">
+            <a asp-controller="Case" asp-action="Details" asp-route-id="@Model.CaseId" class="btn-stamp btn-stamp--ghost">
+                ← Back to Case File
+            </a>
         </div>
-
-        <button type="submit" class="btn btn-danger btn-lg mt-3">Submit Accusation</button>
-    </form>
-
-    <a asp-controller="Case" asp-action="Details" asp-route-id="@Model.CaseId" class="btn btn-secondary mt-3">Back to Case</a>
+    </div>
 </div>
+
+@section Scripts {
+    <script>
+        // Visually highlight the selected suspect card
+        document.querySelectorAll('[data-suspect-card]').forEach(card => {
+            card.addEventListener('click', () => {
+                document.querySelectorAll('[data-suspect-card]').forEach(c => c.classList.remove('is-checked'));
+                card.classList.add('is-checked');
+            });
+        });
+    </script>
+}

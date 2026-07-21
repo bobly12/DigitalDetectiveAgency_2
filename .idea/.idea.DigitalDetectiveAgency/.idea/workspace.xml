@@ -15,12 +15,27 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="7521a7d0-2c8e-4ea1-937e-91e7ca6298b6" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.DigitalDetectiveAgency/.idea/dataSources/7df75ee2-76cc-4421-8143-4cde6f081f49.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.DigitalDetectiveAgency/.idea/dataSources/7df75ee2-76cc-4421-8143-4cde6f081f49.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.DigitalDetectiveAgency/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.DigitalDetectiveAgency/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DigitalDetectiveAgency/Views/Case/Details.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/DigitalDetectiveAgency/Views/Case/Details.cshtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DigitalDetectiveAgency/DigitalDetectiveAgency.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/DigitalDetectiveAgency/DigitalDetectiveAgency.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DigitalDetectiveAgency/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/DigitalDetectiveAgency/Program.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DigitalDetectiveAgency/Views/Accusation/Create.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/DigitalDetectiveAgency/Views/Accusation/Create.cshtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DigitalDetectiveAgency/Views/Accusation/Create.cshtml.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/DigitalDetectiveAgency/Views/Accusation/Result.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/DigitalDetectiveAgency/Views/Accusation/Result.cshtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DigitalDetectiveAgency/Views/Accusation/Result.cshtml.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/DigitalDetectiveAgency/Views/AdminCase/Create.cshtml.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/DigitalDetectiveAgency/Views/AdminCase/Edit.cshtml.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/DigitalDetectiveAgency/Views/AdminCase/Index.cshtml.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/DigitalDetectiveAgency/Views/AdminEvidence/Create.cshtml.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/DigitalDetectiveAgency/Views/AdminEvidence/Edit.cshtml.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/DigitalDetectiveAgency/Views/AdminSuspect/Create.cshtml.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/DigitalDetectiveAgency/Views/AdminSuspect/Edit.cshtml.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/DigitalDetectiveAgency/Views/AdminWitness/Create.cshtml.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/DigitalDetectiveAgency/Views/AdminWitness/Edit.cshtml.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/DigitalDetectiveAgency/Views/Board/Index.cshtml.cs" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/DigitalDetectiveAgency/Views/Case/Index.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/DigitalDetectiveAgency/Views/Case/Index.cshtml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DigitalDetectiveAgency/Views/Home/Index.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/DigitalDetectiveAgency/Views/Home/Index.cshtml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DigitalDetectiveAgency/Views/Shared/_Layout.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/DigitalDetectiveAgency/Views/Shared/_Layout.cshtml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wwwroot/js/board.js" beforeDir="false" afterPath="$PROJECT_DIR$/DigitalDetectiveAgency/wwwroot/js/board.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DigitalDetectiveAgency/wwwroot/css/pages/home.css" beforeDir="false" afterPath="$PROJECT_DIR$/DigitalDetectiveAgency/wwwroot/css/pages/home.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DigitalDetectiveAgency/wwwroot/images/textures/corkboard-bg.jpg.css" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -62,6 +77,7 @@
     <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/Controllers/AccusationController.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/Controllers/AdminCaseController.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/Controllers/AdminEvidenceController.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/Controllers/AdminSuspectController.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/Controllers/AdminWitnessController.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/Controllers/BoardController.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/Controllers/CaseController.cs" root0="FORCE_HIGHLIGHTING" />
@@ -121,29 +137,17 @@
     <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/Services/Interfaces/ICaseAssignmentSyncService.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/Services/Interfaces/IScoringService.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/Views/Accusation/Create.cshtml" root0="FORCE_HIGHLIGHTING" root1="FORCE_HIGHLIGHTING" root2="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/Views/Accusation/Create.cshtml.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/Views/Accusation/Result.cshtml" root0="FORCE_HIGHLIGHTING" root1="FORCE_HIGHLIGHTING" root2="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/Views/Accusation/Result.cshtml.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/Views/AdminCase/Create.cshtml" root0="FORCE_HIGHLIGHTING" root1="FORCE_HIGHLIGHTING" root2="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/Views/AdminCase/Create.cshtml.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/Views/AdminCase/Index.cshtml" root0="FORCE_HIGHLIGHTING" root1="FORCE_HIGHLIGHTING" root2="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/Views/AdminCase/Index.cshtml.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/Views/AdminCase/edit.cshtml" root0="FORCE_HIGHLIGHTING" root1="FORCE_HIGHLIGHTING" root2="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/Views/AdminCase/edit.cshtml.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/Views/AdminEvidence/Create.cshtml" root0="FORCE_HIGHLIGHTING" root1="FORCE_HIGHLIGHTING" root2="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/Views/AdminEvidence/Create.cshtml.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/Views/AdminEvidence/Edit.cshtml" root0="FORCE_HIGHLIGHTING" root1="FORCE_HIGHLIGHTING" root2="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/Views/AdminEvidence/Edit.cshtml.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/Views/AdminSuspect/Create.cshtml" root0="FORCE_HIGHLIGHTING" root1="FORCE_HIGHLIGHTING" root2="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/Views/AdminSuspect/Create.cshtml.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/Views/AdminSuspect/Edit.cshtml" root0="FORCE_HIGHLIGHTING" root1="FORCE_HIGHLIGHTING" root2="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/Views/AdminSuspect/Edit.cshtml.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/Views/AdminWitness/Create.cshtml" root0="FORCE_HIGHLIGHTING" root1="FORCE_HIGHLIGHTING" root2="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/Views/AdminWitness/Create.cshtml.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/Views/AdminWitness/Edit.cshtml" root0="FORCE_HIGHLIGHTING" root1="FORCE_HIGHLIGHTING" root2="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/Views/AdminWitness/Edit.cshtml.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/Views/Board/Index.cshtml" root0="FORCE_HIGHLIGHTING" root1="FORCE_HIGHLIGHTING" root2="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/Views/Board/Index.cshtml.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/Views/Case/Details.cshtml" root0="FORCE_HIGHLIGHTING" root1="FORCE_HIGHLIGHTING" root2="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/Views/Case/Index.cshtml" root0="FORCE_HIGHLIGHTING" root1="FORCE_HIGHLIGHTING" root2="FORCE_HIGHLIGHTING" />
     <setting file="jar://$APPLICATION_HOME_DIR$/lib/intellij.relaxng.jar!/resources/html5-schema/html5/block.rnc" root0="FORCE_HIGHLIGHTING" />
@@ -159,23 +163,23 @@
   <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="true" />
   <component name="NextEditCompletionFeaturesState">
     <decayedCancelled>
-      <entry key="MS100" value="1.0" />
-      <entry key="MS500" value="1.0" />
-      <entry key="S2" value="1.0" />
-      <entry key="S5" value="1.0" />
-      <entry key="S10" value="1.000000007802048" />
-      <entry key="S30" value="1.0019833660299549" />
-      <entry key="S60" value="1.0445349978102032" />
-      <entry key="M2" value="1.211033167582907" />
-      <entry key="M5" value="1.5371039432872735" />
-      <entry key="M10" value="1.8492208155325447" />
-      <entry key="M15" value="2.6137257062163224" />
-      <entry key="M30" value="7.533833557332368" />
-      <entry key="H1" value="17.065141002239777" />
-      <entry key="H2" value="26.861818046923602" />
-      <entry key="H4" value="35.024873169847915" />
-      <entry key="D1" value="65.13250454008214" />
-      <entry key="W1" value="83.05721583385719" />
+      <entry key="MS100" value="1.2349256388430865" />
+      <entry key="MS500" value="2.1394525097377572" />
+      <entry key="S2" value="4.8836182937722095" />
+      <entry key="S5" value="6.480876812489651" />
+      <entry key="S10" value="7.185422977164396" />
+      <entry key="S30" value="7.715191813594515" />
+      <entry key="S60" value="7.855864722448105" />
+      <entry key="M2" value="7.927494058062985" />
+      <entry key="M5" value="7.970965459874366" />
+      <entry key="M10" value="7.9982365930944335" />
+      <entry key="M15" value="8.085254115778287" />
+      <entry key="M30" value="9.431240603890293" />
+      <entry key="H1" value="15.448224479149888" />
+      <entry key="H2" value="25.747940325585567" />
+      <entry key="H4" value="36.47006446294079" />
+      <entry key="D1" value="70.92172269866256" />
+      <entry key="W1" value="90.64849305707097" />
     </decayedCancelled>
     <decayedSelected>
       <entry key="MS100" value="0.0" />
@@ -185,35 +189,35 @@
       <entry key="S10" value="0.0" />
       <entry key="S30" value="0.0" />
       <entry key="S60" value="0.0" />
-      <entry key="M2" value="1.6181493399946966E-196" />
-      <entry key="M5" value="7.30625082418827E-79" />
-      <entry key="M10" value="1.2085750302507475E-39" />
-      <entry key="M15" value="1.4294622778213455E-26" />
-      <entry key="M30" value="1.690797087743317E-13" />
-      <entry key="H1" value="5.815114617543216E-7" />
-      <entry key="H2" value="0.0010784338755792135" />
-      <entry key="H4" value="0.04644207382737368" />
-      <entry key="D1" value="1.0682598576666007" />
-      <entry key="W1" value="1.8286155617246982" />
+      <entry key="M2" value="2.5796263980048584E-207" />
+      <entry key="M5" value="3.505176265785248E-83" />
+      <entry key="M10" value="8.37107551497708E-42" />
+      <entry key="M15" value="5.194109816921201E-28" />
+      <entry key="M30" value="3.22300296663849E-14" />
+      <entry key="H1" value="2.5388841613372054E-7" />
+      <entry key="H2" value="7.125836033039677E-4" />
+      <entry key="H4" value="0.03775137342931608" />
+      <entry key="D1" value="1.0320017515126614" />
+      <entry key="W1" value="1.8196173024455875" />
     </decayedSelected>
     <decayedShown>
-      <entry key="MS100" value="0.8766057213160351" />
-      <entry key="MS500" value="0.974004268543241" />
-      <entry key="S2" value="0.9934367347173356" />
-      <entry key="S5" value="0.9973695065410157" />
-      <entry key="S10" value="0.9986838949842083" />
-      <entry key="S30" value="1.0015434612545215" />
-      <entry key="S60" value="1.0443042079825458" />
-      <entry key="M2" value="1.2108966095470421" />
-      <entry key="M5" value="1.5370327524620444" />
-      <entry key="M10" value="1.8491771341107608" />
-      <entry key="M15" value="2.6136758486302414" />
-      <entry key="M30" value="7.533693943615325" />
-      <entry key="H1" value="17.064914148387665" />
-      <entry key="H2" value="26.862684357731617" />
-      <entry key="H4" value="35.07116012513488" />
-      <entry key="D1" value="66.20069879208864" />
-      <entry key="W1" value="84.88581852573446" />
+      <entry key="MS100" value="1.1944376183471452" />
+      <entry key="MS500" value="2.126017575038106" />
+      <entry key="S2" value="4.876393939570806" />
+      <entry key="S5" value="6.477117861263937" />
+      <entry key="S10" value="7.183353767568237" />
+      <entry key="S30" value="7.714454734758028" />
+      <entry key="S60" value="7.855489911533453" />
+      <entry key="M2" value="7.92730505699472" />
+      <entry key="M5" value="7.970889469482234" />
+      <entry key="M10" value="7.998198232323651" />
+      <entry key="M15" value="8.085226917597407" />
+      <entry key="M30" value="9.431201290193778" />
+      <entry key="H1" value="15.448119082513147" />
+      <entry key="H2" value="25.74850957074226" />
+      <entry key="H4" value="36.50768815679635" />
+      <entry key="D1" value="71.95366080651458" />
+      <entry key="W1" value="92.46809751517866" />
     </decayedShown>
   </component>
   <component name="ProblemsViewState">
@@ -298,7 +302,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1784507984145</updated>
-      <workItem from="1784507985321" duration="30671000" />
+      <workItem from="1784507985321" duration="35076000" />
     </task>
     <servers />
   </component>
