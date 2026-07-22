@@ -1,0 +1,47 @@
+/* variables.css — the single source of truth for the Detective HQ palette */
+:root {
+    /* Base (night shift office) */
+    --color-bg: #0F1115;
+    --color-panel: #1A1D24;
+    --color-panel-alt: #252932;
+
+    /* Paper (physical documents) */
+    --color-paper: #E8DCC4;
+    --color-paper-light: #F5EFE0;
+    --color-paper-shadow: #8B7355;
+
+    /* Red string / accent */
+    --color-red: #B33A3A;
+    --color-red-hover: #D64545;
+    --color-red-deep: #7A1F1F;
+
+    /* Brass / success / rank */
+    --color-brass: #C9A24B;
+    --color-brass-dark: #8A6D2F;
+    --color-success: #4C7A4C;
+
+    /* Text */
+    --color-text-on-dark: #EDEAE0;
+    --color-text-on-paper: #1A1A1A;
+    --color-text-muted: #9A9A9A;
+
+    /* Typography */
+    --font-display: "Oswald", "Arial Narrow", sans-serif;
+    --font-body: "Inter", -apple-system, sans-serif;
+    --font-accent: "Caveat", cursive;
+
+    /* Spacing scale */
+    --space-xs: 0.5rem;
+    --space-sm: 1rem;
+    --space-md: 1.5rem;
+    --space-lg: 2.5rem;
+    --space-xl: 4rem;
+
+    /* Shadows */
+    --shadow-paper: 0 4px 12px rgba(0, 0, 0, 0.4);
+    --shadow-panel: 0 2px 8px rgba(0, 0, 0, 0.6);
+
+    /* Radii — paper is slightly rounded, UI chrome is sharper */
+    --radius-paper: 3px;
+    --radius-ui: 2px;
+}

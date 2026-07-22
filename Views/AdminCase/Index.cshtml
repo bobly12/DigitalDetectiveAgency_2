@@ -1,0 +1,37 @@
+@* Views/AdminCase/Index.cshtml *@
+@model List<DigitalDetectiveAgency.Models.ViewModels.CaseFormViewModel>
+
+<div class="container mt-4">
+    <h1>🛠️ Manage Cases</h1>
+    <a asp-action="Create" class="btn btn-primary mb-3">+ New Case</a>
+
+    <table class="table">
+        <thead><tr><th>Title</th><th>Difficulty</th><th>Published</th><th></th></tr></thead>
+        <tbody>
+        @foreach (var c in Model)
+        {
+            <tr>
+                <td>@c.Title</td>
+                <td>@c.Difficulty</td>
+                <td>
+                    @if (c.IsPublished) { <span class="badge bg-success">Published</span> }
+                    else { <span class="badge bg-secondary">Draft</span> }
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@c.Id" class="btn btn-sm btn-outline-primary">Edit</a>
+                    @if (!c.IsPublished)
+                    {
+                        <form asp-action="Publish" asp-route-id="@c.Id" method="post" class="d-inline">
+                            <button type="submit" class="btn btn-sm btn-outline-success">Publish</button>
+                        </form>
+                    }
+                    <form asp-action="Delete" asp-route-id="@c.Id" method="post" class="d-inline"
+                          onsubmit="return confirm('Delete this case and all its content?');">
+                        <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+                    </form>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>

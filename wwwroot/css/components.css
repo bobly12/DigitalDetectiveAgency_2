@@ -1,0 +1,241 @@
+/* components.css — shared building blocks used across 2+ pages */
+
+/* ===== Buttons ===== */
+.btn-stamp {
+    display: inline-block;
+    font-family: var(--font-display);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    padding: 0.65rem 1.5rem;
+    border: none;
+    border-radius: var(--radius-ui);
+    cursor: pointer;
+    text-decoration: none;
+    transition: background-color 0.15s ease, transform 0.1s ease;
+}
+
+.btn-stamp--primary {
+    background-color: var(--color-red);
+    color: #fff;
+}
+.btn-stamp--primary:hover {
+    background-color: var(--color-red-hover);
+    color: #fff;
+    transform: translateY(-1px);
+}
+
+.btn-stamp--ghost {
+    background-color: transparent;
+    color: var(--color-brass);
+    border: 1px solid var(--color-brass-dark);
+}
+.btn-stamp--ghost:hover {
+    background-color: rgba(201, 162, 75, 0.1);
+    color: var(--color-brass);
+}
+
+.btn-stamp--danger {
+    background-color: var(--color-red-deep);
+    color: #fff;
+}
+.btn-stamp--danger:hover {
+    background-color: var(--color-red);
+    color: #fff;
+}
+
+/* ===== Paper Card (base for Case/Evidence/Suspect/Witness cards) ===== */
+.paper-card {
+    background-color: var(--color-paper-light);
+    color: var(--color-text-on-paper);
+    border-radius: var(--radius-paper);
+    box-shadow: var(--shadow-paper);
+    padding: var(--space-md);
+}
+
+.paper-card h5,
+.paper-card h3 {
+    font-family: var(--font-display);
+    margin-top: 0;
+}
+
+/* Pinned variant — used on the Investigation Board */
+.paper-card--pinned {
+    position: relative;
+}
+.paper-card--pinned::before {
+    content: "📌";
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 1.2rem;
+}
+
+/* ===== Status Badge (rubber stamp look) ===== */
+.stamp-badge {
+    display: inline-block;
+    font-family: var(--font-display);
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    padding: 0.25rem 0.75rem;
+    border-radius: var(--radius-ui);
+    border: 2px solid currentColor;
+    transform: rotate(-2deg);
+}
+
+.stamp-badge--new {
+    color: #6b7280;
+}
+.stamp-badge--progress {
+    color: var(--color-brass);
+}
+.stamp-badge--solved {
+    color: var(--color-success);
+}
+.stamp-badge--unsolved {
+    color: var(--color-red);
+}
+
+/* ===== Form (paper-panel style, used in Login/Register/Accusation) ===== */
+.form-paper {
+    background-color: var(--color-paper-light);
+    color: var(--color-text-on-paper);
+    border-radius: var(--radius-paper);
+    box-shadow: var(--shadow-paper);
+    padding: var(--space-lg);
+    max-width: 420px;
+    margin: 0 auto;
+}
+
+.form-paper h2 {
+    font-family: var(--font-display);
+    text-align: center;
+    margin-bottom: var(--space-md);
+}
+
+.form-paper label {
+    display: block;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-paper-shadow);
+    margin-bottom: 0.25rem;
+}
+
+.form-paper input {
+    width: 100%;
+    border: none;
+    border-bottom: 1px solid var(--color-paper-shadow);
+    background: transparent;
+    padding: 0.4rem 0;
+    margin-bottom: var(--space-sm);
+    font-family: var(--font-body);
+}
+
+.form-paper input:focus {
+    outline: none;
+    border-bottom-color: var(--color-red);
+}
+
+/* Validation summary — restyled to match the paper aesthetic instead of Bootstrap red box */
+.validation-summary-errors ul {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 var(--space-sm) 0;
+    color: var(--color-red-deep);
+    font-size: 0.85rem;
+}
+/* ===== Case File Modal (pop-out card reader) ===== */
+.file-modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0, 0, 0, 0.75);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-md);
+}
+
+.file-modal-overlay.is-open {
+    display: flex;
+}
+
+.file-modal {
+    background-color: var(--color-paper-light);
+    color: var(--color-text-on-paper);
+    border-radius: var(--radius-paper);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+    max-width: 520px;
+    width: 100%;
+    max-height: 85vh;
+    overflow-y: auto;
+    padding: var(--space-lg);
+    position: relative;
+    transform: scale(0.9) translateY(20px);
+    opacity: 0;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.file-modal-overlay.is-open .file-modal {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+}
+
+.file-modal__close {
+    position: absolute;
+    top: var(--space-sm);
+    right: var(--space-sm);
+    background: none;
+    border: none;
+    font-size: 1.4rem;
+    line-height: 1;
+    cursor: pointer;
+    color: var(--color-paper-shadow);
+    padding: 0.25rem 0.5rem;
+}
+
+.file-modal__close:hover {
+    color: var(--color-red-deep);
+}
+
+.file-modal__image {
+    width: 100%;
+    max-height: 280px;
+    object-fit: cover;
+    border-radius: var(--radius-ui);
+    margin-bottom: var(--space-md);
+}
+
+.file-modal__title {
+    font-family: var(--font-display);
+    font-size: 1.4rem;
+    margin: 0 0 var(--space-sm) 0;
+}
+
+.file-modal__body p {
+    line-height: 1.6;
+    margin-bottom: var(--space-sm);
+}
+
+.file-modal__label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-red-deep);
+    font-weight: 600;
+    margin-bottom: 0.2rem;
+}
+
+/* Make the source cards clearly clickable */
+.dossier-item-card.is-clickable {
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.dossier-item-card.is-clickable:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.35);
+}

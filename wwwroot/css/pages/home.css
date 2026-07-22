@@ -1,0 +1,69 @@
+/* home.css — Headquarters page */
+
+.hq-hero {
+    background: linear-gradient(rgba(15,17,21,0.85), rgba(15,17,21,0.95));
+    border-radius: var(--radius-paper);
+    text-align: center;
+    padding: var(--space-xl) var(--space-md);
+    margin-bottom: var(--space-lg);
+}
+
+.hq-hero h1 {
+    font-family: var(--font-display);
+    font-size: 3rem;
+    letter-spacing: 0.03em;
+    margin-bottom: var(--space-sm);
+}
+
+.hq-hero p {
+    color: var(--color-text-muted);
+    font-size: 1.1rem;
+    margin-bottom: var(--space-md);
+}
+
+.hq-hero__stats {
+    margin-top: var(--space-md);
+    color: var(--color-brass);
+    font-family: var(--font-display);
+    letter-spacing: 0.05em;
+}
+
+.hq-features {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-md);
+}
+
+.hq-feature-card {
+    background-color: var(--color-panel);
+    border: 1px solid rgba(201, 162, 75, 0.15);
+    border-radius: var(--radius-ui);
+    text-align: center;
+    padding: var(--space-md);
+    transition: transform 0.15s ease;
+}
+
+.hq-feature-card:hover {
+    transform: translateY(-4px);
+}
+
+.hq-feature-card__icon {
+    font-size: 2.2rem;
+    margin-bottom: var(--space-xs);
+}
+
+.hq-feature-card h5 {
+    font-family: var(--font-display);
+    letter-spacing: 0.03em;
+}
+
+.hq-feature-card p {
+    color: var(--color-text-muted);
+    font-size: 0.9rem;
+}
+
+@media (max-width: 768px) {
+    .hq-features {
+        grid-template-columns: 1fr;
+    }
+}
