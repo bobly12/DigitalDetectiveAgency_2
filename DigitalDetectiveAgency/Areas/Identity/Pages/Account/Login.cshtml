@@ -1,0 +1,46 @@
+﻿@page
+@model LoginModel
+
+@{
+    ViewData["Title"] = "Detective Login";
+}
+
+<div class="container-interrogation" style="max-width: 500px;">
+    <div class="form-paper">
+        <h2>🕵️ Detective Login</h2>
+        <p style="text-align:center; color:#6b6b6b; font-size:0.85rem; margin-bottom:1.5rem;">
+            Use a local account to log in.
+        </p>
+
+        <form id="account" method="post">
+            <div asp-validation-summary="ModelOnly" class="validation-summary-errors" role="alert"></div>
+
+            <label asp-for="Input.Email"></label>
+            <input asp-for="Input.Email" autocomplete="username" aria-required="true" placeholder="name@example.com" />
+            <span asp-validation-for="Input.Email" class="text-danger" style="font-size:0.8rem;"></span>
+
+            <label asp-for="Input.Password"></label>
+            <input asp-for="Input.Password" type="password" autocomplete="current-password" aria-required="true" placeholder="Password" />
+            <span asp-validation-for="Input.Password" class="text-danger" style="font-size:0.8rem;"></span>
+
+            <div style="margin: 1rem 0; font-size:0.85rem;">
+                <label style="display:inline; text-transform:none; letter-spacing:normal;">
+                    <input asp-for="Input.RememberMe" style="width:auto; display:inline;" />
+                    Remember me?
+                </label>
+            </div>
+
+            <button type="submit" class="btn-stamp btn-stamp--primary" style="width:100%;">Log In</button>
+        </form>
+
+        <div style="text-align:center; margin-top:1rem; font-size:0.85rem;">
+            <p><a asp-page="./ForgotPassword">Forgot your password?</a></p>
+            <p><a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">Register as a new detective</a></p>
+            <p><a asp-page="./ResendEmailConfirmation">Resend email confirmation</a></p>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

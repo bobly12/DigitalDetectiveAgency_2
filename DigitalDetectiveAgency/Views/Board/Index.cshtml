@@ -1,0 +1,62 @@
+@model DigitalDetectiveAgency.Models.ViewModels.BoardViewModel
+
+@{
+    ViewData["Title"] = "Investigation Board";
+}
+
+@section PageStyles {
+    <link rel="stylesheet" href="~/css/pages/board.css" asp-append-version="true" />
+}
+
+<div class="container-board">
+    <h1 class="board-title">🧵 Evidence Wall — @Model.CaseTitle</h1>
+    <p class="board-hint">Click a card, then another, to connect them. Click a red thread to cut it.</p>
+
+    <div class="board-wrapper" id="board-container">
+        <svg id="connection-svg" style="position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:1;"></svg>
+
+        <div class="board-columns">
+            <div>
+                <div class="board-column__label">🔍 Evidence</div>
+                @foreach (var node in Model.Evidence)
+                {
+                    <div class="board-card" data-type="Evidence" data-id="@node.Id">
+                        <strong>@node.Name</strong>
+                    </div>
+                }
+            </div>
+            <div>
+                <div class="board-column__label">🕴 Suspects</div>
+                @foreach (var node in Model.Suspects)
+                {
+                    <div class="board-card" data-type="Suspect" data-id="@node.Id">
+                        <strong>@node.Name</strong>
+                    </div>
+                }
+            </div>
+            <div>
+                <div class="board-column__label">🗣 Witnesses</div>
+                @foreach (var node in Model.Witnesses)
+                {
+                    <div class="board-card" data-type="Witness" data-id="@node.Id">
+                        <strong>@node.Name</strong>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+
+    <div style="margin-top: var(--space-md);">
+        <a asp-controller="Case" asp-action="Details" asp-route-id="@Model.CaseId" class="btn-stamp btn-stamp--ghost">
+            ← Back to Case File
+        </a>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        window.boardCaseId = @Model.CaseId;
+        window.initialConnections = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.Connections));
+    </script>
+    <script src="~/js/board.js"></script>
+}

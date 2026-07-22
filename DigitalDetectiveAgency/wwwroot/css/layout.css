@@ -1,0 +1,111 @@
+/* layout.css — shell: nav, footer, themed page containers */
+
+body {
+    background-color: var(--color-bg);
+    color: var(--color-text-on-dark);
+    font-family: var(--font-body);
+    margin: 0;
+}
+
+/* ===== Top Dossier Bar (nav) ===== */
+.dossier-nav {
+    background-color: var(--color-panel);
+    border-bottom: 1px solid rgba(201, 162, 75, 0.25); /* hairline brass */
+    padding: var(--space-sm) var(--space-lg);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.dossier-nav__brand {
+    font-family: var(--font-display);
+    font-size: 1.4rem;
+    letter-spacing: 0.05em;
+    color: var(--color-text-on-dark);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+}
+
+.dossier-nav__links {
+    display: flex;
+    gap: var(--space-md);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.dossier-nav__links a {
+    color: var(--color-text-muted);
+    text-decoration: none;
+    font-size: 0.85rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding-bottom: 4px;
+    border-bottom: 2px solid transparent;
+    transition: color 0.15s ease, border-color 0.15s ease;
+}
+
+.dossier-nav__links a:hover,
+.dossier-nav__links a.active {
+    color: var(--color-text-on-dark);
+    border-bottom-color: var(--color-red);
+}
+
+.dossier-nav__admin a {
+    color: var(--color-brass) !important;
+}
+
+/* ===== Footer ===== */
+.dossier-footer {
+    border-top: 1px solid rgba(201, 162, 75, 0.15);
+    color: var(--color-text-muted);
+    font-size: 0.75rem;
+    text-align: center;
+    padding: var(--space-md) 0;
+    margin-top: var(--space-xl);
+}
+
+.dossier-footer a {
+    color: var(--color-text-muted);
+}
+
+/* ===== Themed Page Containers ===== */
+/* Each page opts into one of these on its outer wrapper div */
+
+.container-hq {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: var(--space-lg) var(--space-md);
+}
+
+.container-archive {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: var(--space-lg) var(--space-md);
+}
+
+.container-dossier {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: var(--space-lg) var(--space-md);
+}
+
+.container-board {
+    max-width: 100%;
+    padding: var(--space-md);
+}
+
+.container-interrogation {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: var(--space-xl) var(--space-md);
+}
+
+.container-report {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: var(--space-xl) var(--space-md);
+    text-align: center;
+}
