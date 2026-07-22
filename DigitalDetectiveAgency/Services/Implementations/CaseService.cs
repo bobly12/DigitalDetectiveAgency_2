@@ -75,5 +75,23 @@ public class CaseService : ICaseService
                 ImageUrl = w.ImageUrl
             }).ToList()
         };
+    } // <--- Added the missing closing brace here for OpenCaseAsync!
+
+    public async Task<CaseIntroViewModel?> GetCaseIntroAsync(int caseId, string userId)
+    {
+        var playerCase = await _caseRepository.GetPlayerCaseAsync(caseId, userId);
+        if (playerCase == null) return null;
+
+        var beats = new List<string>
+        {
+            playerCase.Case.Description
+        };
+
+        return new CaseIntroViewModel
+        {
+            CaseId = playerCase.Case.Id,
+            Title = playerCase.Case.Title,
+            StoryBeats = beats
+        };
     }
 }

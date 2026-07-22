@@ -1,0 +1,61 @@
+@model DigitalDetectiveAgency.Models.ViewModels.CaseIntroViewModel
+
+@{
+    ViewData["Title"] = Model.Title;
+}
+
+@section PageStyles {
+    <link rel="stylesheet" href="~/css/pages/intro.css" asp-append-version="true" />
+}
+
+<div class="intro-screen" id="intro-screen">
+    <div class="intro-screen__title">Case File — @Model.Title</div>
+
+    <div>
+        <p class="intro-beat" id="intro-beat"></p>
+        <div class="intro-continue" id="intro-continue">
+            <button class="btn-stamp btn-stamp--primary" id="intro-continue-btn">Continue →</button>
+        </div>
+    </div>
+
+    <a asp-controller="Case" asp-action="Details" asp-route-id="@Model.CaseId" class="intro-skip">
+        Skip Intro
+    </a>
+</div>
+
+@section Scripts {
+    <script>
+        const beats = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.StoryBeats));
+        let index = 0;
+
+        const beatEl = document.getElementById('intro-beat');
+        const continueWrap = document.getElementById('intro-continue');
+        const continueBtn = document.getElementById('intro-continue-btn');
+
+        function showBeat(i) {
+            beatEl.classList.remove('is-visible');
+            continueWrap.classList.remove('is-visible');
+
+            setTimeout(() => {
+                beatEl.textContent = beats[i];
+                beatEl.classList.add('is-visible');
+
+                const isLast = i === beats.length - 1;
+                continueBtn.textContent = isLast ? 'Begin Investigation →' : 'Continue →';
+
+                setTimeout(() => continueWrap.classList.add('is-visible'), 300);
+            }, 250);
+        }
+
+        continueBtn.addEventListener('click', () => {
+            if (index < beats.length - 1) {
+                index++;
+                showBeat(index);
+            } else {
+                window.location.href = '@Url.Action("Details", "Case", new { id = Model.CaseId })';
+            }
+        });
+
+        showBeat(0);
+    </script>
+}

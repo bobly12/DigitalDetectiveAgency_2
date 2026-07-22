@@ -48,11 +48,16 @@
         <div class="dossier-grid">
             @foreach (var item in Model.Evidence)
             {
-                <div class="dossier-item-card">
+                var fields = new[] { new { heading = (string?)null, text = item.Description } };
+                <div class="dossier-item-card is-clickable"
+                     data-name="@item.Name"
+                     data-image="@item.ImageUrl"
+                     data-label="Evidence"
+                     data-fields="@System.Text.Json.JsonSerializer.Serialize(fields)">
                     <img src="@item.ImageUrl" alt="@item.Name" />
                     <div class="dossier-item-card__body">
                         <h6>@item.Name</h6>
-                        <p>@item.Description</p>
+                        <p>@(item.Description.Length > 80 ? item.Description.Substring(0, 80) + "…" : item.Description)</p>
                     </div>
                 </div>
             }
@@ -69,15 +74,21 @@
         <div class="dossier-grid">
             @foreach (var s in Model.Suspects)
             {
-                <div class="dossier-item-card">
+                var fields = new[]
+                {
+                    new { heading = (string?)null, text = s.Description },
+                    new { heading = (string?)"Motive", text = s.Motive },
+                    new { heading = (string?)"Alibi", text = s.Alibi }
+                };
+                <div class="dossier-item-card is-clickable"
+                     data-name="@s.Name"
+                     data-image="@s.ImageUrl"
+                     data-label="Suspect"
+                     data-fields="@System.Text.Json.JsonSerializer.Serialize(fields)">
                     <img src="@s.ImageUrl" alt="@s.Name" />
                     <div class="dossier-item-card__body">
                         <h6>@s.Name</h6>
-                        <p>@s.Description</p>
-                        <p class="tag">Motive:</p>
-                        <p>@s.Motive</p>
-                        <p class="tag">Alibi:</p>
-                        <p>@s.Alibi</p>
+                        <p>@(s.Description.Length > 80 ? s.Description.Substring(0, 80) + "…" : s.Description)</p>
                     </div>
                 </div>
             }
@@ -94,11 +105,16 @@
         <div class="dossier-grid">
             @foreach (var w in Model.Witnesses)
             {
-                <div class="dossier-item-card">
+                var fields = new[] { new { heading = (string?)null, text = "\"" + w.Statement + "\"" } };
+                <div class="dossier-item-card is-clickable"
+                     data-name="@w.Name"
+                     data-image="@w.ImageUrl"
+                     data-label="Witness"
+                     data-fields="@System.Text.Json.JsonSerializer.Serialize(fields)">
                     <img src="@w.ImageUrl" alt="@w.Name" />
                     <div class="dossier-item-card__body">
                         <h6>@w.Name</h6>
-                        <p style="font-style: italic;">"@w.Statement"</p>
+                        <p>@(w.Statement.Length > 80 ? w.Statement.Substring(0, 80) + "…" : w.Statement)</p>
                     </div>
                 </div>
             }
@@ -109,3 +125,7 @@
         <a asp-action="Index" class="btn-stamp btn-stamp--ghost">← Back to Case Archive</a>
     </div>
 </div>
+
+@section Scripts {
+    <script src="~/js/file-modal.js" asp-append-version="true"></script>
+}

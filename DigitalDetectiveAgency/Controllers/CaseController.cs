@@ -40,4 +40,17 @@ public class CaseController : Controller
 
         return View(caseDetail);
     }
+    // CaseController.cs — add:
+    public async Task<IActionResult> Intro(int id)
+    {
+        var userId = _userManager.GetUserId(User)!;
+        var intro = await _caseService.GetCaseIntroAsync(id, userId);
+
+        if (intro == null)
+        {
+            return Forbid();
+        }
+
+        return View(intro);
+    }
 }

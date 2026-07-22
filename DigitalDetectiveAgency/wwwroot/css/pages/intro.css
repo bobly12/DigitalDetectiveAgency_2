@@ -1,0 +1,60 @@
+/* intro.css — Cinematic Case Opening */
+
+.intro-screen {
+    min-height: 80vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    background: radial-gradient(circle at center, rgba(30,25,20,0.5), rgba(15,17,21,0.98));
+    border-radius: var(--radius-paper);
+    padding: var(--space-xl) var(--space-md);
+    position: relative;
+}
+
+.intro-screen__title {
+    font-family: var(--font-display);
+    letter-spacing: 0.05em;
+    color: var(--color-brass);
+    font-size: 1rem;
+    text-transform: uppercase;
+    position: absolute;
+    top: var(--space-lg);
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0.7;
+}
+
+.intro-beat {
+    max-width: 640px;
+    font-family: var(--font-accent);
+    font-size: 1.6rem;
+    line-height: 1.6;
+    color: var(--color-text-on-dark);
+    opacity: 0;
+    transition: opacity 0.6s ease;
+}
+
+.intro-beat.is-visible {
+    opacity: 1;
+}
+
+.intro-continue {
+    margin-top: var(--space-lg);
+    opacity: 0;
+    transition: opacity 0.4s ease 0.3s;
+}
+
+.intro-continue.is-visible {
+    opacity: 1;
+}
+
+.intro-skip {
+    position: absolute;
+    bottom: var(--space-md);
+    right: var(--space-md);
+    font-size: 0.75rem;
+    color: var(--color-text-muted);
+    text-decoration: underline;
+    cursor: pointer;
+}

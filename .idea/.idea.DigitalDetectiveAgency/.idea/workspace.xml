@@ -16,26 +16,17 @@
   <component name="ChangeListManager">
     <list default="true" id="7521a7d0-2c8e-4ea1-937e-91e7ca6298b6" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.DigitalDetectiveAgency/.idea/dataSources/7df75ee2-76cc-4421-8143-4cde6f081f49.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.DigitalDetectiveAgency/.idea/dataSources/7df75ee2-76cc-4421-8143-4cde6f081f49.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.DigitalDetectiveAgency/.idea/dataSources/data_sources_history.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.DigitalDetectiveAgency/.idea/dataSources/data_sources_history.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.DigitalDetectiveAgency/.idea/dataSources/ee927c47-2521-497b-aff3-32931d132dd8.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.DigitalDetectiveAgency/.idea/dataSources/ee927c47-2521-497b-aff3-32931d132dd8/storage_v2/_src_/database/DigitalDetectiveAgencyDB.oKqK-A.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.DigitalDetectiveAgency/.idea/dataSources/ee927c47-2521-497b-aff3-32931d132dd8/storage_v2/_src_/database/DigitalDetectiveAgencyDB.oKqK-A/schema/INFORMATION_SCHEMA.NBgcMw.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.DigitalDetectiveAgency/.idea/dataSources/ee927c47-2521-497b-aff3-32931d132dd8/storage_v2/_src_/database/DigitalDetectiveAgencyDB.oKqK-A/schema/sys.zb4BAA.meta" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.DigitalDetectiveAgency/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.DigitalDetectiveAgency/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DigitalDetectiveAgency/DigitalDetectiveAgency.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/DigitalDetectiveAgency/DigitalDetectiveAgency.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DigitalDetectiveAgency/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/DigitalDetectiveAgency/Program.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DigitalDetectiveAgency/Views/Accusation/Create.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/DigitalDetectiveAgency/Views/Accusation/Create.cshtml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DigitalDetectiveAgency/Views/Accusation/Create.cshtml.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/DigitalDetectiveAgency/Views/Accusation/Result.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/DigitalDetectiveAgency/Views/Accusation/Result.cshtml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DigitalDetectiveAgency/Views/Accusation/Result.cshtml.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/DigitalDetectiveAgency/Views/AdminCase/Create.cshtml.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/DigitalDetectiveAgency/Views/AdminCase/Edit.cshtml.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/DigitalDetectiveAgency/Views/AdminCase/Index.cshtml.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/DigitalDetectiveAgency/Views/AdminEvidence/Create.cshtml.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/DigitalDetectiveAgency/Views/AdminEvidence/Edit.cshtml.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/DigitalDetectiveAgency/Views/AdminSuspect/Create.cshtml.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/DigitalDetectiveAgency/Views/AdminSuspect/Edit.cshtml.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/DigitalDetectiveAgency/Views/AdminWitness/Create.cshtml.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/DigitalDetectiveAgency/Views/AdminWitness/Edit.cshtml.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/DigitalDetectiveAgency/Views/Board/Index.cshtml.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/DigitalDetectiveAgency/Views/Case/Index.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/DigitalDetectiveAgency/Views/Case/Index.cshtml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DigitalDetectiveAgency/wwwroot/css/pages/home.css" beforeDir="false" afterPath="$PROJECT_DIR$/DigitalDetectiveAgency/wwwroot/css/pages/home.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DigitalDetectiveAgency/wwwroot/images/textures/corkboard-bg.jpg.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/DigitalDetectiveAgency.sln.DotSettings.user" beforeDir="false" afterPath="$PROJECT_DIR$/DigitalDetectiveAgency.sln.DotSettings.user" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DigitalDetectiveAgency/Views/Case/Intro.cshtml.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/DigitalDetectiveAgency/Views/Profile/Index.cshtml.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/DigitalDetectiveAgency/app.db-shm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/DigitalDetectiveAgency/app.db-wal" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -46,33 +37,34 @@
     <option name="firstShow" value="false" />
   </component>
   <component name="EmbeddingIndexingInfo">
-    <option name="cachedIndexableFilesCount" value="1" />
+    <option name="cachedIndexableFilesCount" value="2" />
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="JavaScript File" />
         <option value="TypeScript File" />
+        <option value="JavaScript File" />
         <option value="CSS File" />
       </list>
     </option>
   </component>
   <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/DigitalDetectiveAgency" />
   </component>
-  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
-  "lastFilter": {
-    "state": "OPEN",
-    "assignee": "bobly12"
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;bobly12&quot;
   }
-}]]></component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/bobly12/DigitalDetectiveAgency_2.git",
-    "accountId": "a59df6ff-8a08-4eff-b805-ab7380de31db"
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/bobly12/DigitalDetectiveAgency_2.git&quot;,
+    &quot;accountId&quot;: &quot;a59df6ff-8a08-4eff-b805-ab7380de31db&quot;
   }
-}]]></component>
+}</component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/metadata/dfe0bc3be25d4cb79d32a33b7c52fe1aa5e00/6b/40145fb6/DigitalDetectiveAgency.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/8d3190b728c21bca391a5b9c190e86f42b86c8e1bb5f4e177de4df75c52152/MigrationsEndPointExtensions.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/Controllers/AccusationController.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/Controllers/AdminCaseController.cs" root0="FORCE_HIGHLIGHTING" />
@@ -81,6 +73,7 @@
     <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/Controllers/AdminWitnessController.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/Controllers/BoardController.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/Controllers/CaseController.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/Controllers/ProfileController.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/Models/DTOs/AccusationSubmitDto.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/Models/DTOs/ConnectionRequestDto.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/Models/Entities/Accusation.cs" root0="FORCE_HIGHLIGHTING" />
@@ -100,9 +93,11 @@
     <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/Models/ViewModels/BoardViewModel.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/Models/ViewModels/CaseDetailViewModel.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/Models/ViewModels/CaseFormViewModel.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/Models/ViewModels/CaseIntroViewModel.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/Models/ViewModels/CaseListItemViewModel.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/Models/ViewModels/EvidenceFormViewModel.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/Models/ViewModels/EvidenceViewModel.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/Models/ViewModels/ProfileViewModel.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/Models/ViewModels/SuspectFormViewModel.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/Models/ViewModels/SuspectOptionViewModel.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/Models/ViewModels/SuspectViewModel.cs" root0="FORCE_HIGHLIGHTING" />
@@ -150,6 +145,12 @@
     <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/Views/Board/Index.cshtml" root0="FORCE_HIGHLIGHTING" root1="FORCE_HIGHLIGHTING" root2="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/Views/Case/Details.cshtml" root0="FORCE_HIGHLIGHTING" root1="FORCE_HIGHLIGHTING" root2="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/Views/Case/Index.cshtml" root0="FORCE_HIGHLIGHTING" root1="FORCE_HIGHLIGHTING" root2="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/Views/Case/Intro.cshtml" root0="FORCE_HIGHLIGHTING" root1="FORCE_HIGHLIGHTING" root2="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/Views/Case/Intro.cshtml.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/Views/Profile/Index.cshtml" root0="FORCE_HIGHLIGHTING" root1="FORCE_HIGHLIGHTING" root2="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/Views/Profile/Index.cshtml.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/wwwroot/lib/bootstrap/dist/css/bootstrap-reboot.min.css.map" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/DigitalDetectiveAgency/wwwroot/lib/jquery/dist/jquery.min.map" root0="FORCE_HIGHLIGHTING" />
     <setting file="jar://$APPLICATION_HOME_DIR$/lib/intellij.relaxng.jar!/resources/html5-schema/html5/block.rnc" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="KubernetesApiPersistence">{}</component>
@@ -163,23 +164,23 @@
   <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="true" />
   <component name="NextEditCompletionFeaturesState">
     <decayedCancelled>
-      <entry key="MS100" value="1.2349256388430865" />
-      <entry key="MS500" value="2.1394525097377572" />
-      <entry key="S2" value="4.8836182937722095" />
-      <entry key="S5" value="6.480876812489651" />
-      <entry key="S10" value="7.185422977164396" />
-      <entry key="S30" value="7.715191813594515" />
-      <entry key="S60" value="7.855864722448105" />
-      <entry key="M2" value="7.927494058062985" />
-      <entry key="M5" value="7.970965459874366" />
-      <entry key="M10" value="7.9982365930944335" />
-      <entry key="M15" value="8.085254115778287" />
-      <entry key="M30" value="9.431240603890293" />
-      <entry key="H1" value="15.448224479149888" />
-      <entry key="H2" value="25.747940325585567" />
-      <entry key="H4" value="36.47006446294079" />
-      <entry key="D1" value="70.92172269866256" />
-      <entry key="W1" value="90.64849305707097" />
+      <entry key="MS100" value="1.0" />
+      <entry key="MS500" value="1.0" />
+      <entry key="S2" value="1.0" />
+      <entry key="S5" value="1.0000000000099558" />
+      <entry key="S10" value="1.0000031552811668" />
+      <entry key="S30" value="1.014667227080416" />
+      <entry key="S60" value="1.121367560965125" />
+      <entry key="M2" value="1.3641478994794598" />
+      <entry key="M5" value="1.9650636668017007" />
+      <entry key="M10" value="4.239423798739903" />
+      <entry key="M15" value="7.766846778021644" />
+      <entry key="M30" value="17.86169078439324" />
+      <entry key="H1" value="30.768957086388582" />
+      <entry key="H2" value="46.45507679710165" />
+      <entry key="H4" value="64.62771591196739" />
+      <entry key="D1" value="114.20402024209237" />
+      <entry key="W1" value="140.23681031576942" />
     </decayedCancelled>
     <decayedSelected>
       <entry key="MS100" value="0.0" />
@@ -189,35 +190,35 @@
       <entry key="S10" value="0.0" />
       <entry key="S30" value="0.0" />
       <entry key="S60" value="0.0" />
-      <entry key="M2" value="2.5796263980048584E-207" />
-      <entry key="M5" value="3.505176265785248E-83" />
-      <entry key="M10" value="8.37107551497708E-42" />
-      <entry key="M15" value="5.194109816921201E-28" />
-      <entry key="M30" value="3.22300296663849E-14" />
-      <entry key="H1" value="2.5388841613372054E-7" />
-      <entry key="H2" value="7.125836033039677E-4" />
-      <entry key="H4" value="0.03775137342931608" />
-      <entry key="D1" value="1.0320017515126614" />
-      <entry key="W1" value="1.8196173024455875" />
+      <entry key="M2" value="2.6377143154154036E-237" />
+      <entry key="M5" value="3.536537274770153E-95" />
+      <entry key="M10" value="8.408440366206836E-48" />
+      <entry key="M15" value="5.209554510699925E-32" />
+      <entry key="M30" value="3.227791212033328E-16" />
+      <entry key="H1" value="2.5407694044925847E-8" />
+      <entry key="H2" value="2.2542236784734798E-4" />
+      <entry key="H4" value="0.021233097181767975" />
+      <entry key="D1" value="0.9376207276524098" />
+      <entry key="W1" value="1.7948559360219178" />
     </decayedSelected>
     <decayedShown>
-      <entry key="MS100" value="1.1944376183471452" />
-      <entry key="MS500" value="2.126017575038106" />
-      <entry key="S2" value="4.876393939570806" />
-      <entry key="S5" value="6.477117861263937" />
-      <entry key="S10" value="7.183353767568237" />
-      <entry key="S30" value="7.714454734758028" />
-      <entry key="S60" value="7.855489911533453" />
-      <entry key="M2" value="7.92730505699472" />
-      <entry key="M5" value="7.970889469482234" />
-      <entry key="M10" value="7.998198232323651" />
-      <entry key="M15" value="8.085226917597407" />
-      <entry key="M30" value="9.431201290193778" />
-      <entry key="H1" value="15.448119082513147" />
-      <entry key="H2" value="25.74850957074226" />
-      <entry key="H4" value="36.50768815679635" />
-      <entry key="D1" value="71.95366080651458" />
-      <entry key="W1" value="92.46809751517866" />
+      <entry key="MS100" value="1.0264848819015072E-4" />
+      <entry key="MS500" value="0.15932007841490775" />
+      <entry key="S2" value="0.6317825521319221" />
+      <entry key="S5" value="0.8321987347214362" />
+      <entry key="S10" value="0.9122524205352811" />
+      <entry key="S30" value="0.9845062492210847" />
+      <entry key="S60" value="1.1061323156487044" />
+      <entry key="M2" value="1.3564580747679627" />
+      <entry key="M5" value="1.9619469921776584" />
+      <entry key="M10" value="4.237799478504696" />
+      <entry key="M15" value="7.765648391012152" />
+      <entry key="M30" value="17.860788003280582" />
+      <entry key="H1" value="30.768228287472738" />
+      <entry key="H2" value="46.45476603719085" />
+      <entry key="H4" value="64.64858493804462" />
+      <entry key="D1" value="115.14152632308782" />
+      <entry key="W1" value="142.03164524125697" />
     </decayedShown>
   </component>
   <component name="ProblemsViewState">
@@ -249,7 +250,7 @@
     "cidr.known.project.marker": "true",
     "codeWithMe.voiceChat.enabledByDefault": "false",
     "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
-    "git-widget-placeholder": "main",
+    "git-widget-placeholder": "debug-assembly",
     "junie.onboarding.icon.badge.shown": "true",
     "list.type.of.created.stylesheet": "CSS",
     "node.js.detected.package.eslint": "true",
@@ -302,7 +303,8 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1784507984145</updated>
-      <workItem from="1784507985321" duration="35076000" />
+      <workItem from="1784507985321" duration="40901000" />
+      <workItem from="1784679633848" duration="7774000" />
     </task>
     <servers />
   </component>

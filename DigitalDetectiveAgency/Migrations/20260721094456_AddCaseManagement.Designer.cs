@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DigitalDetectiveAgency.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260721015045_AddAdminRoleSupport")]
-    partial class AddAdminRoleSupport
+    [Migration("20260721094456_AddCaseManagement")]
+    partial class AddCaseManagement
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
