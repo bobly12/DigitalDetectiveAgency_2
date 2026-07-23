@@ -82,9 +82,10 @@ public class CaseService : ICaseService
         var playerCase = await _caseRepository.GetPlayerCaseAsync(caseId, userId);
         if (playerCase == null) return null;
 
-        var beats = playerCase.Case.StoryText
-            .Split("|||", StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
-            .ToList();
+        var beats = new List<string>
+        {
+            playerCase.Case.Description
+        };
 
         return new CaseIntroViewModel
         {

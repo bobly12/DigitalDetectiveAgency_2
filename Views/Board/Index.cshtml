@@ -1,7 +1,7 @@
 @model DigitalDetectiveAgency.Models.ViewModels.BoardViewModel
 
 @{
-    ViewData["Title"] = "Investigation Board";
+    ViewData["Title"] = Model.CaseTitle;
 }
 
 @section PageStyles {
@@ -9,8 +9,28 @@
 }
 
 <div class="container-board">
-    <h1 class="board-title">🧵 Evidence Wall — @Model.CaseTitle</h1>
-    <p class="board-hint">Click a card, then another, to connect them. Click a red thread to cut it.</p>
+
+    <div class="board-case-header">
+        <h1 class="board-title">🧵 @Model.CaseTitle</h1>
+        <p class="board-case-summary">@Model.CaseSummary</p>
+        <div class="board-victim-line">
+            <strong>Victim:</strong> @Model.VictimName (@Model.VictimOccupation) &nbsp;|&nbsp;
+            <strong>Location:</strong> @Model.Location
+        </div>
+
+        @if (Model.IsCompleted)
+        {
+            <div class="dossier-completed-banner">📁 Case Closed — Score: @Model.Score</div>
+        }
+        else
+        {
+            <a asp-controller="Accusation" asp-action="Create" asp-route-id="@Model.CaseId" class="btn-stamp btn-stamp--danger">
+                ⚖️ Make Accusation
+            </a>
+        }
+    </div>
+
+    <p class="board-hint">Click a photo to examine it closely. Click two cards to connect them. Click a red thread to cut it.</p>
 
     <div class="board-wrapper" id="board-container">
         <svg id="connection-svg" style="position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:1;"></svg>
@@ -20,7 +40,11 @@
                 <div class="board-column__label">🔍 Evidence</div>
                 @foreach (var node in Model.Evidence)
                 {
-                    <div class="board-card" data-type="Evidence" data-id="@node.Id">
+                    var fields = new[] { new { heading = (string?)null, text = node.Description } };
+                    <div class="board-card" data-type="Evidence" data-id="@node.Id"
+                         data-name="@node.Name" data-image="@node.ImageUrl" data-label="Evidence"
+                         data-fields="@System.Text.Json.JsonSerializer.Serialize(fields)">
+                        <img src="@node.ImageUrl" alt="@node.Name" class="board-card__img" />
                         <strong>@node.Name</strong>
                     </div>
                 }
@@ -29,7 +53,18 @@
                 <div class="board-column__label">🕴 Suspects</div>
                 @foreach (var node in Model.Suspects)
                 {
-                    <div class="board-card" data-type="Suspect" data-id="@node.Id">
+                    var fields = new[]
+                    {
+                        new { heading = (string?)null, text = node.Description },
+                        new { heading = (string?)"Motive", text = node.Motive ?? "" },
+                        new { heading = (string?)"Alibi", text = node.Alibi ?? "" }
+                    };
+                    <div class="board-card @(Model.EliminatedSuspectIds.Contains(node.Id) ? "is-eliminated" : "")"
+                         data-type="Suspect" data-id="@node.Id"
+                         data-name="@node.Name" data-image="@node.ImageUrl" data-label="Suspect"
+                         data-fields="@System.Text.Json.JsonSerializer.Serialize(fields)">
+                        <button class="board-card__eliminate-btn" data-eliminate-suspect="@node.Id" title="Eliminate suspect">✕</button>
+                        <img src="@node.ImageUrl" alt="@node.Name" class="board-card__img" />
                         <strong>@node.Name</strong>
                     </div>
                 }
@@ -38,7 +73,11 @@
                 <div class="board-column__label">🗣 Witnesses</div>
                 @foreach (var node in Model.Witnesses)
                 {
-                    <div class="board-card" data-type="Witness" data-id="@node.Id">
+                    var fields = new[] { new { heading = (string?)null, text = "\"" + node.Description + "\"" } };
+                    <div class="board-card" data-type="Witness" data-id="@node.Id"
+                         data-name="@node.Name" data-image="@node.ImageUrl" data-label="Witness"
+                         data-fields="@System.Text.Json.JsonSerializer.Serialize(fields)">
+                        <img src="@node.ImageUrl" alt="@node.Name" class="board-card__img" />
                         <strong>@node.Name</strong>
                     </div>
                 }
@@ -47,8 +86,8 @@
     </div>
 
     <div style="margin-top: var(--space-md);">
-        <a asp-controller="Case" asp-action="Details" asp-route-id="@Model.CaseId" class="btn-stamp btn-stamp--ghost">
-            ← Back to Case File
+        <a asp-controller="Case" asp-action="Index" class="btn-stamp btn-stamp--ghost">
+            ← Back to Case Archive
         </a>
     </div>
 </div>
@@ -59,4 +98,5 @@
         window.initialConnections = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.Connections));
     </script>
     <script src="~/js/board.js"></script>
+    <script src="~/js/file-modal.js"></script>
 }
