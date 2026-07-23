@@ -19,6 +19,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     public DbSet<ClueConnection> ClueConnections { get; set; }
     public DbSet<CaseConnection> CaseConnections { get; set; }
     public DbSet<Accusation> Accusations { get; set; }
+    public DbSet<SuspectElimination> SuspectEliminations { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -104,7 +105,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
                 Description = "An antique pocket watch, stopped at 9:47 PM. The glass is cracked, and the inside cover is engraved with initials that don't match anyone in the household.",
                 ImageUrl = "/images/evidence/pocket_watch.jpg"
             }
-        ); // <--- Added missing ");" here
+        );
 
         // Seed Suspects
         builder.Entity<Suspect>().HasData(
@@ -150,8 +151,9 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
                 Statement = "A woman matching Elena's description left in a hurry just before intermission. She seemed upset.",
                 ImageUrl = "/images/witnesses/clerk.jpg"
             }
-            
         );
+
+        // ClueConnection relationships
         builder.Entity<ClueConnection>()
             .HasOne(cc => cc.ApplicationUser)
             .WithMany()
@@ -170,12 +172,14 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
             .HasForeignKey(cc => cc.CaseId)
             .OnDelete(DeleteBehavior.Cascade);
 
-// Seed the "answer key" for Case 1 (The Vanishing Violinist)
-// Elena (Suspect Id=2) is guilty; these are the connections that "prove" it
+        // Seed the "answer key" for Case 1 (The Vanishing Violinist)
+        // Elena (Suspect Id=2) is guilty; these are the connections that "prove" it
         builder.Entity<CaseConnection>().HasData(
-            new CaseConnection { Id = 1, CaseId = 1, FromType = "Evidence", FromId = 2, ToType = "Suspect", ToId = 2 }, // Torn Program -> Elena
-            new CaseConnection { Id = 2, CaseId = 1, FromType = "Witness", FromId = 2, ToType = "Suspect", ToId = 2 }   // Ticket Clerk -> Elena
+            new CaseConnection { Id = 1, CaseId = 1, FromType = "Evidence", FromId = 2, ToType = "Suspect", ToId = 2 },
+            new CaseConnection { Id = 2, CaseId = 1, FromType = "Witness", FromId = 2, ToType = "Suspect", ToId = 2 }
         );
+
+        // Accusation relationships
         builder.Entity<Accusation>()
             .HasOne(a => a.ApplicationUser)
             .WithMany()
@@ -193,5 +197,24 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
             .WithMany()
             .HasForeignKey(a => a.AccusedSuspectId)
             .OnDelete(DeleteBehavior.Restrict);
-    } // <--- Added missing closing brace for OnModelCreating
+
+        // SuspectElimination relationships — NOW CORRECTLY INSIDE OnModelCreating
+        builder.Entity<SuspectElimination>()
+            .HasOne(se => se.ApplicationUser)
+            .WithMany()
+            .HasForeignKey(se => se.ApplicationUserId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        builder.Entity<SuspectElimination>()
+            .HasOne(se => se.Case)
+            .WithMany(c => c.SuspectEliminations)
+            .HasForeignKey(se => se.CaseId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        builder.Entity<SuspectElimination>()
+            .HasOne(se => se.Suspect)
+            .WithMany()
+            .HasForeignKey(se => se.SuspectId)
+            .OnDelete(DeleteBehavior.Restrict); // avoid multiple cascade paths, same reason as Accusation
     }
+}

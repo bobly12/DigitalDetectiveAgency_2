@@ -56,5 +56,19 @@ public class BoardController : Controller
             return BadRequest(new { message = error });
 
         return Ok(new { message = "Connection removed." });
+        
     }
+    // POST: /Board/ToggleElimination
+    [HttpPost]
+    public async Task<IActionResult> ToggleElimination([FromBody] ToggleEliminationRequestDto request)
+    {
+        var userId = _userManager.GetUserId(User)!;
+        var (success, error) = await _boardService.ToggleEliminationAsync(request, userId);
+
+        if (!success)
+            return BadRequest(new { message = error });
+
+        return Ok(new { message = "Elimination toggled." });
+    }
+   
 }

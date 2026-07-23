@@ -48,11 +48,42 @@ public class BoardRepository : IBoardRepository
         _context.ClueConnections.Remove(connection);
         await _context.SaveChangesAsync();
     }
-    // BoardRepository.cs — add:
+
     public async Task<List<CaseConnection>> GetAnswerKeyAsync(int caseId)
     {
         return await _context.CaseConnections
             .Where(cc => cc.CaseId == caseId)
             .ToListAsync();
+    }
+
+    // NEW: Suspect Elimination methods
+    public async Task<List<int>> GetEliminatedSuspectIdsAsync(int caseId, string userId)
+    {
+        return await _context.SuspectEliminations
+            .Where(se => se.CaseId == caseId && se.ApplicationUserId == userId)
+            .Select(se => se.SuspectId)
+            .ToListAsync();
+    }
+
+    public async Task ToggleEliminationAsync(int caseId, int suspectId, string userId)
+    {
+        var existing = await _context.SuspectEliminations
+            .FirstOrDefaultAsync(se => se.CaseId == caseId && se.SuspectId == suspectId && se.ApplicationUserId == userId);
+
+        if (existing != null)
+        {
+            _context.SuspectEliminations.Remove(existing);
+        }
+        else
+        {
+            _context.SuspectEliminations.Add(new SuspectElimination
+            {
+                CaseId = caseId,
+                SuspectId = suspectId,
+                ApplicationUserId = userId
+            });
+        }
+
+        await _context.SaveChangesAsync();
     }
 }

@@ -14,3 +14,9 @@ public class DeleteConnectionRequestDto
 {
     public int ConnectionId { get; set; }
 }
+
+public class ToggleEliminationRequestDto
+{
+    public int CaseId { get; set; }
+    public int SuspectId { get; set; }
+}
