@@ -7,5 +7,6 @@ namespace DigitalDetectiveAgency.Services.Interfaces;
 public interface IAccusationService
 {
     Task<AccusationFormViewModel?> GetAccusationFormAsync(int caseId, string userId);
+    Task<bool> CanAccuseAsync(int caseId, string userId); // NEW
     Task<(bool Success, string? Error, AccusationResultViewModel? Result)> SubmitAccusationAsync(AccusationSubmitDto dto, string userId);
 }

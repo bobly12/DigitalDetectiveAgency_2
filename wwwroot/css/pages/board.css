@@ -160,3 +160,72 @@
     margin-bottom: var(--space-xs);
     cursor: zoom-in;
 }
+/* ===== Investigation Confidence Gauge (added) ===== */
+.confidence-gauge {
+    max-width: 420px;
+    margin-bottom: var(--space-md);
+}
+
+.confidence-gauge__label {
+    display: flex;
+    justify-content: space-between;
+    font-family: var(--font-display);
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-brass);
+    margin-bottom: var(--space-xs);
+}
+
+.confidence-gauge__value {
+    color: var(--color-text-on-dark);
+}
+
+.confidence-gauge__track {
+    background-color: rgba(255,255,255,0.12);
+    border-radius: 20px;
+    height: 20px;
+    overflow: hidden;
+    position: relative;
+}
+
+.confidence-gauge__fill {
+    height: 100%;
+    transition: width 0.6s ease;
+}
+
+.confidence-gauge__fill--high { background-color: var(--color-success); }
+.confidence-gauge__fill--mid  { background-color: var(--color-brass); }
+.confidence-gauge__fill--low  { background-color: var(--color-red); }
+
+.confidence-gauge__detail {
+    font-size: 0.8rem;
+    color: var(--color-text-muted);
+    margin-top: var(--space-xs);
+}
+
+/* ===== Disabled accusation button (added) ===== */
+.btn-stamp--disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    filter: grayscale(60%);
+}
+
+/* ===== Locked suspect file indicator (added) ===== */
+.board-card__lock {
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    font-size: 0.9rem;
+}
+
+/* ===== Redirect/info notice (added) ===== */
+.board-notice {
+    background-color: rgba(230, 180, 90, 0.15);
+    border: 1px solid var(--color-brass);
+    color: var(--color-text-on-dark);
+    border-radius: var(--radius-ui);
+    padding: var(--space-sm) var(--space-md);
+    font-size: 0.9rem;
+    margin-bottom: var(--space-md);
+}

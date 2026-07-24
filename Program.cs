@@ -63,7 +63,7 @@ builder.Services.AddScoped<IAdminCaseService, AdminCaseService>();
 builder.Services.AddScoped<IAdminEvidenceService, AdminEvidenceService>();
 builder.Services.AddScoped<IAdminSuspectService, AdminSuspectService>();
 builder.Services.AddScoped<IAdminWitnessService, AdminWitnessService>();
-
+builder.Services.AddScoped<IInvestigationProgressService, InvestigationProgressService>();
 // ======================================================
 // BUILD APPLICATION
 // ======================================================

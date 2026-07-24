@@ -24,6 +24,15 @@ public class AccusationController : Controller
     public async Task<IActionResult> Create(int id)
     {
         var userId = _userManager.GetUserId(User)!;
+
+        // NEW: block direct-URL access to the form before enough evidence is gathered
+        var canAccuse = await _accusationService.CanAccuseAsync(id, userId);
+        if (!canAccuse)
+        {
+            TempData["BoardMessage"] = "You haven't gathered enough evidence to make an accusation yet.";
+            return RedirectToAction("Index", "Board", new { id });
+        }
+
         var form = await _accusationService.GetAccusationFormAsync(id, userId);
 
         if (form == null)
