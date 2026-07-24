@@ -17,4 +17,49 @@ public class BoardViewModel
 
     public List<BoardConnectionViewModel> Connections { get; set; } = new();
     public List<int> EliminatedSuspectIds { get; set; } = new();
+    
+    // ==========================
+    // Investigation Progress
+    // ==========================
+
+    /// <summary>
+    /// Overall investigation confidence (0–100).
+    /// Calculated dynamically by InvestigationProgressService.
+    /// Never stored in the database.
+    /// </summary>
+    public int Confidence { get; set; }
+
+    /// <summary>
+    /// Indicates whether the player has gathered enough evidence
+    /// to submit an accusation.
+    /// </summary>
+    public bool CanAccuse { get; set; }
+
+    /// <summary>
+    /// Number of correct clue connections made.
+    /// </summary>
+    public int CorrectConnections { get; set; }
+
+    /// <summary>
+    /// Total required clue connections in the case.
+    /// </summary>
+    public int TotalRequiredConnections { get; set; }
+
+    /// <summary>
+    /// Total clue connections created by the player.
+    /// </summary>
+    public int PlayerConnections { get; set; }
+
+    /// <summary>
+    /// Number of innocent suspects correctly eliminated.
+    /// </summary>
+    public int CorrectEliminatedSuspects { get; set; }
+
+    /// <summary>
+    /// Total innocent suspects in the case.
+    /// </summary>
+    public int TotalInnocentSuspects { get; set; }
+    
+    public int RemainingConfidence =>
+        Math.Max(0, 75 - Confidence);
 }

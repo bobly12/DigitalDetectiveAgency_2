@@ -9,43 +9,71 @@ using DigitalDetectiveAgency.Services.Implementations;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// 1. ADD SERVICES TO CONTAINER FIRST
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+// ======================================================
+// DATABASE
+// ======================================================
+
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
+    ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
+
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-// We combine the Identity setup into ONE call and include AddRoles here.
-// RequireConfirmedAccount is FALSE — this project has no real email sender configured,
-// so requiring email confirmation would permanently lock every new account out.
-builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = false)
-    .AddRoles<IdentityRole>()
-    .AddEntityFrameworkStores<ApplicationDbContext>();
+// ======================================================
+// IDENTITY
+// ======================================================
+
+builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
+{
+    options.SignIn.RequireConfirmedAccount = false;
+})
+.AddRoles<IdentityRole>()
+.AddEntityFrameworkStores<ApplicationDbContext>();
 
 builder.Services.AddControllersWithViews();
 
-// Register Repositories and Services
+// ======================================================
+// REPOSITORIES
+// ======================================================
+
 builder.Services.AddScoped<ICaseRepository, CaseRepository>();
-builder.Services.AddScoped<ICaseService, CaseService>();
 builder.Services.AddScoped<IBoardRepository, BoardRepository>();
-builder.Services.AddScoped<IBoardService, BoardService>();
 builder.Services.AddScoped<IAccusationRepository, AccusationRepository>();
-builder.Services.AddScoped<IAccusationService, AccusationService>();
-builder.Services.AddScoped<IScoringService, ScoringService>();
 builder.Services.AddScoped<IEvidenceRepository, EvidenceRepository>();
 builder.Services.AddScoped<ISuspectRepository, SuspectRepository>();
 builder.Services.AddScoped<IWitnessRepository, WitnessRepository>();
+
+// ======================================================
+// APPLICATION SERVICES
+// ======================================================
+
+builder.Services.AddScoped<ICaseService, CaseService>();
+builder.Services.AddScoped<IBoardService, BoardService>();
+builder.Services.AddScoped<IAccusationService, AccusationService>();
+builder.Services.AddScoped<IScoringService, ScoringService>();
+
+// NEW SERVICE
+builder.Services.AddScoped<IInvestigationProgressService, InvestigationProgressService>();
+
 builder.Services.AddScoped<ICaseAssignmentSyncService, CaseAssignmentSyncService>();
+
 builder.Services.AddScoped<IAdminCaseService, AdminCaseService>();
 builder.Services.AddScoped<IAdminEvidenceService, AdminEvidenceService>();
 builder.Services.AddScoped<IAdminSuspectService, AdminSuspectService>();
 builder.Services.AddScoped<IAdminWitnessService, AdminWitnessService>();
 
-// 2. BUILD THE APP
+// ======================================================
+// BUILD APPLICATION
+// ======================================================
+
 var app = builder.Build();
 
-// 3. NOW WE CAN USE 'app' FOR SEEDING
-// Seed the Admin role and promote a test account (one-time dev convenience)
+// ======================================================
+// SEED ADMIN ROLE
+// ======================================================
+
 using (var scope = app.Services.CreateScope())
 {
     var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
@@ -56,15 +84,20 @@ using (var scope = app.Services.CreateScope())
         await roleManager.CreateAsync(new IdentityRole("Admin"));
     }
 
-    // TEMP: replace with your own test account email, then remove this block after first run
+    // TEMP ONLY
     var adminUser = await userManager.FindByEmailAsync("your-test-account@example.com");
-    if (adminUser != null && !await userManager.IsInRoleAsync(adminUser, "Admin"))
+
+    if (adminUser != null &&
+        !await userManager.IsInRoleAsync(adminUser, "Admin"))
     {
         await userManager.AddToRoleAsync(adminUser, "Admin");
     }
 }
 
-// 4. CONFIGURE THE HTTP REQUEST PIPELINE
+// ======================================================
+// HTTP PIPELINE
+// ======================================================
+
 if (app.Environment.IsDevelopment())
 {
     app.UseMigrationsEndPoint();
@@ -76,9 +109,9 @@ else
 }
 
 app.UseHttpsRedirection();
+
 app.UseRouting();
 
-// Authentication MUST be registered before Authorization
 app.UseAuthentication();
 app.UseAuthorization();
 

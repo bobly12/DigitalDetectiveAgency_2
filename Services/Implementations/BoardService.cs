@@ -10,6 +10,7 @@ public class BoardService : IBoardService
 {
     private readonly IBoardRepository _boardRepository;
     private readonly ICaseRepository _caseRepository;
+    private readonly IInvestigationProgressService _progressService;
 
     private static readonly HashSet<string> ValidTypes = new()
     {
@@ -20,10 +21,12 @@ public class BoardService : IBoardService
 
     public BoardService(
         IBoardRepository boardRepository,
-        ICaseRepository caseRepository)
+        ICaseRepository caseRepository,
+        IInvestigationProgressService progressService)
     {
         _boardRepository = boardRepository;
         _caseRepository = caseRepository;
+        _progressService = progressService;
     }
 
     public async Task<BoardViewModel?> GetBoardAsync(int caseId, string userId)
@@ -39,23 +42,38 @@ public class BoardService : IBoardService
         var connections = await _boardRepository.GetConnectionsAsync(caseId, userId);
         var eliminatedIds = await _boardRepository.GetEliminatedSuspectIdsAsync(caseId, userId);
 
+        // NEW: Calculate investigation progress
+        var progress = await _progressService.GetInvestigationProgressAsync(caseId, userId);
+
         return new BoardViewModel
         {
             CaseId = caseId,
             CaseTitle = playerCase.Case.Title,
-            CaseSummary = playerCase.Case.Description, // Mapped to Case.Description
-            VictimName = string.Empty,                 // Fallback if not on entity model
-            VictimOccupation = string.Empty,           // Fallback if not on entity model
-            Location = string.Empty,                   // Fallback if not on entity model
+            CaseSummary = playerCase.Case.Description,
+
+            // Update these later if you add these fields to Case
+            VictimName = string.Empty,
+            VictimOccupation = string.Empty,
+            Location = string.Empty,
+
             IsCompleted = playerCase.IsCompleted,
             Score = playerCase.Score,
+
+            // Investigation Progress
+            Confidence = progress.Confidence,
+            CanAccuse = progress.CanAccuse,
+            PlayerConnections = progress.PlayerConnections,
+            CorrectConnections = progress.CorrectConnections,
+            TotalRequiredConnections = progress.TotalRequiredConnections,
+            CorrectEliminatedSuspects = progress.CorrectEliminatedSuspects,
+            TotalInnocentSuspects = progress.TotalInnocentSuspects,
 
             Evidence = evidence
                 .Select(MapEvidence)
                 .ToList(),
 
             Suspects = suspects
-                .Select(MapSuspect)
+                .Select(s => MapSuspect(s, progress.UnlockedSuspectIds))
                 .ToList(),
 
             Witnesses = witnesses
@@ -173,8 +191,12 @@ public class BoardService : IBoardService
         };
     }
 
-    private static BoardNodeViewModel MapSuspect(Suspect suspect)
+    private static BoardNodeViewModel MapSuspect(
+        Suspect suspect,
+        HashSet<int> unlockedSuspectIds)
     {
+        bool unlocked = unlockedSuspectIds.Contains(suspect.Id);
+
         return new BoardNodeViewModel
         {
             Type = "Suspect",
@@ -182,8 +204,18 @@ public class BoardService : IBoardService
             Name = suspect.Name,
             ImageUrl = suspect.ImageUrl ?? string.Empty,
             Description = suspect.Description ?? string.Empty,
-            Motive = suspect.Motive ?? string.Empty,
-            Alibi = suspect.Alibi ?? string.Empty
+
+            // Hide until unlocked
+            Motive = unlocked
+                ? suspect.Motive ?? string.Empty
+                : "???",
+
+            Alibi = unlocked
+                ? suspect.Alibi ?? string.Empty
+                : "???",
+
+            IsMotiveUnlocked = unlocked,
+            IsAlibiUnlocked = unlocked
         };
     }
 
