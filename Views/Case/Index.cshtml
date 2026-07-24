@@ -23,7 +23,6 @@
                 <div class="case-folder">
                     <div class="case-folder__tab">Case File — @item.Difficulty</div>
                     <h5>@item.Title</h5>
-                    <p>@item.Description</p>
 
                     @if (item.IsCompleted)
                     {
@@ -39,9 +38,18 @@
                     }
 
                     <div style="margin-top: var(--space-sm);">
-                        <a asp-controller="Case" asp-action="Details" asp-route-id="@item.CaseId" class="btn-stamp btn-stamp--primary">
-                            Open File
-                        </a>
+                        @if (item.IsCompleted)
+                        {
+                            <a asp-controller="Board" asp-action="Index" asp-route-id="@item.CaseId" class="btn-stamp btn-stamp--primary">
+                                View File
+                            </a>
+                        }
+                        else
+                        {
+                            <a asp-controller="Case" asp-action="Intro" asp-route-id="@item.CaseId" class="btn-stamp btn-stamp--primary">
+                                Open File
+                            </a>
+                        }
                     </div>
                 </div>
             }

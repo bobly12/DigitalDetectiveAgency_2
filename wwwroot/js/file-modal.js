@@ -1,8 +1,5 @@
 // file-modal.js — generic "pop-out" card reader
-// Works off data-* attributes on any element with class "dossier-item-card is-clickable"
-
 (function () {
-    // Build the modal shell once, inject it into the page
     const overlay = document.createElement('div');
     overlay.className = 'file-modal-overlay';
     overlay.innerHTML = `
@@ -58,13 +55,17 @@
         overlay.classList.remove('is-open');
     }
 
-    document.querySelectorAll('.dossier-item-card.is-clickable').forEach(card => {
-        card.addEventListener('click', () => openModal(card));
+    // Attach click handlers to every card's image specifically
+    document.querySelectorAll('.board-card__img').forEach(img => {
+        img.addEventListener('click', (e) => {
+            e.stopPropagation();
+            openModal(img.closest('.board-card'));
+        });
     });
 
     closeBtn.addEventListener('click', closeModal);
     overlay.addEventListener('click', (e) => {
-        if (e.target === overlay) closeModal(); // click outside the card closes it
+        if (e.target === overlay) closeModal();
     });
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') closeModal();

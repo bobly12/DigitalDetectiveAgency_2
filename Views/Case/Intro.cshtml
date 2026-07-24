@@ -18,7 +18,7 @@
         </div>
     </div>
 
-    <a asp-controller="Case" asp-action="Details" asp-route-id="@Model.CaseId" class="intro-skip">
+    <a asp-controller="Board" asp-action="Index" asp-route-id="@Model.CaseId" class="intro-skip">
         Skip Intro
     </a>
 </div>
@@ -52,7 +52,7 @@
                 index++;
                 showBeat(index);
             } else {
-                window.location.href = '@Url.Action("Details", "Case", new { id = Model.CaseId })';
+                window.location.href = '@Url.Action("Index", "Board", new { id = Model.CaseId })';
             }
         });
 
