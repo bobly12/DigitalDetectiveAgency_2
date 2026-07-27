@@ -86,7 +86,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
                 Id = 1,
                 CaseId = 1,
                 Name = "Dropped Rose",
-                Description = "A single red rose found on the dressing room floor. The stem is freshly cut, not wilted — suggesting it was placed here recently, possibly during the disappearance itself.",
+                Description = "A single red rose found on the dressing room floor. The stem is freshly cut, not wilted — someone left it here recently.",
                 ImageUrl = "/images/evidence/rose.jpg"
             },
             new Evidence
@@ -104,6 +104,38 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
                 Name = "Broken Pocket Watch",
                 Description = "An antique pocket watch, stopped at 9:47 PM. The glass is cracked, and the inside cover is engraved with initials that don't match anyone in the household.",
                 ImageUrl = "/images/evidence/pocket_watch.jpg"
+            },
+            new Evidence
+            {
+                Id = 4,
+                CaseId = 1,
+                Name = "Insurance Ledger Page",
+                Description = "A photocopied ledger page with several transactions circled and the word 'AUDIT' underlined twice. Found stuffed in a lobby trash can.",
+                ImageUrl = "/images/evidence/ledger.jpg"
+            },
+            new Evidence
+            {
+                Id = 5,
+                CaseId = 1,
+                Name = "Handwritten Note",
+                Description = "A crumpled note reading: 'We need to talk. I'm not done fighting for us.' No signature, but the handwriting is bold and impatient.",
+                ImageUrl = "/images/evidence/note.jpg"
+            },
+            new Evidence
+            {
+                Id = 6,
+                CaseId = 1,
+                Name = "Voicemail Transcript",
+                Description = "A printed transcript of a voicemail: 'You can't just cut me out after everything I've done for you. We'll see about that.' Timestamp: three days before the disappearance.",
+                ImageUrl = "/images/evidence/voicemail.jpg"
+            },
+            new Evidence
+            {
+                Id = 7,
+                CaseId = 1,
+                Name = "Backstage Security Log",
+                Description = "A printout of badge-scan entries. One badge — registered to Elena Vasquez — scanned into the dressing room corridor at 7:38 PM, twenty minutes before the violinist was last seen.",
+                ImageUrl = "/images/evidence/security_log.jpg"
             }
         );
 
@@ -130,6 +162,39 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
                 Alibi = "Says she was at a nearby cafe, but no one can confirm it.",
                 ImageUrl = "/images/suspects/elena.jpg",
                 IsGuilty = true
+            },
+            new Suspect
+            {
+                Id = 3,
+                CaseId = 1,
+                Name = "Victor Hale",
+                Description = "The concert hall's owner and producer. Smooth talker, expensive suit, always working the room.",
+                Motive = "The violinist had discovered irregularities in the hall's finances and threatened to go public before the show.",
+                Alibi = "Says he was greeting donors in the lobby all evening — mostly true, but he was unaccounted for a 15-minute window.",
+                ImageUrl = "/images/suspects/victor.jpg",
+                IsGuilty = false
+            },
+            new Suspect
+            {
+                Id = 4,
+                CaseId = 1,
+                Name = "Sophia Reyes",
+                Description = "The violinist's longtime personal assistant. Quiet, meticulous, always one step behind her.",
+                Motive = "Learned two days ago that she'd been written out of the violinist's will after years of unpaid overtime.",
+                Alibi = "Claims she was home sick — but no one can confirm it, and her phone was off all night.",
+                ImageUrl = "/images/suspects/sophia.jpg",
+                IsGuilty = false
+            },
+            new Suspect
+            {
+                Id = 5,
+                CaseId = 1,
+                Name = "Damian Cole",
+                Description = "The violinist's ex-fiancé. Showed up uninvited backstage an hour before the show.",
+                Motive = "Still bitter over their public breakup; was overheard arguing with her in the hallway.",
+                Alibi = "Says he was at the bar the whole time — bartender remembers seeing him, but not exactly when he left.",
+                ImageUrl = "/images/suspects/damian.jpg",
+                IsGuilty = false
             }
         );
 
@@ -150,6 +215,22 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
                 Name = "Ticket Booth Clerk",
                 Statement = "A woman matching Elena's description left in a hurry just before intermission. She seemed upset.",
                 ImageUrl = "/images/witnesses/clerk.jpg"
+            },
+            new Witness
+            {
+                Id = 3,
+                CaseId = 1,
+                Name = "Sound Technician",
+                Statement = "I overheard Victor Hale on the phone saying something like 'we need to make the numbers disappear before anyone audits this.' Didn't think much of it at the time.",
+                ImageUrl = "/images/witnesses/sound_tech.jpg"
+            },
+            new Witness
+            {
+                Id = 4,
+                CaseId = 1,
+                Name = "Valet",
+                Statement = "Damian Cole's car peeled out of the lot around 9 PM, tires screeching. Looked like he was in a real hurry to leave.",
+                ImageUrl = "/images/witnesses/valet.jpg"
             }
         );
 
@@ -173,10 +254,10 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
             .OnDelete(DeleteBehavior.Cascade);
 
         // Seed the "answer key" for Case 1 (The Vanishing Violinist)
-        // Elena (Suspect Id=2) is guilty; these are the connections that "prove" it
         builder.Entity<CaseConnection>().HasData(
             new CaseConnection { Id = 1, CaseId = 1, FromType = "Evidence", FromId = 2, ToType = "Suspect", ToId = 2 },
-            new CaseConnection { Id = 2, CaseId = 1, FromType = "Witness", FromId = 2, ToType = "Suspect", ToId = 2 }
+            new CaseConnection { Id = 2, CaseId = 1, FromType = "Witness", FromId = 2, ToType = "Suspect", ToId = 2 },
+            new CaseConnection { Id = 3, CaseId = 1, FromType = "Evidence", FromId = 7, ToType = "Suspect", ToId = 2 }
         );
 
         // Accusation relationships
@@ -198,7 +279,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
             .HasForeignKey(a => a.AccusedSuspectId)
             .OnDelete(DeleteBehavior.Restrict);
 
-        // SuspectElimination relationships — NOW CORRECTLY INSIDE OnModelCreating
+        // SuspectElimination relationships
         builder.Entity<SuspectElimination>()
             .HasOne(se => se.ApplicationUser)
             .WithMany()
@@ -215,6 +296,6 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
             .HasOne(se => se.Suspect)
             .WithMany()
             .HasForeignKey(se => se.SuspectId)
-            .OnDelete(DeleteBehavior.Restrict); // avoid multiple cascade paths, same reason as Accusation
+            .OnDelete(DeleteBehavior.Restrict); // avoid multiple cascade paths
     }
 }

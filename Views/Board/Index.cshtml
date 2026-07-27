@@ -1,11 +1,11 @@
 @model DigitalDetectiveAgency.Models.ViewModels.BoardViewModel
 
 @{
-ViewData["Title"] = Model.CaseTitle;
+    ViewData["Title"] = Model.CaseTitle;
 }
 
 @section PageStyles {
-<link rel="stylesheet" href="~/css/pages/board.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/pages/board.css" asp-append-version="true" />
 }
 
 <div class="container-board">
@@ -20,99 +20,109 @@ ViewData["Title"] = Model.CaseTitle;
 
         @if (TempData["BoardMessage"] != null)
         {
-        <div class="board-notice">@TempData["BoardMessage"]</div>
+            <div class="board-notice">@TempData["BoardMessage"]</div>
         }
 
         @if (Model.IsCompleted)
         {
-        <div class="dossier-completed-banner">📁 Case Closed — Score: @Model.Score</div>
+            <div class="dossier-completed-banner">📁 Case Closed — Score: @Model.Score</div>
         }
         else
         {
-        <div class="confidence-gauge">
-            <div class="confidence-gauge__label">
-                Investigation Confidence
-                <span class="confidence-gauge__value">@Model.Confidence%</span>
+            <div class="confidence-gauge">
+                <div class="confidence-gauge__label">
+                    Investigation Confidence
+                    <span class="confidence-gauge__value">@Model.Confidence%</span>
+                </div>
+                <div class="confidence-gauge__track">
+                    <div class="confidence-gauge__fill @(Model.Confidence >= 75 ? "confidence-gauge__fill--high" : Model.Confidence >= 40 ? "confidence-gauge__fill--mid" : "confidence-gauge__fill--low")"
+                         style="width: @Model.Confidence%;"></div>
+                </div>
+                <div class="confidence-gauge__detail">
+                    @Model.CorrectConnections / @Model.TotalRequiredConnections connections &nbsp;•&nbsp;
+                    @Model.CorrectEliminatedSuspects / @Model.TotalInnocentSuspects suspects cleared
+                </div>
             </div>
-            <div class="confidence-gauge__track">
-                <div class="confidence-gauge__fill @(Model.Confidence >= 75 ? "confidence-gauge__fill--high" : Model.Confidence >= 40 ? "confidence-gauge__fill--mid" : "confidence-gauge__fill--low")"
-                     style="width: @Model.Confidence%;"></div>
-            </div>
-            <div class="confidence-gauge__detail">
-                @Model.CorrectConnections / @Model.TotalRequiredConnections connections &nbsp;•&nbsp;
-                @Model.CorrectEliminatedSuspects / @Model.TotalInnocentSuspects suspects cleared
-            </div>
-        </div>
 
-        @if (Model.CanAccuse)
-        {
-        <a asp-controller="Accusation" asp-action="Create" asp-route-id="@Model.CaseId" class="btn-stamp btn-stamp--danger">
-            ⚖️ Make Accusation
-        </a>
-        }
-        else
-        {
-        <button type="button" class="btn-stamp btn-stamp--disabled" disabled title="Reach 75% confidence to unlock">
-            ⚖️ Make Accusation (@Model.RemainingConfidence% more needed)
-        </button>
-        }
+            @if (Model.CanAccuse)
+            {
+                <a asp-controller="Accusation" asp-action="Create" asp-route-id="@Model.CaseId" class="btn-stamp btn-stamp--danger">
+                    ⚖️ Make Accusation
+                </a>
+            }
+            else
+            {
+                <button type="button" class="btn-stamp btn-stamp--disabled" disabled title="Reach 75% confidence to unlock">
+                    ⚖️ Make Accusation (@Model.RemainingConfidence% more needed)
+                </button>
+            }
         }
     </div>
 
-    <p class="board-hint">Click a photo to examine it closely. Click two cards to connect them. Click a red thread to cut it.</p>
+    <p class="board-hint">Click the <strong>pin</strong> on a card to start a thread, then click a pin on another card to connect them. Click a thread to cut it.</p>
 
     <div class="board-wrapper" id="board-container">
-        <svg id="connection-svg" style="position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:1;"></svg>
+        <svg id="connection-svg" style="position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:1;">
+            <defs>
+                <filter id="stringWobble" x="-30%" y="-30%" width="160%" height="160%">
+                    <feTurbulence type="fractalNoise" baseFrequency="0.012 0.09" numOctaves="2" seed="7" result="noise" />
+                    <feDisplacementMap in="SourceGraphic" in2="noise" scale="4" xChannelSelector="R" yChannelSelector="G" />
+                </filter>
+            </defs>
+        </svg>
 
         <div class="board-columns">
             <div>
                 <div class="board-column__label">🔍 Evidence</div>
                 @foreach (var node in Model.Evidence)
                 {
-                var fields = new[] { new { heading = (string?)null, text = node.Description } };
-                <div class="board-card" data-type="Evidence" data-id="@node.Id"
-                     data-name="@node.Name" data-image="@node.ImageUrl" data-label="Evidence"
-                     data-fields="@System.Text.Json.JsonSerializer.Serialize(fields)">
-                    <img src="@node.ImageUrl" alt="@node.Name" class="board-card__img" />
-                    <strong>@node.Name</strong>
-                </div>
+                    var fields = new[] { new { heading = (string?)null, text = node.Description } };
+                    <div class="board-card" data-type="Evidence" data-id="@node.Id"
+                         data-name="@node.Name" data-image="@node.ImageUrl" data-label="Evidence"
+                         data-fields="@System.Text.Json.JsonSerializer.Serialize(fields)">
+                        <span class="board-card__pin" data-connect-pin title="Click to start or complete a connection"></span>
+                        <img src="@node.ImageUrl" alt="@node.Name" class="board-card__img" />
+                        <strong>@node.Name</strong>
+                    </div>
                 }
             </div>
             <div>
                 <div class="board-column__label">🕴 Suspects</div>
                 @foreach (var node in Model.Suspects)
                 {
-                var fields = new[]
-                {
-                new { heading = (string?)null, text = node.Description },
-                new { heading = (string?)"Motive", text = node.Motive ?? "" },
-                new { heading = (string?)"Alibi", text = node.Alibi ?? "" }
-                };
-                <div class="board-card @(Model.EliminatedSuspectIds.Contains(node.Id) ? "is-eliminated" : "")"
-                     data-type="Suspect" data-id="@node.Id"
-                     data-name="@node.Name" data-image="@node.ImageUrl" data-label="Suspect"
-                     data-fields="@System.Text.Json.JsonSerializer.Serialize(fields)">
-                    <button class="board-card__eliminate-btn" data-eliminate-suspect="@node.Id" title="Eliminate suspect">✕</button>
-                    @if (!node.IsMotiveUnlocked)
+                    var fields = new[]
                     {
-                    <span class="board-card__lock" title="Make a valid connection to this suspect to unlock their file">🔒</span>
-                    }
-                    <img src="@node.ImageUrl" alt="@node.Name" class="board-card__img" />
-                    <strong>@node.Name</strong>
-                </div>
+                        new { heading = (string?)null, text = node.Description },
+                        new { heading = (string?)"Motive", text = node.Motive ?? "" },
+                        new { heading = (string?)"Alibi", text = node.Alibi ?? "" }
+                    };
+                    <div class="board-card @(Model.EliminatedSuspectIds.Contains(node.Id) ? "is-eliminated" : "")"
+                         data-type="Suspect" data-id="@node.Id"
+                         data-name="@node.Name" data-image="@node.ImageUrl" data-label="Suspect"
+                         data-fields="@System.Text.Json.JsonSerializer.Serialize(fields)">
+                        <button class="board-card__eliminate-btn" data-eliminate-suspect="@node.Id" title="Eliminate suspect">✕</button>
+                        <span class="board-card__pin" data-connect-pin title="Click to start or complete a connection"></span>
+                        @if (!node.IsMotiveUnlocked)
+                        {
+                            <span class="board-card__lock" title="Connect this suspect to a piece of evidence or a witness to unlock their file">🔒</span>
+                        }
+                        <img src="@node.ImageUrl" alt="@node.Name" class="board-card__img" />
+                        <strong>@node.Name</strong>
+                    </div>
                 }
             </div>
             <div>
                 <div class="board-column__label">🗣 Witnesses</div>
                 @foreach (var node in Model.Witnesses)
                 {
-                var fields = new[] { new { heading = (string?)null, text = "\"" + node.Description + "\"" } };
-                <div class="board-card" data-type="Witness" data-id="@node.Id"
-                     data-name="@node.Name" data-image="@node.ImageUrl" data-label="Witness"
-                     data-fields="@System.Text.Json.JsonSerializer.Serialize(fields)">
-                    <img src="@node.ImageUrl" alt="@node.Name" class="board-card__img" />
-                    <strong>@node.Name</strong>
-                </div>
+                    var fields = new[] { new { heading = (string?)null, text = "\"" + node.Description + "\"" } };
+                    <div class="board-card" data-type="Witness" data-id="@node.Id"
+                         data-name="@node.Name" data-image="@node.ImageUrl" data-label="Witness"
+                         data-fields="@System.Text.Json.JsonSerializer.Serialize(fields)">
+                        <span class="board-card__pin" data-connect-pin title="Click to start or complete a connection"></span>
+                        <img src="@node.ImageUrl" alt="@node.Name" class="board-card__img" />
+                        <strong>@node.Name</strong>
+                    </div>
                 }
             </div>
         </div>
@@ -126,10 +136,10 @@ ViewData["Title"] = Model.CaseTitle;
 </div>
 
 @section Scripts {
-<script>
-    window.boardCaseId = @Model.CaseId;
-    window.initialConnections = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.Connections));
-</script>
-<script src="~/js/board.js"></script>
-<script src="~/js/file-modal.js"></script>
+    <script>
+        window.boardCaseId = @Model.CaseId;
+        window.initialConnections = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.Connections));
+    </script>
+    <script src="~/js/board.js"></script>
+    <script src="~/js/file-modal.js"></script>
 }

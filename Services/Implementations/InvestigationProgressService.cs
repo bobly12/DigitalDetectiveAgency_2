@@ -44,8 +44,8 @@ public class InvestigationProgressService : IInvestigationProgressService
                 s.Id == id &&
                 !s.IsGuilty));
 
-        var unlockedSuspectIds =
-            CalculateUnlockedSuspectIds(playerConnections, answerKey);
+        // NOTE: unlock no longer depends on the answer key — see method below.
+        var unlockedSuspectIds = CalculateUnlockedSuspectIds(playerConnections);
 
         var confidence = CalculateConfidence(
             correctConnections,
@@ -74,6 +74,8 @@ public class InvestigationProgressService : IInvestigationProgressService
     /// Replace this implementation with the shared validation helper
     /// if your project already has one.
     /// This should be the ONLY definition of a valid connection.
+    /// Still used for CorrectConnections / Confidence — just no longer
+    /// used to gate the Motive/Alibi unlock (see below).
     /// </summary>
     private static bool IsValidConnection(
         ClueConnection playerConnection,
@@ -96,24 +98,38 @@ public class InvestigationProgressService : IInvestigationProgressService
         );
     }
 
+    /// <summary>
+    /// A suspect's Motive/Alibi unlock as soon as the player connects them to
+    /// any Evidence or Witness card — regardless of whether that connection
+    /// turns out to be correct. This rewards actively investigating a lead,
+    /// not just already knowing the right answer.
+    ///
+    /// Suspect-to-Suspect connections do NOT unlock anything, since that
+    /// isn't "linking a clue" to them.
+    ///
+    /// Correctness is intentionally irrelevant here: a wrong guess still
+    /// unlocks the suspect's file (so the player isn't punished for taking
+    /// a shot and can course-correct), but it still contributes nothing to
+    /// CorrectConnections/Confidence above, which remain strictly validated
+    /// against the answer key. Unlocking and scoring are separate concerns.
+    /// </summary>
     private static HashSet<int> CalculateUnlockedSuspectIds(
-        IEnumerable<ClueConnection> playerConnections,
-        List<CaseConnection> answerKey)
+        IEnumerable<ClueConnection> playerConnections)
     {
         var unlocked = new HashSet<int>();
 
         foreach (var connection in playerConnections)
         {
-            if (!IsValidConnection(connection, answerKey))
-                continue;
+            bool fromIsSuspect = connection.FromType == "Suspect";
+            bool toIsSuspect = connection.ToType == "Suspect";
 
-            // TODO:
-            // Replace "Suspect" with your project's enum/constant
-            // if one already exists.
-            if (connection.FromType == "Suspect")
+            bool fromIsClue = connection.FromType == "Evidence" || connection.FromType == "Witness";
+            bool toIsClue = connection.ToType == "Evidence" || connection.ToType == "Witness";
+
+            if (fromIsSuspect && toIsClue)
                 unlocked.Add(connection.FromId);
 
-            if (connection.ToType == "Suspect")
+            if (toIsSuspect && fromIsClue)
                 unlocked.Add(connection.ToId);
         }
 

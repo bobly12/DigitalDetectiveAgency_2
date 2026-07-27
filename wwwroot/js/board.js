@@ -1,12 +1,13 @@
 // wwwroot/js/board.js
 (function () {
     const svg = document.getElementById('connection-svg');
-    const cards = document.querySelectorAll('.board-card');
     let selectedCard = null;
     let connections = [...window.initialConnections];
 
-    function getCardCenter(card) {
-        const rect = card.getBoundingClientRect();
+    function getPinPosition(card) {
+        const pin = card.querySelector('[data-connect-pin]');
+        const target = pin || card;
+        const rect = target.getBoundingClientRect();
         const containerRect = document.getElementById('board-container').getBoundingClientRect();
         return {
             x: rect.left - containerRect.left + rect.width / 2,
@@ -23,27 +24,34 @@
         const toCard = findCard(conn.toType || conn.ToType, conn.toId || conn.ToId);
         if (!fromCard || !toCard) return;
 
-        const from = getCardCenter(fromCard);
-        const to = getCardCenter(toCard);
+        const from = getPinPosition(fromCard);
+        const to = getPinPosition(toCard);
 
-        const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-        line.setAttribute('x1', from.x);
-        line.setAttribute('y1', from.y);
-        line.setAttribute('x2', to.x);
-        line.setAttribute('y2', to.y);
-        line.setAttribute('stroke', '#c0392b');
-        line.setAttribute('stroke-width', '2');
-        line.dataset.connectionId = conn.id || conn.Id;
-        line.style.pointerEvents = 'stroke';
-        line.style.cursor = 'pointer';
+        // Sag the string like real corkboard twine — bow the midpoint downward,
+        // more sag for longer threads, capped so it doesn't get silly on wide boards.
+        const dist = Math.hypot(to.x - from.x, to.y - from.y);
+        const sag = Math.min(50, dist * 0.15);
+        const midX = (from.x + to.x) / 2;
+        const midY = (from.y + to.y) / 2 + sag;
 
-        line.addEventListener('click', () => removeConnection(line, conn.id || conn.Id));
+        const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        path.setAttribute('d', `M ${from.x} ${from.y} Q ${midX} ${midY} ${to.x} ${to.y}`);
+        path.setAttribute('fill', 'none');
+        path.setAttribute('stroke', '#b8342a');
+        path.setAttribute('stroke-width', '2');
+        path.setAttribute('filter', 'url(#stringWobble)');
+        path.classList.add('conn-line');
+        path.dataset.connectionId = conn.id || conn.Id;
+        path.style.pointerEvents = 'stroke';
+        path.style.cursor = 'pointer';
 
-        svg.appendChild(line);
+        path.addEventListener('click', () => removeConnection(path, conn.id || conn.Id));
+
+        svg.appendChild(path);
     }
 
     function redrawAll() {
-        svg.innerHTML = '';
+        svg.querySelectorAll('.conn-line').forEach(el => el.remove());
         connections.forEach(drawLine);
     }
 
@@ -64,24 +72,30 @@
         }
     }
 
-    // ===== Card-to-card connection behavior =====
-    cards.forEach(card => {
-        card.style.cursor = 'pointer';
-        card.addEventListener('click', async (e) => {
-            // If the click was on the photo itself, let file-modal.js handle it instead
-            if (e.target.classList.contains('board-card__img')) {
-                return;
-            }
+    function clearSelection() {
+        if (!selectedCard) return;
+        selectedCard.querySelector('[data-connect-pin]')?.classList.remove('is-active-pin');
+        selectedCard.classList.remove('is-selected');
+        selectedCard = null;
+    }
+
+    // ===== Pin-to-pin connection behavior =====
+    // The pin is the only click target for starting/completing a connection.
+    // Clicking elsewhere on a card (e.g. the photo) is handled separately by file-modal.js.
+    document.querySelectorAll('[data-connect-pin]').forEach(pin => {
+        pin.addEventListener('click', async (e) => {
+            e.stopPropagation();
+            const card = pin.closest('.board-card');
 
             if (!selectedCard) {
                 selectedCard = card;
+                pin.classList.add('is-active-pin');
                 card.classList.add('is-selected');
                 return;
             }
 
             if (selectedCard === card) {
-                selectedCard.classList.remove('is-selected');
-                selectedCard = null;
+                clearSelection();
                 return;
             }
 
@@ -96,8 +110,7 @@
                 body: JSON.stringify({ caseId: window.boardCaseId, fromType, fromId, toType, toId })
             });
 
-            selectedCard.classList.remove('is-selected');
-            selectedCard = null;
+            clearSelection();
 
             if (res.ok) {
                 connections.push({ fromType, fromId, toType, toId, id: Date.now() });
