@@ -93,8 +93,14 @@
                     var fields = new[]
                     {
                         new { heading = (string?)null, text = node.Description },
-                        new { heading = (string?)"Motive", text = node.Motive ?? "" },
-                        new { heading = (string?)"Alibi", text = node.Alibi ?? "" }
+                        new {
+                            heading = (string?)"Motive",
+                            text = node.IsMotiveUnlocked ? (node.Motive ?? "") : "🔒 Unknown — connect this suspect to evidence or a witness to unlock."
+                        },
+                        new {
+                            heading = (string?)"Alibi",
+                            text = node.IsAlibiUnlocked ? (node.Alibi ?? "") : "🔒 Unknown — connect this suspect to evidence or a witness to unlock."
+                        }
                     };
                     <div class="board-card @(Model.EliminatedSuspectIds.Contains(node.Id) ? "is-eliminated" : "")"
                          data-type="Suspect" data-id="@node.Id"

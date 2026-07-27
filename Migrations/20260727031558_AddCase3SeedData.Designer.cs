@@ -4,6 +4,7 @@ using DigitalDetectiveAgency.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DigitalDetectiveAgency.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260727031558_AddCase3SeedData")]
+    partial class AddCase3SeedData
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -173,14 +176,6 @@ namespace DigitalDetectiveAgency.Migrations
                             Difficulty = 2,
                             IsPublished = true,
                             Title = "The Last Harvest at Hacienda Malinao"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Description = "The night before dive resort owner Ramon Aguilar was set to unveil a controversial expansion into Talipanan Cove — land the local fisherfolk have worked for generations and the Mangyan community considers ancestral ground — he's found dead at the bottom of his own boat dock. The town had gathered for the resort's investor showcase. Protesters had gathered outside the gate for weeks. Everyone had a reason to want the expansion stopped. Only one person had a reason to stop Ramon himself.",
-                            Difficulty = 2,
-                            IsPublished = true,
-                            Title = "Undertow at Puerto Galera"
                         });
                 });
 
@@ -268,33 +263,6 @@ namespace DigitalDetectiveAgency.Migrations
                             FromId = 8,
                             FromType = "Witness",
                             ToId = 10,
-                            ToType = "Suspect"
-                        },
-                        new
-                        {
-                            Id = 7,
-                            CaseId = 4,
-                            FromId = 17,
-                            FromType = "Evidence",
-                            ToId = 12,
-                            ToType = "Suspect"
-                        },
-                        new
-                        {
-                            Id = 8,
-                            CaseId = 4,
-                            FromId = 18,
-                            FromType = "Evidence",
-                            ToId = 12,
-                            ToType = "Suspect"
-                        },
-                        new
-                        {
-                            Id = 9,
-                            CaseId = 4,
-                            FromId = 13,
-                            FromType = "Witness",
-                            ToId = 12,
                             ToType = "Suspect"
                         });
                 });
@@ -489,70 +457,6 @@ namespace DigitalDetectiveAgency.Migrations
                             Description = "William Tan's business card, a lower price scrawled on the back along with the words 'final — take it or we walk.'",
                             ImageUrl = "/images/evidence/business_card.jpg",
                             Name = "Business Card with Scribbled Offer"
-                        },
-                        new
-                        {
-                            Id = 16,
-                            CaseId = 4,
-                            Description = "A standard dive knife, the kind every instructor and boat crew on the property carries. No initials, no distinguishing marks.",
-                            ImageUrl = "/images/evidence/dive_knife.jpg",
-                            Name = "Diving Knife"
-                        },
-                        new
-                        {
-                            Id = 17,
-                            CaseId = 4,
-                            Description = "An environmental clearance form for the cove expansion, the approval signature traced rather than signed — and initialed 'N.A.' in the corner margin.",
-                            ImageUrl = "/images/evidence/forged_permit.jpg",
-                            Name = "Forged Permit Application"
-                        },
-                        new
-                        {
-                            Id = 18,
-                            CaseId = 4,
-                            Description = "A second, unofficial ledger found taped beneath the office desk drawer, tracking three years of maintenance budget quietly redirected to a personal account.",
-                            ImageUrl = "/images/evidence/fund_ledger.jpg",
-                            Name = "Diverted Maintenance Fund Ledger"
-                        },
-                        new
-                        {
-                            Id = 19,
-                            CaseId = 4,
-                            Description = "A policy naming Cristina as sole beneficiary, dated two months after the wedding — and never disclosed to Ramon's children from his first marriage.",
-                            ImageUrl = "/images/evidence/insurance_policy.jpg",
-                            Name = "Life Insurance Policy"
-                        },
-                        new
-                        {
-                            Id = 20,
-                            CaseId = 4,
-                            Description = "An envelope of cash found in Mayor Villaruz's car, a sticky note attached reading 'para sa fast-track, huwag na banggitin.'",
-                            ImageUrl = "/images/evidence/bribe_envelope.jpg",
-                            Name = "Bribery Cash Envelope"
-                        },
-                        new
-                        {
-                            Id = 21,
-                            CaseId = 4,
-                            Description = "A phone photo of the resort's dive compressor with a cut hose — taken the same week Boyet was overheard threatening to 'make sure the showcase doesn't go smoothly.'",
-                            ImageUrl = "/images/evidence/compressor_photo.jpg",
-                            Name = "Sabotaged Compressor Photo"
-                        },
-                        new
-                        {
-                            Id = 22,
-                            CaseId = 4,
-                            Description = "A flyer from the fisherfolk association, hand-annotated in the margin: 'kung kailangan, gagamit tayo ng ibang paraan' — if necessary, we'll use other means.",
-                            ImageUrl = "/images/evidence/protest_flyer.jpg",
-                            Name = "Protest Flyer"
-                        },
-                        new
-                        {
-                            Id = 23,
-                            CaseId = 4,
-                            Description = "A half-burned copy of the Mangyan community's ancestral domain petition, found in the resort office trash bin — someone tried to make it disappear before the investors saw it.",
-                            ImageUrl = "/images/evidence/burnt_petition.jpg",
-                            Name = "Burnt Petition Copy"
                         });
                 });
 
@@ -759,72 +663,6 @@ namespace DigitalDetectiveAgency.Migrations
                             IsGuilty = false,
                             Motive = "Ernesto tried to renegotiate the price at the last minute, threatening to walk away from the deal entirely.",
                             Name = "William Tan"
-                        },
-                        new
-                        {
-                            Id = 12,
-                            Alibi = "Says he was doing late inventory in the resort office alone. No one thought to question it — he's always the last one to leave.",
-                            CaseId = 4,
-                            Description = "Ramon's nephew and the resort's general manager, trusted with the books for the past six years.",
-                            ImageUrl = "/images/suspects/nico.jpg",
-                            IsGuilty = true,
-                            Motive = "An outside audit tied to the expansion loan would have surfaced years of diverted maintenance funds and forged permit paperwork — all under his signature.",
-                            Name = "Nico Aguilar"
-                        },
-                        new
-                        {
-                            Id = 13,
-                            Alibi = "Claims she was greeting investors at the showcase all night. Several guests confirm seeing her — but not continuously.",
-                            CaseId = 4,
-                            Description = "Ramon's second wife, twenty years his junior, married just three years ago.",
-                            ImageUrl = "/images/suspects/cristina.jpg",
-                            IsGuilty = false,
-                            Motive = "Sole beneficiary on a life insurance policy Ramon took out shortly after their wedding — one his first family never knew existed.",
-                            Name = "Cristina Aguilar"
-                        },
-                        new
-                        {
-                            Id = 14,
-                            Alibi = "Says his boat never left Sabang that night. The marina logbook backs him up — mostly; there's a 40-minute gap in the entries.",
-                            CaseId = 4,
-                            Description = "Owner of a rival dive resort in Sabang, and Ramon's business rival for over a decade.",
-                            ImageUrl = "/images/suspects/boyet.jpg",
-                            IsGuilty = false,
-                            Motive = "Ramon's expansion would have driven half of Boyet's dive tourists to the new cove, likely closing his resort within a year.",
-                            Name = "Boyet Ramos"
-                        },
-                        new
-                        {
-                            Id = 15,
-                            Alibi = "Says he left the showcase early with a headache. His driver confirms dropping him home, but not what time he arrived.",
-                            CaseId = 4,
-                            Description = "The town mayor, who fast-tracked the resort's expansion permits over the objections of his own municipal planning office.",
-                            ImageUrl = "/images/suspects/villaruz.jpg",
-                            IsGuilty = false,
-                            Motive = "Ramon was the only person who could prove the permits were approved in exchange for a cut of the investor funding.",
-                            Name = "Mayor Teodoro Villaruz"
-                        },
-                        new
-                        {
-                            Id = 16,
-                            Alibi = "Says he was leading a prayer gathering with his community at the edge of the property when the fireworks started. Several members confirm it.",
-                            CaseId = 4,
-                            Description = "An elder of the local Mangyan community, who has spent months formally petitioning to have the cove recognized as ancestral domain.",
-                            ImageUrl = "/images/suspects/bandying.jpg",
-                            IsGuilty = false,
-                            Motive = "The expansion would pave over a burial ground his community has protected for generations — and Ramon had ignored every petition.",
-                            Name = "Datu Bandying"
-                        },
-                        new
-                        {
-                            Id = 17,
-                            Alibi = "Says he was leading the protest chant outside the gate when the fireworks went off — dozens of witnesses can place him there.",
-                            CaseId = 4,
-                            Description = "Head of the local fisherfolk association, and the loudest voice at every protest outside the resort gate for the past two months.",
-                            ImageUrl = "/images/suspects/pandoy.jpg",
-                            IsGuilty = false,
-                            Motive = "The cove is the fishing ground his association depends on. Losing it meant losing livelihoods for over thirty families.",
-                            Name = "Fernando \"Ka Pandoy\" Reyes"
                         });
                 });
 
@@ -961,38 +799,6 @@ namespace DigitalDetectiveAgency.Migrations
                             ImageUrl = "/images/witnesses/niece.jpg",
                             Name = "Ernesto's Niece",
                             Statement = "I saw Tita Teresa and Tito Ernesto arguing near the garden earlier that evening, before the fireworks even started. She looked like she'd been crying."
-                        },
-                        new
-                        {
-                            Id = 10,
-                            CaseId = 4,
-                            ImageUrl = "/images/witnesses/bangkero.jpg",
-                            Name = "Bangkero (Boat Captain)",
-                            Statement = "Merong nakita akong tao malapit sa dive shop that night, pero madilim — hindi ko masabi kung sino."
-                        },
-                        new
-                        {
-                            Id = 11,
-                            CaseId = 4,
-                            ImageUrl = "/images/witnesses/front_desk.jpg",
-                            Name = "Resort Front Desk Staff",
-                            Statement = "I overheard Cristina on the phone that night saying, 'after this, wala nang makakapigil sa 'kin.' Didn't think much of it at the time."
-                        },
-                        new
-                        {
-                            Id = 12,
-                            CaseId = 4,
-                            ImageUrl = "/images/witnesses/sabang_local.jpg",
-                            Name = "Sabang Local",
-                            Statement = "I saw Boyet's boat idling near the resort's private dock that night, lights off. Left again after maybe ten minutes."
-                        },
-                        new
-                        {
-                            Id = 13,
-                            CaseId = 4,
-                            ImageUrl = "/images/witnesses/security_guard.jpg",
-                            Name = "Resort Security Guard",
-                            Statement = "Si Nico lang ang nakita kong pumasok sa office nang mag-isa, late na late na. Sabi niya nagta-take lang daw siya ng inventory, pero nakita ko siyang may dalang shredder bag paglabas."
                         });
                 });
 
