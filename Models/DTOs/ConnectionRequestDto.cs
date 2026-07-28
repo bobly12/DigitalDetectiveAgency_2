@@ -13,6 +13,7 @@ public class ConnectionRequestDto
 public class DeleteConnectionRequestDto
 {
     public int ConnectionId { get; set; }
+    public int CaseId { get; set; } // NEW — needed so the server can rebuild the progress snapshot after deleting
 }
 
 public class ToggleEliminationRequestDto

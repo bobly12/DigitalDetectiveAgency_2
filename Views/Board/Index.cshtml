@@ -32,30 +32,27 @@
             <div class="confidence-gauge">
                 <div class="confidence-gauge__label">
                     Investigation Confidence
-                    <span class="confidence-gauge__value">@Model.Confidence%</span>
+                    <span class="confidence-gauge__value" id="confidence-value">@Model.Confidence%</span>
                 </div>
                 <div class="confidence-gauge__track">
                     <div class="confidence-gauge__fill @(Model.Confidence >= 75 ? "confidence-gauge__fill--high" : Model.Confidence >= 40 ? "confidence-gauge__fill--mid" : "confidence-gauge__fill--low")"
+                         id="confidence-fill"
                          style="width: @Model.Confidence%;"></div>
                 </div>
-                <div class="confidence-gauge__detail">
+                <div class="confidence-gauge__detail" id="confidence-detail">
                     @Model.CorrectConnections / @Model.TotalRequiredConnections connections &nbsp;•&nbsp;
                     @Model.CorrectEliminatedSuspects / @Model.TotalInnocentSuspects suspects cleared
                 </div>
             </div>
 
-            @if (Model.CanAccuse)
-            {
-                <a asp-controller="Accusation" asp-action="Create" asp-route-id="@Model.CaseId" class="btn-stamp btn-stamp--danger">
-                    ⚖️ Make Accusation
-                </a>
-            }
-            else
-            {
-                <button type="button" class="btn-stamp btn-stamp--disabled" disabled title="Reach 75% confidence to unlock">
-                    ⚖️ Make Accusation (@Model.RemainingConfidence% more needed)
-                </button>
-            }
+            <a asp-controller="Accusation" asp-action="Create" asp-route-id="@Model.CaseId"
+               id="accuse-btn"
+               class="btn-stamp btn-stamp--danger @(Model.CanAccuse ? "" : "btn-stamp--disabled")"
+               data-can-accuse="@Model.CanAccuse.ToString().ToLower()"
+               aria-disabled="@(Model.CanAccuse ? null : "true")"
+               title="@(Model.CanAccuse ? null : "Reach 75% confidence to unlock")">
+                ⚖️ <span id="accuse-btn-label">@(Model.CanAccuse ? "Make Accusation" : $"Make Accusation ({Model.RemainingConfidence}% more needed)")</span>
+            </a>
         }
     </div>
 
@@ -93,14 +90,8 @@
                     var fields = new[]
                     {
                         new { heading = (string?)null, text = node.Description },
-                        new {
-                            heading = (string?)"Motive",
-                            text = node.IsMotiveUnlocked ? (node.Motive ?? "") : "🔒 Unknown — connect this suspect to evidence or a witness to unlock."
-                        },
-                        new {
-                            heading = (string?)"Alibi",
-                            text = node.IsAlibiUnlocked ? (node.Alibi ?? "") : "🔒 Unknown — connect this suspect to evidence or a witness to unlock."
-                        }
+                        new { heading = (string?)"Motive", text = node.Motive ?? "" },
+                        new { heading = (string?)"Alibi", text = node.Alibi ?? "" }
                     };
                     <div class="board-card @(Model.EliminatedSuspectIds.Contains(node.Id) ? "is-eliminated" : "")"
                          data-type="Suspect" data-id="@node.Id"
@@ -110,7 +101,7 @@
                         <span class="board-card__pin" data-connect-pin title="Click to start or complete a connection"></span>
                         @if (!node.IsMotiveUnlocked)
                         {
-                            <span class="board-card__lock" title="Connect this suspect to a piece of evidence or a witness to unlock their file">🔒</span>
+                            <span class="board-card__lock" data-suspect-lock title="Connect this suspect to a piece of evidence or a witness to unlock their file">🔒</span>
                         }
                         <img src="@node.ImageUrl" alt="@node.Name" class="board-card__img" />
                         <strong>@node.Name</strong>

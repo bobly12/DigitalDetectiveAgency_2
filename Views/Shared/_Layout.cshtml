@@ -18,18 +18,25 @@
     <header>
         <nav class="dossier-nav">
             <a class="dossier-nav__brand" asp-area="" asp-controller="Home" asp-action="Index">
-                🕵️ Digital Detective Agency
+                Digital Detective Agency
             </a>
-            <ul class="dossier-nav__links">
-                <li><a asp-controller="Profile" asp-action="Index">Profile</a></li>
-                <li><a asp-controller="Case" asp-action="Index">Case Files</a></li>
-                <li><a asp-controller="Home" asp-action="Privacy">Privacy</a></li>
-                @if (User.IsInRole("Admin"))
-                {
-                    <li class="dossier-nav__admin"><a asp-controller="AdminCase" asp-action="Index">🛠 Admin</a></li>
-                }
-            </ul>
-            <partial name="_LoginPartial" />
+
+            <div class="dossier-nav__menu">
+                <button class="dossier-nav__menu-trigger" type="button" aria-haspopup="true">
+                    ☰ Menu
+                </button>
+                <ul class="dossier-nav__dropdown">
+                    <li><a asp-controller="Profile" asp-action="Index">Profile</a></li>
+                    <li><a asp-controller="Case" asp-action="Index">Case Files</a></li>
+                    <li><a asp-controller="Home" asp-action="Privacy">Privacy</a></li>
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <li class="dossier-nav__admin"><a asp-controller="AdminCase" asp-action="Index">🛠 Admin</a></li>
+                    }
+                    <li class="dossier-nav__divider"></li>
+                    <partial name="_LoginPartial" />
+                </ul>
+            </div>
         </nav>
     </header>
 

@@ -58,3 +58,25 @@
     text-decoration: underline;
     cursor: pointer;
 }
+/* Add to wwwroot/css/pages/intro.css â€” centers the title and story beats.
+   If .intro-screen isn't already flex/column, this rule set adds it. */
+.intro-screen {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    min-height: 70vh;
+}
+
+.intro-screen__title {
+    text-align: center;
+    max-width: 700px;
+}
+
+.intro-beat {
+    text-align: center;
+    max-width: 650px;
+    margin-left: auto;
+    margin-right: auto;
+}           

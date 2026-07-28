@@ -12,11 +12,16 @@ namespace DigitalDetectiveAgency.Controllers;
 public class BoardController : Controller
 {
     private readonly IBoardService _boardService;
+    private readonly IInvestigationProgressService _progressService;
     private readonly UserManager<ApplicationUser> _userManager;
 
-    public BoardController(IBoardService boardService, UserManager<ApplicationUser> userManager)
+    public BoardController(
+        IBoardService boardService,
+        IInvestigationProgressService progressService,
+        UserManager<ApplicationUser> userManager)
     {
         _boardService = boardService;
+        _progressService = progressService;
         _userManager = userManager;
     }
 
@@ -37,12 +42,19 @@ public class BoardController : Controller
     public async Task<IActionResult> SaveConnection([FromBody] ConnectionRequestDto request)
     {
         var userId = _userManager.GetUserId(User)!;
-        var (success, error) = await _boardService.SaveConnectionAsync(request, userId);
+        var (success, error, connectionId) = await _boardService.SaveConnectionAsync(request, userId);
 
         if (!success)
             return BadRequest(new { message = error });
 
-        return Ok(new { message = "Connection saved." });
+        var progress = await BuildProgressSnapshotAsync(request.CaseId, userId);
+
+        return Ok(new
+        {
+            message = "Connection saved.",
+            connectionId,
+            progress
+        });
     }
 
     // POST: /Board/DeleteConnection
@@ -55,9 +67,15 @@ public class BoardController : Controller
         if (!success)
             return BadRequest(new { message = error });
 
-        return Ok(new { message = "Connection removed." });
-        
+        var progress = await BuildProgressSnapshotAsync(request.CaseId, userId);
+
+        return Ok(new
+        {
+            message = "Connection removed.",
+            progress
+        });
     }
+
     // POST: /Board/ToggleElimination
     [HttpPost]
     public async Task<IActionResult> ToggleElimination([FromBody] ToggleEliminationRequestDto request)
@@ -68,7 +86,45 @@ public class BoardController : Controller
         if (!success)
             return BadRequest(new { message = error });
 
-        return Ok(new { message = "Elimination toggled." });
+        var progress = await BuildProgressSnapshotAsync(request.CaseId, userId);
+
+        return Ok(new
+        {
+            message = "Elimination toggled.",
+            progress
+        });
     }
-   
+
+    // GET: /Board/GetSuspectFile?caseId=5&suspectId=10
+    // Only returns real Motive/Alibi if the suspect is actually unlocked —
+    // checked fresh server-side on every call. Used by board.js right after
+    // a connection unlocks a new suspect, instead of a full page reload.
+    [HttpGet]
+    public async Task<IActionResult> GetSuspectFile(int caseId, int suspectId)
+    {
+        var userId = _userManager.GetUserId(User)!;
+        var (success, motive, alibi) = await _boardService.GetSuspectFileAsync(caseId, suspectId, userId);
+
+        if (!success)
+            return Forbid();
+
+        return Ok(new { motive, alibi });
+    }
+
+    private async Task<object> BuildProgressSnapshotAsync(int caseId, string userId)
+    {
+        var progress = await _progressService.GetInvestigationProgressAsync(caseId, userId);
+
+        return new
+        {
+            confidence = progress.Confidence,
+            canAccuse = progress.CanAccuse,
+            remainingConfidence = Math.Max(0, 75 - progress.Confidence),
+            correctConnections = progress.CorrectConnections,
+            totalRequiredConnections = progress.TotalRequiredConnections,
+            correctEliminatedSuspects = progress.CorrectEliminatedSuspects,
+            totalInnocentSuspects = progress.TotalInnocentSuspects,
+            unlockedSuspectIds = progress.UnlockedSuspectIds
+        };
+    }
 }

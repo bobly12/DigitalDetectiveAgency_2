@@ -28,33 +28,201 @@ body {
     gap: var(--space-xs);
 }
 
-.dossier-nav__links {
+/* ===== Top Dossier Bar (nav) â€” REPLACE the old .dossier-nav__links
+   block and everything between it and "===== Footer =====" with this ===== */
+
+.dossier-nav__brand {
+    font-family: var(--font-display);
+    font-size: 1.4rem;
+    letter-spacing: 0.05em;
+    color: var(--color-text-on-dark);
+    text-decoration: none;
     display: flex;
-    gap: var(--space-md);
-    list-style: none;
-    margin: 0;
-    padding: 0;
+    align-items: center;
+    gap: var(--space-xs);
 }
 
-.dossier-nav__links a {
-    color: var(--color-text-muted);
-    text-decoration: none;
+/* ===== Hover/focus dropdown menu ===== */
+.dossier-nav__menu {
+    position: relative;
+}
+
+.dossier-nav__menu-trigger {
+    background: none;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    border-radius: var(--radius-ui);
+    color: var(--color-text-on-dark);
+    font-family: var(--font-display);
     font-size: 0.85rem;
     letter-spacing: 0.08em;
     text-transform: uppercase;
-    padding-bottom: 4px;
-    border-bottom: 2px solid transparent;
-    transition: color 0.15s ease, border-color 0.15s ease;
+    padding: var(--space-xs) var(--space-sm);
+    cursor: pointer;
 }
 
-.dossier-nav__links a:hover,
-.dossier-nav__links a.active {
-    color: var(--color-text-on-dark);
-    border-bottom-color: var(--color-red);
+.dossier-nav__dropdown {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    margin-top: var(--space-xs);
+    background-color: var(--color-panel);
+    border: 1px solid rgba(201, 162, 75, 0.35);
+    border-radius: var(--radius-ui);
+    list-style: none;
+    padding: var(--space-xs) 0;
+    min-width: 180px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+
+    /* hidden until hover/focus */
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-4px);
+    transition: opacity 0.15s ease, transform 0.15s ease, visibility 0.15s;
+    z-index: 50;
+}
+
+.dossier-nav__menu:hover .dossier-nav__dropdown,
+.dossier-nav__menu:focus-within .dossier-nav__dropdown {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.dossier-nav__dropdown li {
+    display: block;
+}
+
+.dossier-nav__dropdown a,
+.dossier-nav__dropdown .dossier-nav__logout-btn {
+    display: block;
+    width: 100%;
+    text-align: left;
+    background: none;
+    border: none;
+    color: var(--color-text-on-dark); /* white/near-white, not grey, not dark */
+    text-decoration: none;
+    font-size: 0.85rem;
+    letter-spacing: 0.05em;
+    padding: var(--space-xs) var(--space-md);
+    cursor: pointer;
+}
+
+.dossier-nav__dropdown a:hover,
+.dossier-nav__dropdown .dossier-nav__logout-btn:hover {
+    background-color: rgba(255, 255, 255, 0.08);
+    color: var(--color-brass);
 }
 
 .dossier-nav__admin a {
     color: var(--color-brass) !important;
+}
+
+.dossier-nav__divider {
+    height: 1px;
+    background-color: rgba(255, 255, 255, 0.12);
+    margin: var(--space-xs) 0;
+}
+
+.dossier-nav__dropdown form {
+    margin: 0;
+}/* ===== Top Dossier Bar (nav) â€” REPLACE the old .dossier-nav__links
+   block and everything between it and "===== Footer =====" with this ===== */
+
+.dossier-nav__brand {
+    font-family: var(--font-display);
+    font-size: 1.4rem;
+    letter-spacing: 0.05em;
+    color: var(--color-text-on-dark);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+}
+
+/* ===== Hover/focus dropdown menu ===== */
+.dossier-nav__menu {
+    position: relative;
+}
+
+.dossier-nav__menu-trigger {
+    background: none;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    border-radius: var(--radius-ui);
+    color: var(--color-text-on-dark);
+    font-family: var(--font-display);
+    font-size: 0.85rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: var(--space-xs) var(--space-sm);
+    cursor: pointer;
+}
+
+.dossier-nav__dropdown {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    margin-top: var(--space-xs);
+    background-color: var(--color-panel);
+    border: 1px solid rgba(201, 162, 75, 0.35);
+    border-radius: var(--radius-ui);
+    list-style: none;
+    padding: var(--space-xs) 0;
+    min-width: 180px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+
+    /* hidden until hover/focus */
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-4px);
+    transition: opacity 0.15s ease, transform 0.15s ease, visibility 0.15s;
+    z-index: 50;
+}
+
+.dossier-nav__menu:hover .dossier-nav__dropdown,
+.dossier-nav__menu:focus-within .dossier-nav__dropdown {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.dossier-nav__dropdown li {
+    display: block;
+}
+
+.dossier-nav__dropdown a,
+.dossier-nav__dropdown .dossier-nav__logout-btn {
+    display: block;
+    width: 100%;
+    text-align: left;
+    background: none;
+    border: none;
+    color: var(--color-text-on-dark); /* white/near-white, not grey, not dark */
+    text-decoration: none;
+    font-size: 0.85rem;
+    letter-spacing: 0.05em;
+    padding: var(--space-xs) var(--space-md);
+    cursor: pointer;
+}
+
+.dossier-nav__dropdown a:hover,
+.dossier-nav__dropdown .dossier-nav__logout-btn:hover {
+    background-color: rgba(255, 255, 255, 0.08);
+    color: var(--color-brass);
+}
+
+.dossier-nav__admin a {
+    color: var(--color-brass) !important;
+}
+
+.dossier-nav__divider {
+    height: 1px;
+    background-color: rgba(255, 255, 255, 0.12);
+    margin: var(--space-xs) 0;
+}
+
+.dossier-nav__dropdown form {
+    margin: 0;
+
 }
 
 /* ===== Footer ===== */

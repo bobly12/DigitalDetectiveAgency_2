@@ -42,7 +42,6 @@ public class BoardService : IBoardService
         var connections = await _boardRepository.GetConnectionsAsync(caseId, userId);
         var eliminatedIds = await _boardRepository.GetEliminatedSuspectIdsAsync(caseId, userId);
 
-        // NEW: Calculate investigation progress
         var progress = await _progressService.GetInvestigationProgressAsync(caseId, userId);
 
         return new BoardViewModel
@@ -51,7 +50,6 @@ public class BoardService : IBoardService
             CaseTitle = playerCase.Case.Title,
             CaseSummary = playerCase.Case.Description,
 
-            // Update these later if you add these fields to Case
             VictimName = string.Empty,
             VictimOccupation = string.Empty,
             Location = string.Empty,
@@ -59,7 +57,6 @@ public class BoardService : IBoardService
             IsCompleted = playerCase.IsCompleted,
             Score = playerCase.Score,
 
-            // Investigation Progress
             Confidence = progress.Confidence,
             CanAccuse = progress.CanAccuse,
             PlayerConnections = progress.PlayerConnections,
@@ -95,7 +92,7 @@ public class BoardService : IBoardService
         };
     }
 
-    public async Task<(bool Success, string? Error)> SaveConnectionAsync(
+    public async Task<(bool Success, string? Error, int ConnectionId)> SaveConnectionAsync(
         ConnectionRequestDto request,
         string userId)
     {
@@ -104,18 +101,18 @@ public class BoardService : IBoardService
             userId);
 
         if (playerCase == null)
-            return (false, "You are not assigned to this case.");
+            return (false, "You are not assigned to this case.", 0);
 
         if (!ValidTypes.Contains(request.FromType) ||
             !ValidTypes.Contains(request.ToType))
         {
-            return (false, "Invalid node type.");
+            return (false, "Invalid node type.", 0);
         }
 
         if (request.FromType == request.ToType &&
             request.FromId == request.ToId)
         {
-            return (false, "Cannot connect a card to itself.");
+            return (false, "Cannot connect a card to itself.", 0);
         }
 
         var exists = await _boardRepository.ConnectionExistsAsync(
@@ -127,7 +124,7 @@ public class BoardService : IBoardService
             request.ToId);
 
         if (exists)
-            return (false, "This connection already exists.");
+            return (false, "This connection already exists.", 0);
 
         var connection = new ClueConnection
         {
@@ -140,8 +137,12 @@ public class BoardService : IBoardService
         };
 
         await _boardRepository.AddConnectionAsync(connection);
+        // EF Core populates connection.Id after SaveChanges runs inside
+        // AddConnectionAsync — the client needs this REAL id (not a fake
+        // client-generated one) so a later DeleteConnection call for this
+        // exact thread actually targets the right row.
 
-        return (true, null);
+        return (true, null, connection.Id);
     }
 
     public async Task<(bool Success, string? Error)> DeleteConnectionAsync(
@@ -179,6 +180,30 @@ public class BoardService : IBoardService
         return (true, null);
     }
 
+    public async Task<(bool Success, string? Motive, string? Alibi)> GetSuspectFileAsync(
+        int caseId,
+        int suspectId,
+        string userId)
+    {
+        var playerCase = await _caseRepository.GetPlayerCaseAsync(caseId, userId);
+        if (playerCase == null)
+            return (false, null, null);
+
+        // Re-checks the unlock server-side on every call — the client never
+        // gets to decide "I'm unlocked now, give me the text." Same rule
+        // GetBoardAsync uses, same InvestigationProgressService snapshot.
+        var progress = await _progressService.GetInvestigationProgressAsync(caseId, userId);
+        if (!progress.UnlockedSuspectIds.Contains(suspectId))
+            return (false, null, null);
+
+        var suspects = await _caseRepository.GetSuspectsForCaseAsync(caseId);
+        var suspect = suspects.FirstOrDefault(s => s.Id == suspectId);
+        if (suspect == null)
+            return (false, null, null);
+
+        return (true, suspect.Motive, suspect.Alibi);
+    }
+
     private static BoardNodeViewModel MapEvidence(Evidence evidence)
     {
         return new BoardNodeViewModel
@@ -205,7 +230,6 @@ public class BoardService : IBoardService
             ImageUrl = suspect.ImageUrl ?? string.Empty,
             Description = suspect.Description ?? string.Empty,
 
-            // Hide until unlocked
             Motive = unlocked
                 ? suspect.Motive ?? string.Empty
                 : "???",
