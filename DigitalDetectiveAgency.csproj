@@ -21,6 +21,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Folder Include="wwwroot\audio\" />
       <Folder Include="wwwroot\images\suspects\" />
       <Folder Include="wwwroot\images\textures\" />
     </ItemGroup>

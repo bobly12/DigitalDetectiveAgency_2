@@ -4,6 +4,26 @@
     let selectedCard = null;
     let connections = [...window.initialConnections];
 
+    // ---------- Audio ----------
+    const sounds = {
+        pin: new Audio('/audio/pin.mp3'),
+        paper: new Audio('/audio/paper.mp3'),
+        unlock: new Audio('/audio/unlock.mp3')
+    };
+
+    Object.values(sounds).forEach(sound => {
+        sound.preload = "auto";
+    });
+
+    function playSound(sound) {
+        if (!sound) return;
+        sound.pause();
+        sound.currentTime = 0;
+        sound.play().catch(() => {
+            // Browser blocked playback due to autoplay policy.
+        });
+    }
+
     // Tracks which suspects we already know are unlocked, so we only
     // fetch a suspect's real file once, right when they first unlock.
     const knownUnlockedSuspectIds = new Set(
@@ -27,6 +47,7 @@
         return document.querySelector(`.board-card[data-type="${type}"][data-id="${id}"]`);
     }
 
+    // ===== Thread Drawing with Animation =====
     function drawLine(conn) {
         const fromCard = findCard(conn.fromType || conn.FromType, conn.fromId || conn.FromId);
         const toCard = findCard(conn.toType || conn.ToType, conn.toId || conn.ToId);
@@ -54,6 +75,16 @@
         path.addEventListener('click', () => removeConnection(conn.id || conn.Id));
 
         svg.appendChild(path);
+
+        // Thread stroke animation setup
+        const len = path.getTotalLength();
+        path.style.strokeDasharray = len;
+        path.style.strokeDashoffset = len;
+
+        requestAnimationFrame(() => {
+            path.style.transition = "stroke-dashoffset .45s ease-out, filter .3s ease";
+            path.style.strokeDashoffset = 0;
+        });
     }
 
     function redrawAll() {
@@ -61,8 +92,7 @@
         connections.forEach(drawLine);
     }
 
-    // ===== Apply a progress snapshot returned by the server to the DOM =====
-    // No page reload — this is the whole point of this rewrite.
+    // ===== Apply progress snapshot & dynamic counter animation =====
     function applyProgress(progress) {
         if (!progress) return;
 
@@ -81,7 +111,35 @@
                         'confidence-gauge__fill--low'
             );
         }
-        if (valueEl) valueEl.textContent = progress.confidence + '%';
+
+        // Animated Confidence Percentage Increment & Pulse
+        if (valueEl) {
+            const start = parseInt(valueEl.textContent) || 0;
+            const end = progress.confidence;
+            const duration = 500;
+            const startTime = performance.now();
+
+            function animate(now) {
+                const p = Math.min((now - startTime) / duration, 1);
+                const value = Math.round(start + (end - start) * p);
+                valueEl.textContent = value + '%';
+
+                if (p < 1) {
+                    requestAnimationFrame(animate);
+                }
+            }
+
+            requestAnimationFrame(animate);
+
+            valueEl.animate([
+                { transform: "scale(1)" },
+                { transform: "scale(1.18)" },
+                { transform: "scale(1)" }
+            ], {
+                duration: 350
+            });
+        }
+
         if (detailEl) {
             detailEl.textContent =
                 `${progress.correctConnections} / ${progress.totalRequiredConnections} connections  •  ` +
@@ -111,9 +169,7 @@
         });
     }
 
-    // Fetches a suspect's real Motive/Alibi (server re-checks the unlock —
-    // this call fails harmlessly if something's out of sync) and patches
-    // the card's stored fields + removes the lock icon.
+    // ===== Unlock suspect card with flip & highlight animations =====
     async function unlockSuspectCard(suspectId) {
         const card = findCard('Suspect', suspectId);
         if (!card) return;
@@ -132,9 +188,35 @@
             card.dataset.fields = JSON.stringify(updatedFields);
 
             const lockEl = card.querySelector('[data-suspect-lock]');
-            if (lockEl) lockEl.remove();
+            if (lockEl) {
+                playSound(sounds.unlock);
+
+                lockEl.animate([
+                    { transform: "rotateY(0deg)", opacity: 1 },
+                    { transform: "rotateY(180deg)", opacity: 0 }
+                ], {
+                    duration: 600,
+                    easing: "ease-out"
+                });
+
+                setTimeout(() => {
+                    lockEl.remove();
+                }, 580);
+            }
+
+            // Card highlight & paper sound
+            card.animate([
+                { transform: "scale(.95)", boxShadow: "0 0 0 rgba(255,215,0,0)" },
+                { transform: "scale(1.05)", boxShadow: "0 0 25px rgba(255,215,0,.8)" },
+                { transform: "scale(1)" }
+            ], {
+                duration: 700
+            });
+
+            playSound(sounds.paper);
+
         } catch {
-            // Non-fatal — worst case, the file stays locked-looking until the next full page load.
+            // Non-fatal fallback
         }
     }
 
@@ -174,6 +256,18 @@
                 selectedCard = card;
                 pin.classList.add('is-active-pin');
                 card.classList.add('is-selected');
+
+                // Sound and pin pop animation on first selection
+                playSound(sounds.pin);
+                pin.animate([
+                    { transform: "translateX(-50%) scale(1)" },
+                    { transform: "translateX(-50%) scale(1.45)" },
+                    { transform: "translateX(-50%) scale(1.2)" }
+                ], {
+                    duration: 220,
+                    easing: "ease-out"
+                });
+
                 return;
             }
 
@@ -197,6 +291,8 @@
 
             if (res.ok) {
                 const data = await res.json();
+
+                playSound(sounds.pin);
                 connections.push({ id: data.connectionId, fromType, fromId, toType, toId });
                 redrawAll();
                 applyProgress(data.progress);

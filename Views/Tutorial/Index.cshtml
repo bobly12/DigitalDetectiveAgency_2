@@ -1,0 +1,87 @@
+@model DigitalDetectiveAgency.Models.ViewModels.TutorialViewModel
+
+@{
+    ViewData["Title"] = "Detective Training";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8" />
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1" />
+
+    <title>@ViewData["Title"]</title>
+
+    <link rel="stylesheet"
+          href="~/css/pages/tutorial.css"
+          asp-append-version="true" />
+
+</head>
+
+<body>
+
+<div class="tutorial-container">
+
+    <div class="tutorial-panel">
+
+        <div class="tutorial-badge">
+            DIGITAL DETECTIVE AGENCY
+        </div>
+
+        <h1 class="tutorial-title">
+            @Model.Title
+        </h1>
+
+        <div class="tutorial-speaker">
+            @Model.Speaker
+        </div>
+
+        <div id="dialogue-box"
+             class="tutorial-dialogue">
+        </div>
+
+        <div class="tutorial-buttons">
+
+            @if (Model.AllowSkip)
+            {
+                <button id="skipButton"
+                        type="button"
+                        class="tutorial-btn secondary">
+                    Skip Briefing
+                </button>
+            }
+
+            <button id="nextButton"
+                    type="button"
+                    class="tutorial-btn primary">
+                Continue
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+    // Used by tutorial.js
+    window.firstCaseId = @Model.FirstCaseId;
+
+    window.tutorialDialogue =
+        @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.Dialogue));
+
+</script>
+
+<script src="~/js/tutorial.js"
+        asp-append-version="true"></script>
+
+</body>
+
+</html>

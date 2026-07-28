@@ -26,17 +26,27 @@ public class BoardController : Controller
     }
 
     // GET: /Board/Index/5
+    // GET: /Board/Index/5
     public async Task<IActionResult> Index(int id)
     {
-        var userId = _userManager.GetUserId(User)!;
-        var board = await _boardService.GetBoardAsync(id, userId);
+        var user = await _userManager.GetUserAsync(User);
+
+        if (user == null)
+            return Challenge();
+
+        // Show tutorial only once, before the first case
+        if (id == 1 && !user.HasCompletedTutorial)
+        {
+            return RedirectToAction("Index", "Tutorial");
+        }
+
+        var board = await _boardService.GetBoardAsync(id, user.Id);
 
         if (board == null)
             return Forbid();
 
         return View(board);
     }
-
     // POST: /Board/SaveConnection
     [HttpPost]
     public async Task<IActionResult> SaveConnection([FromBody] ConnectionRequestDto request)

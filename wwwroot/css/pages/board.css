@@ -259,3 +259,45 @@
     font-size: 0.9rem;
     margin-bottom: var(--space-md);
 }
+.conn-line{
+
+    stroke-linecap:round;
+
+    filter:drop-shadow(0 0 3px rgba(190,40,40,.35));
+
+    animation:
+            threadGlow 2s infinite alternate;
+
+}
+
+@keyframes threadGlow{
+
+    from{
+
+        filter:drop-shadow(0 0 2px rgba(200,50,50,.2));
+
+    }
+
+    to{
+
+        filter:drop-shadow(0 0 8px rgba(255,80,80,.65));
+
+    }
+
+}
+
+.board-card{
+
+    transition:
+            transform .18s,
+            box-shadow .18s;
+
+}
+
+.board-card__pin{
+
+    transition:
+            transform .18s,
+            box-shadow .18s;
+
+}
