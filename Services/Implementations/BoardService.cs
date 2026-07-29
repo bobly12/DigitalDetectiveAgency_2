@@ -66,7 +66,7 @@ public class BoardService : IBoardService
             TotalInnocentSuspects = progress.TotalInnocentSuspects,
 
             Evidence = evidence
-                .Select(MapEvidence)
+                .Select(e => MapEvidence(e, progress.UnlockedEvidenceIds))
                 .ToList(),
 
             Suspects = suspects
@@ -74,7 +74,7 @@ public class BoardService : IBoardService
                 .ToList(),
 
             Witnesses = witnesses
-                .Select(MapWitness)
+                .Select(w => MapWitness(w, progress.UnlockedWitnessIds))
                 .ToList(),
 
             Connections = connections
@@ -204,15 +204,20 @@ public class BoardService : IBoardService
         return (true, suspect.Motive, suspect.Alibi);
     }
 
-    private static BoardNodeViewModel MapEvidence(Evidence evidence)
+    private static BoardNodeViewModel MapEvidence(
+        Evidence evidence,
+        HashSet<int> unlockedEvidenceIds)
     {
+        bool revealed = unlockedEvidenceIds.Contains(evidence.Id);
+
         return new BoardNodeViewModel
         {
             Type = "Evidence",
             Id = evidence.Id,
-            Name = evidence.Name,
-            ImageUrl = evidence.ImageUrl ?? string.Empty,
-            Description = evidence.Description ?? string.Empty
+            Name = revealed ? evidence.Name : "Undiscovered Lead",
+            ImageUrl = revealed ? (evidence.ImageUrl ?? string.Empty) : string.Empty,
+            Description = revealed ? (evidence.Description ?? string.Empty) : string.Empty,
+            IsRevealed = revealed
         };
     }
 
@@ -239,19 +244,25 @@ public class BoardService : IBoardService
                 : "???",
 
             IsMotiveUnlocked = unlocked,
-            IsAlibiUnlocked = unlocked
+            IsAlibiUnlocked = unlocked,
+            IsRevealed = true // Suspects are never staged - always visible
         };
     }
 
-    private static BoardNodeViewModel MapWitness(Witness witness)
+    private static BoardNodeViewModel MapWitness(
+        Witness witness,
+        HashSet<int> unlockedWitnessIds)
     {
+        bool revealed = unlockedWitnessIds.Contains(witness.Id);
+
         return new BoardNodeViewModel
         {
             Type = "Witness",
             Id = witness.Id,
-            Name = witness.Name,
-            ImageUrl = witness.ImageUrl ?? string.Empty,
-            Description = witness.Statement ?? string.Empty
+            Name = revealed ? witness.Name : "Undiscovered Lead",
+            ImageUrl = revealed ? (witness.ImageUrl ?? string.Empty) : string.Empty,
+            Description = revealed ? (witness.Statement ?? string.Empty) : string.Empty,
+            IsRevealed = revealed
         };
     }
 }

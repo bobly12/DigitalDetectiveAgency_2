@@ -51,7 +51,7 @@ namespace DigitalDetectiveAgency.Migrations
 
                     b.HasIndex("CaseId");
 
-                    b.ToTable("Accusations");
+                    b.ToTable("Accusations", (string)null);
                 });
 
             modelBuilder.Entity("DigitalDetectiveAgency.Models.Entities.ApplicationUser", b =>
@@ -150,7 +150,7 @@ namespace DigitalDetectiveAgency.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Cases");
+                    b.ToTable("Cases", (string)null);
 
                     b.HasData(
                         new
@@ -216,7 +216,7 @@ namespace DigitalDetectiveAgency.Migrations
 
                     b.HasIndex("CaseId");
 
-                    b.ToTable("CaseConnections");
+                    b.ToTable("CaseConnections", (string)null);
 
                     b.HasData(
                         new
@@ -340,7 +340,7 @@ namespace DigitalDetectiveAgency.Migrations
 
                     b.HasIndex("CaseId");
 
-                    b.ToTable("ClueConnections");
+                    b.ToTable("ClueConnections", (string)null);
                 });
 
             modelBuilder.Entity("DigitalDetectiveAgency.Models.Entities.Evidence", b =>
@@ -370,7 +370,7 @@ namespace DigitalDetectiveAgency.Migrations
 
                     b.HasIndex("CaseId");
 
-                    b.ToTable("EvidenceItems");
+                    b.ToTable("EvidenceItems", (string)null);
 
                     b.HasData(
                         new
@@ -598,7 +598,7 @@ namespace DigitalDetectiveAgency.Migrations
 
                     b.HasIndex("CaseId");
 
-                    b.ToTable("PlayerCases");
+                    b.ToTable("PlayerCases", (string)null);
                 });
 
             modelBuilder.Entity("DigitalDetectiveAgency.Models.Entities.Suspect", b =>
@@ -639,7 +639,7 @@ namespace DigitalDetectiveAgency.Migrations
 
                     b.HasIndex("CaseId");
 
-                    b.ToTable("Suspects");
+                    b.ToTable("Suspects", (string)null);
 
                     b.HasData(
                         new
@@ -860,7 +860,7 @@ namespace DigitalDetectiveAgency.Migrations
 
                     b.HasIndex("SuspectId");
 
-                    b.ToTable("SuspectEliminations");
+                    b.ToTable("SuspectEliminations", (string)null);
                 });
 
             modelBuilder.Entity("DigitalDetectiveAgency.Models.Entities.Witness", b =>
@@ -890,7 +890,7 @@ namespace DigitalDetectiveAgency.Migrations
 
                     b.HasIndex("CaseId");
 
-                    b.ToTable("Witnesses");
+                    b.ToTable("Witnesses", (string)null);
 
                     b.HasData(
                         new

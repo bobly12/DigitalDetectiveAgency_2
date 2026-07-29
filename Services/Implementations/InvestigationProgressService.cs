@@ -14,6 +14,12 @@ public class InvestigationProgressService : IInvestigationProgressService
     private const double ConnectionWeight = 70.0;
     private const double EliminationWeight = 30.0;
 
+    // Staged Evidence Reveal tuning constants.
+    // How many Evidence/Witness cards are visible before the player
+    // has taken any investigative action at all.
+    private const int StartingEvidenceCount = 2;
+    private const int StartingWitnessCount = 1;
+
     public InvestigationProgressService(
         IBoardRepository boardRepository,
         ICaseRepository caseRepository)
@@ -31,6 +37,8 @@ public class InvestigationProgressService : IInvestigationProgressService
         var answerKey = await _boardRepository.GetAnswerKeyAsync(caseId);
         var eliminatedIds = await _boardRepository.GetEliminatedSuspectIdsAsync(caseId, userId);
         var suspects = await _caseRepository.GetSuspectsForCaseAsync(caseId);
+        var evidence = await _caseRepository.GetEvidenceForCaseAsync(caseId);
+        var witnesses = await _caseRepository.GetWitnessesForCaseAsync(caseId);
 
         var correctConnections = playerConnections
             .Count(pc => IsValidConnection(pc, answerKey));
@@ -46,6 +54,23 @@ public class InvestigationProgressService : IInvestigationProgressService
 
         // NOTE: unlock no longer depends on the answer key — see method below.
         var unlockedSuspectIds = CalculateUnlockedSuspectIds(playerConnections);
+
+        // Staged Evidence Reveal: how many investigative actions has the
+        // player taken so far, in total? Every connection attempt (right or
+        // wrong) and every elimination counts as "the player is actively
+        // investigating," which is what unlocks the next lead - correctness
+        // isn't required here, same philosophy as the Suspect unlock above.
+        var actionsTaken = playerConnections.Count + eliminatedIds.Count;
+
+        var unlockedEvidenceIds = CalculateStagedUnlockIds(
+            evidence.Select(e => e.Id).OrderBy(id => id),
+            StartingEvidenceCount,
+            actionsTaken);
+
+        var unlockedWitnessIds = CalculateStagedUnlockIds(
+            witnesses.Select(w => w.Id).OrderBy(id => id),
+            StartingWitnessCount,
+            actionsTaken);
 
         var confidence = CalculateConfidence(
             correctConnections,
@@ -65,7 +90,9 @@ public class InvestigationProgressService : IInvestigationProgressService
             CorrectEliminatedSuspects = correctEliminatedSuspects,
             TotalInnocentSuspects = totalInnocentSuspects,
 
-            UnlockedSuspectIds = unlockedSuspectIds
+            UnlockedSuspectIds = unlockedSuspectIds,
+            UnlockedEvidenceIds = unlockedEvidenceIds,
+            UnlockedWitnessIds = unlockedWitnessIds
         };
     }
 
@@ -118,22 +145,52 @@ public class InvestigationProgressService : IInvestigationProgressService
     {
         var unlocked = new HashSet<int>();
 
-        foreach (var connection in playerConnections)
+        foreach (var conn in playerConnections)
         {
-            bool fromIsSuspect = connection.FromType == "Suspect";
-            bool toIsSuspect = connection.ToType == "Suspect";
+            if (conn.FromType == "Suspect" &&
+                (conn.ToType == "Evidence" || conn.ToType == "Witness"))
+            {
+                unlocked.Add(conn.FromId);
+            }
 
-            bool fromIsClue = connection.FromType == "Evidence" || connection.FromType == "Witness";
-            bool toIsClue = connection.ToType == "Evidence" || connection.ToType == "Witness";
-
-            if (fromIsSuspect && toIsClue)
-                unlocked.Add(connection.FromId);
-
-            if (toIsSuspect && fromIsClue)
-                unlocked.Add(connection.ToId);
+            if (conn.ToType == "Suspect" &&
+                (conn.FromType == "Evidence" || conn.FromType == "Witness"))
+            {
+                unlocked.Add(conn.ToId);
+            }
         }
 
         return unlocked;
+    }
+
+    /// <summary>
+    /// Staged Evidence Reveal calculation.
+    ///
+    /// Given the full set of ordered IDs for a node type (Evidence or
+    /// Witness, ordered ascending by Id - the intended narrative reveal
+    /// order), a starting count that's always visible for free, and how
+    /// many investigative actions the player has taken so far, returns
+    /// exactly which IDs should currently be visible on the board.
+    ///
+    /// This is purely derived - nothing here is stored. Calling this twice
+    /// with the same inputs always returns the same result, and a
+    /// completed case (which already has plenty of recorded actions) will
+    /// naturally have everything unlocked without any special-casing.
+    /// </summary>
+    private static HashSet<int> CalculateStagedUnlockIds(
+        IEnumerable<int> orderedIds,
+        int startingCount,
+        int actionsTaken)
+    {
+        var idsInOrder = orderedIds.ToList();
+
+        int unlockCount = Math.Min(
+            idsInOrder.Count,
+            startingCount + actionsTaken);
+
+        // Guard: never go negative even if startingCount were misconfigured to 0
+        // and actionsTaken is 0 - Take(0) is safe and returns an empty set.
+        return idsInOrder.Take(Math.Max(0, unlockCount)).ToHashSet();
     }
 
     private static int CalculateConfidence(
@@ -142,27 +199,16 @@ public class InvestigationProgressService : IInvestigationProgressService
         int correctEliminatedSuspects,
         int totalInnocentSuspects)
     {
-        var connectionRatio =
-            totalRequiredConnections == 0
-                ? 0
-                : Math.Min(
-                    1.0,
-                    (double)correctConnections / totalRequiredConnections);
+        double connectionRatio = totalRequiredConnections == 0
+            ? 0
+            : Math.Min(1.0, (double)correctConnections / totalRequiredConnections);
 
-        var eliminationRatio =
-            totalInnocentSuspects == 0
-                ? 0
-                : Math.Min(
-                    1.0,
-                    (double)correctEliminatedSuspects / totalInnocentSuspects);
+        double eliminationRatio = totalInnocentSuspects == 0
+            ? 0
+            : Math.Min(1.0, (double)correctEliminatedSuspects / totalInnocentSuspects);
 
-        var confidence =
-            (connectionRatio * ConnectionWeight) +
-            (eliminationRatio * EliminationWeight);
+        double rawConfidence = (connectionRatio * ConnectionWeight) + (eliminationRatio * EliminationWeight);
 
-        return Math.Clamp(
-            (int)Math.Round(confidence),
-            0,
-            100);
+        return Math.Clamp((int)Math.Round(rawConfidence), 0, 100);
     }
 }

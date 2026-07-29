@@ -23,4 +23,13 @@ public class BoardNodeViewModel
     /// True when the player has unlocked this suspect's alibi.
     /// </summary>
     public bool IsAlibiUnlocked { get; set; }
+
+    /// <summary>
+    /// Staged Evidence Reveal (Evidence and Witness cards only).
+    /// True means the card is fully visible on the board (image, name,
+    /// clickable for details). False means it should render as a locked
+    /// "undiscovered" placeholder instead. Always true for Suspects,
+    /// since suspects use the separate Motive/Alibi lock mechanic instead.
+    /// </summary>
+    public bool IsRevealed { get; set; } = true;
 }

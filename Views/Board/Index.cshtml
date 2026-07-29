@@ -73,14 +73,25 @@
                 <div class="board-column__label">🔍 Evidence</div>
                 @foreach (var node in Model.Evidence)
                 {
-                    var fields = new[] { new { heading = (string?)null, text = node.Description } };
-                    <div class="board-card" data-type="Evidence" data-id="@node.Id"
-                         data-name="@node.Name" data-image="@node.ImageUrl" data-label="Evidence"
-                         data-fields="@System.Text.Json.JsonSerializer.Serialize(fields)">
-                        <span class="board-card__pin" data-connect-pin title="Click to start or complete a connection"></span>
-                        <img src="@node.ImageUrl" alt="@node.Name" class="board-card__img" />
-                        <strong>@node.Name</strong>
-                    </div>
+                    @if (!node.IsRevealed)
+                    {
+                        <div class="board-card board-card--undiscovered" data-type="Evidence" data-id="@node.Id" data-revealed="false">
+                            <span class="board-card__lock-icon">🔒</span>
+                            <strong>Undiscovered Lead</strong>
+                            <small>Keep investigating to uncover this.</small>
+                        </div>
+                    }
+                    else
+                    {
+                        var fields = new[] { new { heading = (string?)null, text = node.Description } };
+                        <div class="board-card" data-type="Evidence" data-id="@node.Id"
+                             data-name="@node.Name" data-image="@node.ImageUrl" data-label="Evidence"
+                             data-fields="@System.Text.Json.JsonSerializer.Serialize(fields)">
+                            <span class="board-card__pin" data-connect-pin title="Click to start or complete a connection"></span>
+                            <img src="@node.ImageUrl" alt="@node.Name" class="board-card__img" />
+                            <strong>@node.Name</strong>
+                        </div>
+                    }
                 }
             </div>
             <div>
@@ -112,14 +123,25 @@
                 <div class="board-column__label">🗣 Witnesses</div>
                 @foreach (var node in Model.Witnesses)
                 {
-                    var fields = new[] { new { heading = (string?)null, text = "\"" + node.Description + "\"" } };
-                    <div class="board-card" data-type="Witness" data-id="@node.Id"
-                         data-name="@node.Name" data-image="@node.ImageUrl" data-label="Witness"
-                         data-fields="@System.Text.Json.JsonSerializer.Serialize(fields)">
-                        <span class="board-card__pin" data-connect-pin title="Click to start or complete a connection"></span>
-                        <img src="@node.ImageUrl" alt="@node.Name" class="board-card__img" />
-                        <strong>@node.Name</strong>
-                    </div>
+                    @if (!node.IsRevealed)
+                    {
+                        <div class="board-card board-card--undiscovered" data-type="Witness" data-id="@node.Id" data-revealed="false">
+                            <span class="board-card__lock-icon">🔒</span>
+                            <strong>Undiscovered Lead</strong>
+                            <small>Keep investigating to uncover this.</small>
+                        </div>
+                    }
+                    else
+                    {
+                        var fields = new[] { new { heading = (string?)null, text = "\"" + node.Description + "\"" } };
+                        <div class="board-card" data-type="Witness" data-id="@node.Id"
+                             data-name="@node.Name" data-image="@node.ImageUrl" data-label="Witness"
+                             data-fields="@System.Text.Json.JsonSerializer.Serialize(fields)">
+                            <span class="board-card__pin" data-connect-pin title="Click to start or complete a connection"></span>
+                            <img src="@node.ImageUrl" alt="@node.Name" class="board-card__img" />
+                            <strong>@node.Name</strong>
+                        </div>
+                    }
                 }
             </div>
         </div>
