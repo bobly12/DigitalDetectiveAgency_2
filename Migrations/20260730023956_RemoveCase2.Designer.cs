@@ -4,6 +4,7 @@ using DigitalDetectiveAgency.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DigitalDetectiveAgency.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260730023956_RemoveCase2")]
+    partial class RemoveCase2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -163,16 +166,8 @@ namespace DigitalDetectiveAgency.Migrations
                         },
                         new
                         {
-                            Id = 2,
-                            Description = "Community radio host Miguel Ramos is found dead moments after his live broadcast suddenly cuts off. Everyone blames the rolling blackout. But one small detail proves the station never actually lost power.",
-                            Difficulty = 1,
-                            IsPublished = true,
-                            Title = "The Last Broadcast"
-                        },
-                        new
-                        {
                             Id = 3,
-                            Description = "The night of the town fiesta, sugar baron Ernesto Malinao is found dead in his study at the family's ancestral hacienda in Negros Occidental hours before he was set to sign the papers selling generations of tenant land to a foreign conglomerate. The house was full of relatives, guests, and household staff. Everyone was watching the fireworks. No one saw a thing.",
+                            Description = "The night of the town fiesta, sugar baron Ernesto Malinao is found dead in his study at the family's ancestral hacienda in Negros Occidental — hours before he was set to sign the papers selling generations of tenant land to a foreign conglomerate. The house was full of relatives, guests, and household staff. Everyone was watching the fireworks. No one saw a thing.",
                             Difficulty = 2,
                             IsPublished = true,
                             Title = "The Last Harvest at Hacienda Malinao"
@@ -180,7 +175,7 @@ namespace DigitalDetectiveAgency.Migrations
                         new
                         {
                             Id = 4,
-                            Description = "The night before dive resort owner Ramon Aguilar was set to unveil a controversial expansion into Talipanan Cove land the local fisherfolk have worked for generations and the Mangyan community considers ancestral ground he's found dead at the bottom of his own boat dock. The town had gathered for the resort's investor showcase. Protesters had gathered outside the gate for weeks. Everyone had a reason to want the expansion stopped. Only one person had a reason to stop Ramon himself.",
+                            Description = "The night before dive resort owner Ramon Aguilar was set to unveil a controversial expansion into Talipanan Cove — land the local fisherfolk have worked for generations and the Mangyan community considers ancestral ground — he's found dead at the bottom of his own boat dock. The town had gathered for the resort's investor showcase. Protesters had gathered outside the gate for weeks. Everyone had a reason to want the expansion stopped. Only one person had a reason to stop Ramon himself.",
                             Difficulty = 2,
                             IsPublished = true,
                             Title = "Undertow at Puerto Galera"
@@ -249,51 +244,6 @@ namespace DigitalDetectiveAgency.Migrations
                         new
                         {
                             Id = 4,
-                            CaseId = 2,
-                            FromId = 26,
-                            FromType = "Evidence",
-                            ToId = 25,
-                            ToType = "Evidence"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            CaseId = 2,
-                            FromId = 24,
-                            FromType = "Evidence",
-                            ToId = 25,
-                            ToType = "Evidence"
-                        },
-                        new
-                        {
-                            Id = 6,
-                            CaseId = 2,
-                            FromId = 27,
-                            FromType = "Evidence",
-                            ToId = 22,
-                            ToType = "Suspect"
-                        },
-                        new
-                        {
-                            Id = 7,
-                            CaseId = 2,
-                            FromId = 28,
-                            FromType = "Evidence",
-                            ToId = 22,
-                            ToType = "Suspect"
-                        },
-                        new
-                        {
-                            Id = 8,
-                            CaseId = 2,
-                            FromId = 29,
-                            FromType = "Evidence",
-                            ToId = 22,
-                            ToType = "Suspect"
-                        },
-                        new
-                        {
-                            Id = 9,
                             CaseId = 3,
                             FromId = 9,
                             FromType = "Evidence",
@@ -302,7 +252,7 @@ namespace DigitalDetectiveAgency.Migrations
                         },
                         new
                         {
-                            Id = 10,
+                            Id = 5,
                             CaseId = 3,
                             FromId = 10,
                             FromType = "Evidence",
@@ -311,7 +261,7 @@ namespace DigitalDetectiveAgency.Migrations
                         },
                         new
                         {
-                            Id = 11,
+                            Id = 6,
                             CaseId = 3,
                             FromId = 8,
                             FromType = "Witness",
@@ -320,7 +270,7 @@ namespace DigitalDetectiveAgency.Migrations
                         },
                         new
                         {
-                            Id = 12,
+                            Id = 7,
                             CaseId = 4,
                             FromId = 17,
                             FromType = "Evidence",
@@ -329,7 +279,7 @@ namespace DigitalDetectiveAgency.Migrations
                         },
                         new
                         {
-                            Id = 13,
+                            Id = 8,
                             CaseId = 4,
                             FromId = 18,
                             FromType = "Evidence",
@@ -338,30 +288,12 @@ namespace DigitalDetectiveAgency.Migrations
                         },
                         new
                         {
-                            Id = 14,
+                            Id = 9,
                             CaseId = 4,
                             FromId = 13,
                             FromType = "Witness",
                             ToId = 12,
                             ToType = "Suspect"
-                        },
-                        new
-                        {
-                            Id = 15,
-                            CaseId = 4,
-                            FromId = 17,
-                            FromType = "Evidence",
-                            ToId = 18,
-                            ToType = "Evidence"
-                        },
-                        new
-                        {
-                            Id = 16,
-                            CaseId = 4,
-                            FromId = 18,
-                            FromType = "Evidence",
-                            ToId = 13,
-                            ToType = "Witness"
                         });
                 });
 
@@ -440,7 +372,7 @@ namespace DigitalDetectiveAgency.Migrations
                         {
                             Id = 1,
                             CaseId = 1,
-                            Description = "A single red rose found on the dressing room floor. The stem is freshly cut, not wilted someone left it here recently.",
+                            Description = "A single red rose found on the dressing room floor. The stem is freshly cut, not wilted — someone left it here recently.",
                             ImageUrl = "/images/evidence/rose.jpg",
                             Name = "Dropped Rose"
                         },
@@ -480,89 +412,9 @@ namespace DigitalDetectiveAgency.Migrations
                         {
                             Id = 7,
                             CaseId = 1,
-                            Description = "A printout of badge-scan entries. One badge registered to Elena Vasquez scanned into the dressing room corridor at 7:38 PM, twenty minutes before the violinist was last seen.",
+                            Description = "A printout of badge-scan entries. One badge — registered to Elena Vasquez — scanned into the dressing room corridor at 7:38 PM, twenty minutes before the violinist was last seen.",
                             ImageUrl = "/images/evidence/security_log.jpg",
                             Name = "Backstage Security Log"
-                        },
-                        new
-                        {
-                            Id = 24,
-                            CaseId = 2,
-                            Description = "Miguel died from a single blunt force trauma to the back of the head. Estimated time of death: 9:17 PM.",
-                            ImageUrl = "/images/evidence/autopsy_report.jpg",
-                            Name = "Autopsy Report"
-                        },
-                        new
-                        {
-                            Id = 25,
-                            CaseId = 2,
-                            Description = "The live broadcast ends abruptly at exactly 9:17 PM. No scream, no struggle-only sudden silence.",
-                            ImageUrl = "/images/evidence/broadcast_recording.jpg",
-                            Name = "Broadcast Recording"
-                        },
-                        new
-                        {
-                            Id = 26,
-                            CaseId = 2,
-                            Description = "The backup generator automatically activated at 9:16 PM and supplied uninterrupted power until 9:19 PM.",
-                            ImageUrl = "/images/evidence/generator_log.jpg",
-                            Name = "Generator Log"
-                        },
-                        new
-                        {
-                            Id = 27,
-                            CaseId = 2,
-                            Description = "A flashlight recovered from Marco's toolbox. Rainwater is mixed with fiberglass insulation dust matching the generator shed.",
-                            ImageUrl = "/images/evidence/wet_flashlight.jpg",
-                            Name = "Wet Flashlight"
-                        },
-                        new
-                        {
-                            Id = 28,
-                            CaseId = 2,
-                            Description = "Several maintenance expenses were redirected into an unknown personal account over the past six months.",
-                            ImageUrl = "/images/evidence/budget_spreadsheet.jpg",
-                            Name = "Maintenance Budget Spreadsheet"
-                        },
-                        new
-                        {
-                            Id = 29,
-                            CaseId = 2,
-                            Description = "Miguel recorded a message saying, 'Marco... we'll figure this out tomorrow. Your son shouldn't suffer because of this.' The recording was never sent.",
-                            ImageUrl = "/images/evidence/voice_memo.jpg",
-                            Name = "Unsent Voice Memo"
-                        },
-                        new
-                        {
-                            Id = 30,
-                            CaseId = 2,
-                            Description = "The roof hatch was opened earlier that afternoon for routine antenna maintenance. No activity was recorded during the murder.",
-                            ImageUrl = "/images/evidence/roof_access.jpg",
-                            Name = "Roof Access Log"
-                        },
-                        new
-                        {
-                            Id = 31,
-                            CaseId = 2,
-                            Description = "A receipt timestamped 9:12 PM showing Liza purchased two coffees several blocks away from the station.",
-                            ImageUrl = "/images/evidence/coffee_receipt.jpg",
-                            Name = "Coffee Shop Receipt"
-                        },
-                        new
-                        {
-                            Id = 32,
-                            CaseId = 2,
-                            Description = "Reception attendance sheets reveal Tina forged employee time records several weeks earlier to help her younger brother keep his job.",
-                            ImageUrl = "/images/evidence/attendance_log.jpg",
-                            Name = "Attendance Log"
-                        },
-                        new
-                        {
-                            Id = 33,
-                            CaseId = 2,
-                            Description = "A blurry CCTV frame captures a white delivery van leaving the station district after the murder. The license plate is unreadable, and investigators never identify the driver.",
-                            ImageUrl = "/images/evidence/white_van.jpg",
-                            Name = "White Van CCTV"
                         },
                         new
                         {
@@ -584,7 +436,7 @@ namespace DigitalDetectiveAgency.Migrations
                         {
                             Id = 10,
                             CaseId = 3,
-                            Description = "A handwritten ledger tallying five months of unpaid wages owed to the cane workers, found in a nipa hut at the edge of the fields - the entries stop the day Ernesto died.",
+                            Description = "A handwritten ledger tallying five months of unpaid wages owed to the cane workers, found in a nipa hut at the edge of the fields — the entries stop the day Ernesto died.",
                             ImageUrl = "/images/evidence/wage_ledger.jpg",
                             Name = "Ledger of Unpaid Sacada Wages"
                         },
@@ -624,7 +476,7 @@ namespace DigitalDetectiveAgency.Migrations
                         {
                             Id = 15,
                             CaseId = 3,
-                            Description = "William Tan's business card, a lower price scrawled on the back along with the words 'final take it or we walk.'",
+                            Description = "William Tan's business card, a lower price scrawled on the back along with the words 'final — take it or we walk.'",
                             ImageUrl = "/images/evidence/business_card.jpg",
                             Name = "Business Card with Scribbled Offer"
                         },
@@ -640,7 +492,7 @@ namespace DigitalDetectiveAgency.Migrations
                         {
                             Id = 17,
                             CaseId = 4,
-                            Description = "An environmental clearance form for the cove expansion, the approval signature traced rather than signed and initialed N.A. in the corner margin.",
+                            Description = "An environmental clearance form for the cove expansion, the approval signature traced rather than signed — and initialed 'N.A.' in the corner margin.",
                             ImageUrl = "/images/evidence/forged_permit.jpg",
                             Name = "Forged Permit Application"
                         },
@@ -656,7 +508,7 @@ namespace DigitalDetectiveAgency.Migrations
                         {
                             Id = 19,
                             CaseId = 4,
-                            Description = "A policy naming Cristina as sole beneficiary, dated two months after the wedding and never disclosed to Ramon's children from his first marriage.",
+                            Description = "A policy naming Cristina as sole beneficiary, dated two months after the wedding — and never disclosed to Ramon's children from his first marriage.",
                             ImageUrl = "/images/evidence/insurance_policy.jpg",
                             Name = "Life Insurance Policy"
                         },
@@ -672,7 +524,7 @@ namespace DigitalDetectiveAgency.Migrations
                         {
                             Id = 21,
                             CaseId = 4,
-                            Description = "A phone photo of the resort's dive compressor with a cut hose taken the same week Boyet was overheard threatening to 'make sure the showcase doesn't go smoothly.'",
+                            Description = "A phone photo of the resort's dive compressor with a cut hose — taken the same week Boyet was overheard threatening to 'make sure the showcase doesn't go smoothly.'",
                             ImageUrl = "/images/evidence/compressor_photo.jpg",
                             Name = "Sabotaged Compressor Photo"
                         },
@@ -680,7 +532,7 @@ namespace DigitalDetectiveAgency.Migrations
                         {
                             Id = 22,
                             CaseId = 4,
-                            Description = "A flyer from the fisherfolk association, hand-annotated in the margin: 'kung kailangan, gagamit tayo ng ibang paraan' (if necessary, we'll use other means).",
+                            Description = "A flyer from the fisherfolk association, hand-annotated in the margin: 'kung kailangan, gagamit tayo ng ibang paraan' — if necessary, we'll use other means.",
                             ImageUrl = "/images/evidence/protest_flyer.jpg",
                             Name = "Protest Flyer"
                         },
@@ -688,7 +540,7 @@ namespace DigitalDetectiveAgency.Migrations
                         {
                             Id = 23,
                             CaseId = 4,
-                            Description = "A half-burned copy of the Mangyan community's ancestral domain petition, found in the resort office trash bin someone tried to make it disappear before the investors saw it.",
+                            Description = "A half-burned copy of the Mangyan community's ancestral domain petition, found in the resort office trash bin — someone tried to make it disappear before the investors saw it.",
                             ImageUrl = "/images/evidence/burnt_petition.jpg",
                             Name = "Burnt Petition Copy"
                         });
@@ -802,7 +654,7 @@ namespace DigitalDetectiveAgency.Migrations
                         new
                         {
                             Id = 3,
-                            Alibi = "Says he was greeting donors in the lobby all evening mostly true, but he was unaccounted for a 15-minute window.",
+                            Alibi = "Says he was greeting donors in the lobby all evening — mostly true, but he was unaccounted for a 15-minute window.",
                             CaseId = 1,
                             Description = "The concert hall's owner and producer. Smooth talker, expensive suit, always working the room.",
                             ImageUrl = "/images/suspects/victor.jpg",
@@ -813,7 +665,7 @@ namespace DigitalDetectiveAgency.Migrations
                         new
                         {
                             Id = 4,
-                            Alibi = "Claims she was home sick but no one can confirm it, and her phone was off all night.",
+                            Alibi = "Claims she was home sick — but no one can confirm it, and her phone was off all night.",
                             CaseId = 1,
                             Description = "The violinist's longtime personal assistant. Quiet, meticulous, always one step behind her.",
                             ImageUrl = "/images/suspects/sophia.jpg",
@@ -824,7 +676,7 @@ namespace DigitalDetectiveAgency.Migrations
                         new
                         {
                             Id = 5,
-                            Alibi = "Says he was at the bar the whole time bartender remembers seeing him, but not exactly when he left.",
+                            Alibi = "Says he was at the bar the whole time — bartender remembers seeing him, but not exactly when he left.",
                             CaseId = 1,
                             Description = "The violinist's ex-fiancé. Showed up uninvited backstage an hour before the show.",
                             ImageUrl = "/images/suspects/damian.jpg",
@@ -834,65 +686,10 @@ namespace DigitalDetectiveAgency.Migrations
                         },
                         new
                         {
-                            Id = 18,
-                            Alibi = "Claims she left to buy coffee before the broadcast ended. A receipt supports her story.",
-                            CaseId = 2,
-                            Description = "The station producer. Organized every broadcast and managed the daily schedule.",
-                            ImageUrl = "/images/suspects/liza.jpg",
-                            IsGuilty = false,
-                            Motive = "Miguel planned to replace her after months of declining ratings.",
-                            Name = "Liza Mendoza"
-                        },
-                        new
-                        {
-                            Id = 19,
-                            Alibi = "Says he spent the evening repairing speakers in Studio B.",
-                            CaseId = 2,
-                            Description = "Senior sound engineer responsible for maintaining Studio B.",
-                            ImageUrl = "/images/suspects/noel.jpg",
-                            IsGuilty = false,
-                            Motive = "Miguel accused him of stealing expensive recording equipment.",
-                            Name = "Noel Santos"
-                        },
-                        new
-                        {
-                            Id = 20,
-                            Alibi = "Claims he was attending a charity dinner throughout the evening.",
-                            CaseId = 2,
-                            Description = "A local politician frequently criticized on Miguel's radio program.",
-                            ImageUrl = "/images/suspects/reyes.jpg",
-                            IsGuilty = false,
-                            Motive = "Miguel planned to expose corruption involving flood-relief funds.",
-                            Name = "Councilor Adrian Reyes"
-                        },
-                        new
-                        {
-                            Id = 21,
-                            Alibi = "Claims she remained at the front desk until police arrived.",
-                            CaseId = 2,
-                            Description = "Receptionist responsible for visitor records and station access.",
-                            ImageUrl = "/images/suspects/tina.jpg",
-                            IsGuilty = false,
-                            Motive = "Miguel publicly embarrassed her brother during an investigative segment.",
-                            Name = "Tina Flores"
-                        },
-                        new
-                        {
-                            Id = 22,
-                            Alibi = "Claims he spent the blackout inspecting the generator outside.",
-                            CaseId = 2,
-                            Description = "Station maintenance technician. Quiet, dependable, and the first to help investigators search the building.",
-                            ImageUrl = "/images/suspects/marco.jpg",
-                            IsGuilty = true,
-                            Motive = "He secretly diverted station maintenance funds to pay for his son's heart surgery and feared Miguel had discovered the missing money.",
-                            Name = "Marco Villanueva"
-                        },
-                        new
-                        {
                             Id = 6,
                             Alibi = "Says he was watching the fireworks with cousins the whole time. A few vaguely recall seeing him 'at some point' during the display.",
                             CaseId = 3,
-                            Description = "Ernesto's estranged son, back from Manila after nearly a decade of silence arriving just three days before his father's death.",
+                            Description = "Ernesto's estranged son, back from Manila after nearly a decade of silence — arriving just three days before his father's death.",
                             ImageUrl = "/images/suspects/ricardo.jpg",
                             IsGuilty = false,
                             Motive = "Cut off financially years ago and only recently reconciled. With the land sale unsigned, he stood to inherit everything.",
@@ -906,7 +703,7 @@ namespace DigitalDetectiveAgency.Migrations
                             Description = "Ernesto's longtime companion, kept quietly in a house at the edge of town for over a decade.",
                             ImageUrl = "/images/suspects/teresa.jpg",
                             IsGuilty = false,
-                            Motive = "Ernesto was ending their arrangement to remarry once the sale went through cutting off her monthly allowance for good.",
+                            Motive = "Ernesto was ending their arrangement to remarry once the sale went through — cutting off her monthly allowance for good.",
                             Name = "Teresa Bautista"
                         },
                         new
@@ -936,10 +733,10 @@ namespace DigitalDetectiveAgency.Migrations
                             Id = 10,
                             Alibi = "Says he was in the chapel praying through the fireworks, as he does every fiesta. No one thought to check.",
                             CaseId = 3,
-                            Description = "The hacienda's katiwala overseer of the cane fields for over forty years. Quiet, devout, tends the small chapel on the property himself.",
+                            Description = "The hacienda's katiwala — overseer of the cane fields for over forty years. Quiet, devout, tends the small chapel on the property himself.",
                             ImageUrl = "/images/suspects/fidel.jpg",
                             IsGuilty = true,
-                            Motive = "The sale would evict the sacada families who'd worked the land for generations families whose wages Ernesto had already quietly stopped paying months ago.",
+                            Motive = "The sale would evict the sacada families who'd worked the land for generations — families whose wages Ernesto had already quietly stopped paying months ago.",
                             Name = "Mang Fidel Cortez"
                         },
                         new
@@ -947,7 +744,7 @@ namespace DigitalDetectiveAgency.Migrations
                             Id = 11,
                             Alibi = "Says he was on a call with his office in Manila during the fireworks. Phone records confirm a call, but not that he was the one on it.",
                             CaseId = 3,
-                            Description = "Representative for the conglomerate buying the land flew in from Manila that morning to finalize the sale.",
+                            Description = "Representative for the conglomerate buying the land — flew in from Manila that morning to finalize the sale.",
                             ImageUrl = "/images/suspects/tan.jpg",
                             IsGuilty = false,
                             Motive = "Ernesto tried to renegotiate the price at the last minute, threatening to walk away from the deal entirely.",
@@ -956,29 +753,29 @@ namespace DigitalDetectiveAgency.Migrations
                         new
                         {
                             Id = 12,
-                            Alibi = "Says he was doing late inventory in the resort office alone. No one thought to question it he's always the last one to leave.",
+                            Alibi = "Says he was doing late inventory in the resort office alone. No one thought to question it — he's always the last one to leave.",
                             CaseId = 4,
                             Description = "Ramon's nephew and the resort's general manager, trusted with the books for the past six years.",
                             ImageUrl = "/images/suspects/nico.jpg",
                             IsGuilty = true,
-                            Motive = "An outside audit tied to the expansion loan would have surfaced years of diverted maintenance funds and forged permit paperwork - all under his signature.",
+                            Motive = "An outside audit tied to the expansion loan would have surfaced years of diverted maintenance funds and forged permit paperwork — all under his signature.",
                             Name = "Nico Aguilar"
                         },
                         new
                         {
                             Id = 13,
-                            Alibi = "Claims she was greeting investors at the showcase all night. Several guests confirm seeing her but not continuously.",
+                            Alibi = "Claims she was greeting investors at the showcase all night. Several guests confirm seeing her — but not continuously.",
                             CaseId = 4,
                             Description = "Ramon's second wife, twenty years his junior, married just three years ago.",
                             ImageUrl = "/images/suspects/cristina.jpg",
                             IsGuilty = false,
-                            Motive = "Sole beneficiary on a life insurance policy Ramon took out shortly after their wedding one his first family never knew existed.",
+                            Motive = "Sole beneficiary on a life insurance policy Ramon took out shortly after their wedding — one his first family never knew existed.",
                             Name = "Cristina Aguilar"
                         },
                         new
                         {
                             Id = 14,
-                            Alibi = "Says his boat never left Sabang that night. The marina logbook backs him up mostly; there's a 40-minute gap in the entries.",
+                            Alibi = "Says his boat never left Sabang that night. The marina logbook backs him up — mostly; there's a 40-minute gap in the entries.",
                             CaseId = 4,
                             Description = "Owner of a rival dive resort in Sabang, and Ramon's business rival for over a decade.",
                             ImageUrl = "/images/suspects/boyet.jpg",
@@ -1005,13 +802,13 @@ namespace DigitalDetectiveAgency.Migrations
                             Description = "An elder of the local Mangyan community, who has spent months formally petitioning to have the cove recognized as ancestral domain.",
                             ImageUrl = "/images/suspects/bandying.jpg",
                             IsGuilty = false,
-                            Motive = "The expansion would pave over a burial ground his community has protected for generations and Ramon had ignored every petition.",
+                            Motive = "The expansion would pave over a burial ground his community has protected for generations — and Ramon had ignored every petition.",
                             Name = "Datu Bandying"
                         },
                         new
                         {
                             Id = 17,
-                            Alibi = "Says he was leading the protest chant outside the gate when the fireworks went off dozens of witnesses can place him there.",
+                            Alibi = "Says he was leading the protest chant outside the gate when the fireworks went off — dozens of witnesses can place him there.",
                             CaseId = 4,
                             Description = "Head of the local fisherfolk association, and the loudest voice at every protest outside the resort gate for the past two months.",
                             ImageUrl = "/images/suspects/pandoy.jpg",
@@ -1117,51 +914,11 @@ namespace DigitalDetectiveAgency.Migrations
                         },
                         new
                         {
-                            Id = 14,
-                            CaseId = 2,
-                            ImageUrl = "/images/witnesses/security_guard_radio.jpg",
-                            Name = "Security Guard",
-                            Statement = "I heard something heavy hit the floor around 9:24 PM. I assumed a microphone stand had fallen."
-                        },
-                        new
-                        {
-                            Id = 15,
-                            CaseId = 2,
-                            ImageUrl = "/images/witnesses/coffee_vendor.jpg",
-                            Name = "Coffee Vendor",
-                            Statement = "The producer bought coffee just after nine. She looked rushed but never returned before the police arrived."
-                        },
-                        new
-                        {
-                            Id = 16,
-                            CaseId = 2,
-                            ImageUrl = "/images/witnesses/janitor_radio.jpg",
-                            Name = "Janitor",
-                            Statement = "I saw someone carrying a flashlight outside near the generator shed. It was raining too hard to recognize who it was."
-                        },
-                        new
-                        {
-                            Id = 17,
-                            CaseId = 2,
-                            ImageUrl = "/images/witnesses/listener.jpg",
-                            Name = "Regular Listener",
-                            Statement = "The broadcast suddenly stopped. Everyone online thought the neighborhood had lost power."
-                        },
-                        new
-                        {
-                            Id = 18,
-                            CaseId = 2,
-                            ImageUrl = "/images/witnesses/delivery_rider.jpg",
-                            Name = "Delivery Rider",
-                            Statement = "A white van left the station shortly after the police arrived. I couldn't read the plate because of the rain."
-                        },
-                        new
-                        {
                             Id = 5,
                             CaseId = 3,
                             ImageUrl = "/images/witnesses/nena.jpg",
                             Name = "Nena, the Kasambahay",
-                            Statement = "I saw someone pass by the study window right when the fireworks started, pero patalikod siya (back was turned), couldn't tell you who."
+                            Statement = "I saw someone pass by the study window right when the fireworks started, pero patalikod siya — back was turned, couldn't tell you who."
                         },
                         new
                         {
@@ -1169,7 +926,7 @@ namespace DigitalDetectiveAgency.Migrations
                             CaseId = 3,
                             ImageUrl = "/images/witnesses/tricycle_driver.jpg",
                             Name = "Tricycle Driver",
-                            Statement = "I drove Ricardo to town earlier that day. He was on the phone the whole ride, arguing with someone about a debt- sounded serious."
+                            Statement = "I drove Ricardo to town earlier that day. He was on the phone the whole ride, arguing with someone about a debt — sounded serious."
                         },
                         new
                         {
@@ -1201,7 +958,7 @@ namespace DigitalDetectiveAgency.Migrations
                             CaseId = 4,
                             ImageUrl = "/images/witnesses/bangkero.jpg",
                             Name = "Bangkero (Boat Captain)",
-                            Statement = "Merong nakita akong tao malapit sa dive shop that night, pero madilim hindi ko masabi kung sino."
+                            Statement = "Merong nakita akong tao malapit sa dive shop that night, pero madilim — hindi ko masabi kung sino."
                         },
                         new
                         {
