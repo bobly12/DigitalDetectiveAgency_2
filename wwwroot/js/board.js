@@ -11,25 +11,32 @@
         unlock: new Audio('/audio/unlock.mp3')
     };
 
-    Object.values(sounds).forEach(sound => {
-        sound.preload = "auto";
-    });
+   // Object.values(sounds).forEach(sound => sound.preload = "auto");//
 
-    function playSound(sound) {
-        if (!sound) return;
-        sound.pause();
-        sound.currentTime = 0;
-        sound.play().catch(() => {
-            // Browser blocked playback due to autoplay policy.
-        });
-    }
+   // function playSound(sound) {
+  //      if (!sound) return;
+    //    sound.pause();
+      //  sound.currentTime = 0;
+        //sound.play().catch(() => {});
+  //  }//
 
-    // Tracks which suspects we already know are unlocked, so we only
-    // fetch a suspect's real file once, right when they first unlock.
+    // Tracks which suspects/nodes are already unlocked in state.
     const knownUnlockedSuspectIds = new Set(
         Array.from(document.querySelectorAll('.board-card[data-type="Suspect"]'))
             .filter(card => !card.querySelector('[data-suspect-lock]'))
-            .map(card => parseInt(card.dataset.id))
+            .map(card => parseInt(card.dataset.id, 10))
+    );
+
+    const knownUnlockedEvidenceIds = new Set(
+        Array.from(document.querySelectorAll('.board-card[data-type="Evidence"]'))
+            .filter(card => !card.classList.contains('board-card--undiscovered'))
+            .map(card => parseInt(card.dataset.id, 10))
+    );
+
+    const knownUnlockedWitnessIds = new Set(
+        Array.from(document.querySelectorAll('.board-card[data-type="Witness"]'))
+            .filter(card => !card.classList.contains('board-card--undiscovered'))
+            .map(card => parseInt(card.dataset.id, 10))
     );
 
     function getPinPosition(card) {
@@ -44,10 +51,11 @@
     }
 
     function findCard(type, id) {
-        return document.querySelector(`.board-card[data-type="${type}"][data-id="${id}"]`);
+        // String conversion ensures matching regardless of string/number type passing
+        return document.querySelector(`.board-card[data-type="${type}"][data-id="${String(id)}"]`);
     }
 
-    // ===== Thread Drawing with Animation =====
+    // ===== Thread Drawing =====
     function drawLine(conn) {
         const fromCard = findCard(conn.fromType || conn.FromType, conn.fromId || conn.FromId);
         const toCard = findCard(conn.toType || conn.ToType, conn.toId || conn.ToId);
@@ -76,7 +84,6 @@
 
         svg.appendChild(path);
 
-        // Thread stroke animation setup
         const len = path.getTotalLength();
         path.style.strokeDasharray = len;
         path.style.strokeDashoffset = len;
@@ -92,9 +99,17 @@
         connections.forEach(drawLine);
     }
 
-    // ===== Apply progress snapshot & dynamic counter animation =====
+    // ===== Apply progress snapshot =====
     function applyProgress(progress) {
         if (!progress) return;
+
+        const confidence = progress.confidence ?? progress.Confidence ?? 0;
+        const correctConn = progress.correctConnections ?? progress.CorrectConnections ?? 0;
+        const totalConn = progress.totalRequiredConnections ?? progress.TotalRequiredConnections ?? 0;
+        const correctElim = progress.correctEliminatedSuspects ?? progress.CorrectEliminatedSuspects ?? 0;
+        const totalInnocent = progress.totalInnocentSuspects ?? progress.TotalInnocentSuspects ?? 0;
+        const canAccuse = progress.canAccuse ?? progress.CanAccuse ?? false;
+        const remConf = progress.remainingConfidence ?? progress.RemainingConfidence ?? 0;
 
         const fillEl = document.getElementById('confidence-fill');
         const valueEl = document.getElementById('confidence-value');
@@ -103,52 +118,41 @@
         const accuseLabel = document.getElementById('accuse-btn-label');
 
         if (fillEl) {
-            fillEl.style.width = progress.confidence + '%';
+            fillEl.style.width = confidence + '%';
             fillEl.classList.remove('confidence-gauge__fill--high', 'confidence-gauge__fill--mid', 'confidence-gauge__fill--low');
             fillEl.classList.add(
-                progress.confidence >= 75 ? 'confidence-gauge__fill--high' :
-                    progress.confidence >= 40 ? 'confidence-gauge__fill--mid' :
+                confidence >= 75 ? 'confidence-gauge__fill--high' :
+                    confidence >= 40 ? 'confidence-gauge__fill--mid' :
                         'confidence-gauge__fill--low'
             );
         }
 
-        // Animated Confidence Percentage Increment & Pulse
         if (valueEl) {
-            const start = parseInt(valueEl.textContent) || 0;
-            const end = progress.confidence;
+            const start = parseInt(valueEl.textContent, 10) || 0;
             const duration = 500;
             const startTime = performance.now();
 
             function animate(now) {
                 const p = Math.min((now - startTime) / duration, 1);
-                const value = Math.round(start + (end - start) * p);
-                valueEl.textContent = value + '%';
-
-                if (p < 1) {
-                    requestAnimationFrame(animate);
-                }
+                valueEl.textContent = Math.round(start + (confidence - start) * p) + '%';
+                if (p < 1) requestAnimationFrame(animate);
             }
 
             requestAnimationFrame(animate);
-
             valueEl.animate([
                 { transform: "scale(1)" },
                 { transform: "scale(1.18)" },
                 { transform: "scale(1)" }
-            ], {
-                duration: 350
-            });
+            ], { duration: 350 });
         }
 
         if (detailEl) {
-            detailEl.textContent =
-                `${progress.correctConnections} / ${progress.totalRequiredConnections} connections  •  ` +
-                `${progress.correctEliminatedSuspects} / ${progress.totalInnocentSuspects} suspects cleared`;
+            detailEl.textContent = `${correctConn} / ${totalConn} connections  •  ${correctElim} / ${totalInnocent} suspects cleared`;
         }
 
         if (accuseBtn && accuseLabel) {
-            accuseBtn.dataset.canAccuse = progress.canAccuse;
-            if (progress.canAccuse) {
+            accuseBtn.dataset.canAccuse = canAccuse;
+            if (canAccuse) {
                 accuseBtn.classList.remove('btn-stamp--disabled');
                 accuseBtn.removeAttribute('aria-disabled');
                 accuseBtn.removeAttribute('title');
@@ -157,32 +161,53 @@
                 accuseBtn.classList.add('btn-stamp--disabled');
                 accuseBtn.setAttribute('aria-disabled', 'true');
                 accuseBtn.setAttribute('title', 'Reach 75% confidence to unlock');
-                accuseLabel.textContent = `Make Accusation (${progress.remainingConfidence}% more needed)`;
+                accuseLabel.textContent = `Make Accusation (${remConf}% more needed)`;
             }
         }
 
-        // Reveal any newly-unlocked suspects' files.
-        (progress.unlockedSuspectIds || []).forEach(suspectId => {
-            if (knownUnlockedSuspectIds.has(suspectId)) return;
-            knownUnlockedSuspectIds.add(suspectId);
-            unlockSuspectCard(suspectId);
+        // Handle property name casing differences (camelCase vs PascalCase)
+        const unlockedSuspects = progress.unlockedSuspectIds || progress.UnlockedSuspectIds || [];
+        const unlockedEvidence = progress.unlockedEvidenceIds || progress.UnlockedEvidenceIds || [];
+        const unlockedWitnesses = progress.unlockedWitnessIds || progress.UnlockedWitnessIds || [];
+
+        unlockedSuspects.forEach(suspectId => {
+            const idNum = parseInt(suspectId, 10);
+            if (knownUnlockedSuspectIds.has(idNum)) return;
+            unlockSuspectCard(idNum);
+        });
+
+        unlockedEvidence.forEach(evidenceId => {
+            const idNum = parseInt(evidenceId, 10);
+            if (knownUnlockedEvidenceIds.has(idNum)) return;
+            revealNode('Evidence', idNum);
+        });
+
+        unlockedWitnesses.forEach(witnessId => {
+            const idNum = parseInt(witnessId, 10);
+            if (knownUnlockedWitnessIds.has(idNum)) return;
+            revealNode('Witness', idNum);
         });
     }
 
-    // ===== Unlock suspect card with flip & highlight animations =====
+    // ===== Unlock suspect card =====
     async function unlockSuspectCard(suspectId) {
         const card = findCard('Suspect', suspectId);
         if (!card) return;
 
         try {
             const res = await fetch(`/Board/GetSuspectFile?caseId=${window.boardCaseId}&suspectId=${suspectId}`);
-            if (!res.ok) return;
+            if (!res.ok) {
+                console.error(`[Board] Failed to fetch suspect ${suspectId}: HTTP ${res.status}`);
+                return;
+            }
             const data = await res.json();
 
-            const existingFields = JSON.parse(card.dataset.fields);
+            knownUnlockedSuspectIds.add(parseInt(suspectId, 10));
+
+            const existingFields = JSON.parse(card.dataset.fields || '[]');
             const updatedFields = existingFields.map(f => {
-                if (f.heading === 'Motive') return { ...f, text: data.motive };
-                if (f.heading === 'Alibi') return { ...f, text: data.alibi };
+                if (f.heading === 'Motive') return { ...f, text: data.motive || data.Motive };
+                if (f.heading === 'Alibi') return { ...f, text: data.alibi || data.Alibi };
                 return f;
             });
             card.dataset.fields = JSON.stringify(updatedFields);
@@ -190,33 +215,89 @@
             const lockEl = card.querySelector('[data-suspect-lock]');
             if (lockEl) {
                 playSound(sounds.unlock);
-
                 lockEl.animate([
                     { transform: "rotateY(0deg)", opacity: 1 },
                     { transform: "rotateY(180deg)", opacity: 0 }
-                ], {
-                    duration: 600,
-                    easing: "ease-out"
-                });
-
-                setTimeout(() => {
-                    lockEl.remove();
-                }, 580);
+                ], { duration: 600, easing: "ease-out" });
+                setTimeout(() => lockEl.remove(), 580);
             }
 
-            // Card highlight & paper sound
             card.animate([
                 { transform: "scale(.95)", boxShadow: "0 0 0 rgba(255,215,0,0)" },
                 { transform: "scale(1.05)", boxShadow: "0 0 25px rgba(255,215,0,.8)" },
                 { transform: "scale(1)" }
-            ], {
-                duration: 700
+            ], { duration: 700 });
+
+            playSound(sounds.paper);
+        } catch (err) {
+            console.error(`[Board] Error unlocking suspect ${suspectId}:`, err);
+        }
+    }
+
+    // ===== Reveal Evidence/Witness cards =====
+    async function revealNode(type, id) {
+        const placeholder = findCard(type, id);
+
+        if (!placeholder) {
+            console.warn(`[Board] Node card not found in DOM: Type=${type}, ID=${id}`);
+            return;
+        }
+
+        if (!placeholder.classList.contains('board-card--undiscovered')) {
+            if (type === 'Evidence') knownUnlockedEvidenceIds.add(parseInt(id, 10));
+            if (type === 'Witness') knownUnlockedWitnessIds.add(parseInt(id, 10));
+            return;
+        }
+
+        const endpoint = type === 'Evidence' ? '/Board/GetEvidenceFile' : '/Board/GetWitnessFile';
+        const idParam = type === 'Evidence' ? 'evidenceId' : 'witnessId';
+
+        try {
+            const res = await fetch(`${endpoint}?caseId=${window.boardCaseId}&${idParam}=${id}`);
+            if (!res.ok) {
+                console.error(`[Board] Failed to fetch ${type} ${id}: HTTP ${res.status}`);
+                return;
+            }
+            const data = await res.json();
+
+            // Support both camelCase and PascalCase backend models
+            const name = data.name || data.Name || '';
+            const imageUrl = data.imageUrl || data.ImageUrl || '';
+            const description = data.description || data.Description || '';
+
+            if (type === 'Evidence') knownUnlockedEvidenceIds.add(parseInt(id, 10));
+            if (type === 'Witness') knownUnlockedWitnessIds.add(parseInt(id, 10));
+
+            const fields = type === 'Evidence'
+                ? [{ heading: null, text: description }]
+                : [{ heading: null, text: `"${description}"` }];
+
+            placeholder.classList.remove('board-card--undiscovered');
+            placeholder.dataset.name = name;
+            placeholder.dataset.image = imageUrl;
+            placeholder.dataset.label = type;
+            placeholder.dataset.fields = JSON.stringify(fields);
+
+            placeholder.innerHTML = `
+                <span class="board-card__pin" data-connect-pin title="Click to start or complete a connection"></span>
+                <img src="${imageUrl}" alt="${name}" class="board-card__img" />
+                <strong>${name}</strong>
+            `;
+
+            placeholder.querySelector('[data-connect-pin]').addEventListener('click', handlePinClick);
+            placeholder.querySelector('.board-card__img').addEventListener('click', (e) => {
+                e.stopPropagation();
+                window.openFileModal?.(placeholder);
             });
 
             playSound(sounds.paper);
+            placeholder.animate([
+                { opacity: 0.4, transform: "scale(.96)" },
+                { opacity: 1, transform: "scale(1)" }
+            ], { duration: 400 });
 
-        } catch {
-            // Non-fatal fallback
+        } catch (err) {
+            console.error(`[Board] Error revealing ${type} ${id}:`, err);
         }
     }
 
@@ -233,7 +314,7 @@
             const data = await res.json();
             connections = connections.filter(c => (c.id || c.Id) !== connectionId);
             redrawAll();
-            applyProgress(data.progress);
+            applyProgress(data.progress || data.Progress);
         } else {
             alert('Could not remove connection.');
         }
@@ -247,67 +328,65 @@
     }
 
     // ===== Pin-to-pin connection behavior =====
-    document.querySelectorAll('[data-connect-pin]').forEach(pin => {
-        pin.addEventListener('click', async (e) => {
-            e.stopPropagation();
-            const card = pin.closest('.board-card');
+    async function handlePinClick(e) {
+        e.stopPropagation();
+        const pin = e.currentTarget;
+        const card = pin.closest('.board-card');
 
-            if (!selectedCard) {
-                selectedCard = card;
-                pin.classList.add('is-active-pin');
-                card.classList.add('is-selected');
+        if (!selectedCard) {
+            selectedCard = card;
+            pin.classList.add('is-active-pin');
+            card.classList.add('is-selected');
 
-                // Sound and pin pop animation on first selection
-                playSound(sounds.pin);
-                pin.animate([
-                    { transform: "translateX(-50%) scale(1)" },
-                    { transform: "translateX(-50%) scale(1.45)" },
-                    { transform: "translateX(-50%) scale(1.2)" }
-                ], {
-                    duration: 220,
-                    easing: "ease-out"
-                });
+            playSound(sounds.pin);
+            pin.animate([
+                { transform: "translateX(-50%) scale(1)" },
+                { transform: "translateX(-50%) scale(1.45)" },
+                { transform: "translateX(-50%) scale(1.2)" }
+            ], { duration: 220, easing: "ease-out" });
 
-                return;
-            }
+            return;
+        }
 
-            if (selectedCard === card) {
-                clearSelection();
-                return;
-            }
-
-            const fromType = selectedCard.dataset.type;
-            const fromId = parseInt(selectedCard.dataset.id);
-            const toType = card.dataset.type;
-            const toId = parseInt(card.dataset.id);
-
-            const res = await fetch('/Board/SaveConnection', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ caseId: window.boardCaseId, fromType, fromId, toType, toId })
-            });
-
+        if (selectedCard === card) {
             clearSelection();
+            return;
+        }
 
-            if (res.ok) {
-                const data = await res.json();
+        const fromType = selectedCard.dataset.type;
+        const fromId = parseInt(selectedCard.dataset.id, 10);
+        const toType = card.dataset.type;
+        const toId = parseInt(card.dataset.id, 10);
 
-                playSound(sounds.pin);
-                connections.push({ id: data.connectionId, fromType, fromId, toType, toId });
-                redrawAll();
-                applyProgress(data.progress);
-            } else {
-                const data = await res.json();
-                alert(data.message || 'Could not save connection.');
-            }
+        const res = await fetch('/Board/SaveConnection', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ caseId: window.boardCaseId, fromType, fromId, toType, toId })
         });
+
+        clearSelection();
+
+        if (res.ok) {
+            const data = await res.json();
+            playSound(sounds.pin);
+            connections.push({ id: data.connectionId || data.ConnectionId, fromType, fromId, toType, toId });
+            redrawAll();
+            applyProgress(data.progress || data.Progress);
+        } else {
+            const data = await res.json();
+            alert(data.message || data.Message || 'Could not save connection.');
+        }
+    }
+
+    document.querySelectorAll('[data-connect-pin]').forEach(pin => {
+        pin.addEventListener('click', handlePinClick);
     });
 
     // ===== Suspect elimination behavior =====
     document.querySelectorAll('[data-eliminate-suspect]').forEach(btn => {
         btn.addEventListener('click', async (e) => {
             e.stopPropagation();
-            const suspectId = parseInt(btn.dataset.eliminateSuspect);
+            const suspectId = parseInt(btn.dataset.eliminateSuspect, 10);
             const card = btn.closest('.board-card');
 
             const res = await fetch('/Board/ToggleElimination', {
@@ -319,7 +398,7 @@
             if (res.ok) {
                 const data = await res.json();
                 card.classList.toggle('is-eliminated');
-                applyProgress(data.progress);
+                applyProgress(data.progress || data.Progress);
             } else {
                 alert('Could not toggle elimination.');
             }

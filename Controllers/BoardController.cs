@@ -136,5 +136,29 @@ public class BoardController : Controller
             totalInnocentSuspects = progress.TotalInnocentSuspects,
             unlockedSuspectIds = progress.UnlockedSuspectIds
         };
+        
+    }
+    [HttpGet]
+    public async Task<IActionResult> GetEvidenceFile(int caseId, int evidenceId)
+    {
+        var userId = _userManager.GetUserId(User)!;
+        var (success, name, imageUrl, description) = await _boardService.GetEvidenceFileAsync(caseId, evidenceId, userId);
+
+        if (!success)
+            return NotFound();
+
+        return Json(new { name, imageUrl, description });
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> GetWitnessFile(int caseId, int witnessId)
+    {
+        var userId = _userManager.GetUserId(User)!;
+        var (success, name, imageUrl, description) = await _boardService.GetWitnessFileAsync(caseId, witnessId, userId);
+
+        if (!success)
+            return NotFound();
+
+        return Json(new { name, imageUrl, description });
     }
 }

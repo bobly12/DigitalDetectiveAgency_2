@@ -137,10 +137,6 @@ public class BoardService : IBoardService
         };
 
         await _boardRepository.AddConnectionAsync(connection);
-        // EF Core populates connection.Id after SaveChanges runs inside
-        // AddConnectionAsync — the client needs this REAL id (not a fake
-        // client-generated one) so a later DeleteConnection call for this
-        // exact thread actually targets the right row.
 
         return (true, null, connection.Id);
     }
@@ -189,9 +185,6 @@ public class BoardService : IBoardService
         if (playerCase == null)
             return (false, null, null);
 
-        // Re-checks the unlock server-side on every call — the client never
-        // gets to decide "I'm unlocked now, give me the text." Same rule
-        // GetBoardAsync uses, same InvestigationProgressService snapshot.
         var progress = await _progressService.GetInvestigationProgressAsync(caseId, userId);
         if (!progress.UnlockedSuspectIds.Contains(suspectId))
             return (false, null, null);
@@ -202,6 +195,48 @@ public class BoardService : IBoardService
             return (false, null, null);
 
         return (true, suspect.Motive, suspect.Alibi);
+    }
+
+    public async Task<(bool Success, string? Name, string? ImageUrl, string? Description)> GetEvidenceFileAsync(
+        int caseId,
+        int evidenceId,
+        string userId)
+    {
+        var playerCase = await _caseRepository.GetPlayerCaseAsync(caseId, userId);
+        if (playerCase == null)
+            return (false, null, null, null);
+
+        var progress = await _progressService.GetInvestigationProgressAsync(caseId, userId);
+        if (!progress.UnlockedEvidenceIds.Contains(evidenceId))
+            return (false, null, null, null);
+
+        var evidenceList = await _caseRepository.GetEvidenceForCaseAsync(caseId);
+        var evidence = evidenceList.FirstOrDefault(e => e.Id == evidenceId);
+        if (evidence == null)
+            return (false, null, null, null);
+
+        return (true, evidence.Name, evidence.ImageUrl, evidence.Description);
+    }
+
+    public async Task<(bool Success, string? Name, string? ImageUrl, string? Description)> GetWitnessFileAsync(
+        int caseId,
+        int witnessId,
+        string userId)
+    {
+        var playerCase = await _caseRepository.GetPlayerCaseAsync(caseId, userId);
+        if (playerCase == null)
+            return (false, null, null, null);
+
+        var progress = await _progressService.GetInvestigationProgressAsync(caseId, userId);
+        if (!progress.UnlockedWitnessIds.Contains(witnessId))
+            return (false, null, null, null);
+
+        var witnessList = await _caseRepository.GetWitnessesForCaseAsync(caseId);
+        var witness = witnessList.FirstOrDefault(w => w.Id == witnessId);
+        if (witness == null)
+            return (false, null, null, null);
+
+        return (true, witness.Name, witness.ImageUrl, witness.Statement);
     }
 
     private static BoardNodeViewModel MapEvidence(
@@ -245,7 +280,7 @@ public class BoardService : IBoardService
 
             IsMotiveUnlocked = unlocked,
             IsAlibiUnlocked = unlocked,
-            IsRevealed = true // Suspects are never staged - always visible
+            IsRevealed = true
         };
     }
 

@@ -19,4 +19,16 @@ public interface IBoardService
     /// is never sent to the browser at all, same guarantee as before.
     /// </summary>
     Task<(bool Success, string? Motive, string? Alibi)> GetSuspectFileAsync(int caseId, int suspectId, string userId);
+
+    /// <summary>
+    /// Returns evidence details (Name, ImageUrl, Description) ONLY if the player
+    /// has unlocked the piece of evidence. Prevents client-side exposure of locked leads.
+    /// </summary>
+    Task<(bool Success, string? Name, string? ImageUrl, string? Description)> GetEvidenceFileAsync(int caseId, int evidenceId, string userId);
+
+    /// <summary>
+    /// Returns witness details (Name, ImageUrl, Statement) ONLY if the player
+    /// has unlocked the witness. Prevents client-side exposure of locked leads.
+    /// </summary>
+    Task<(bool Success, string? Name, string? ImageUrl, string? Description)> GetWitnessFileAsync(int caseId, int witnessId, string userId);
 }
