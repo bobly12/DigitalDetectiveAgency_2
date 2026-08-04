@@ -1,5 +1,6 @@
 using DigitalDetectiveAgency.Models.Entities;
 using DigitalDetectiveAgency.Models.ViewModels;
+using DigitalDetectiveAgency.Repositories.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -10,10 +11,12 @@ namespace DigitalDetectiveAgency.Controllers;
 public class TutorialController : Controller
 {
     private readonly UserManager<ApplicationUser> _userManager;
+    private readonly ICaseRepository _caseRepository;
 
-    public TutorialController(UserManager<ApplicationUser> userManager)
+    public TutorialController(UserManager<ApplicationUser> userManager, ICaseRepository caseRepository)
     {
         _userManager = userManager;
+        _caseRepository = caseRepository;
     }
 
     public async Task<IActionResult> Index()
@@ -23,14 +26,23 @@ public class TutorialController : Controller
         if (user == null)
             return Challenge();
 
+        var firstCaseId = await _caseRepository.GetFirstPublishedCaseIdAsync();
+
+        if (firstCaseId == null)
+        {
+            // No published case exists yet — nothing to send the player to.
+            TempData["BoardMessage"] = "No cases are available yet. Check back soon, Detective.";
+            return RedirectToAction("Index", "Case");
+        }
+
         if (user.HasCompletedTutorial)
-            return RedirectToAction("Index", "Board", new { id = 1 });
+            return RedirectToAction("Index", "Board", new { id = firstCaseId });
 
         var vm = new TutorialViewModel
         {
             Speaker = "Chief Investigator",
             Title = "Detective Training",
-            FirstCaseId = 1,
+            FirstCaseId = firstCaseId.Value,
             AllowSkip = true,
             Dialogue = new List<string>
             {
@@ -56,12 +68,15 @@ public class TutorialController : Controller
             return Unauthorized();
 
         user.HasCompletedTutorial = true;
-
         await _userManager.UpdateAsync(user);
+
+        var firstCaseId = await _caseRepository.GetFirstPublishedCaseIdAsync();
 
         return Ok(new
         {
-            redirect = Url.Action("Index", "Board", new { id = 1 })
+            redirect = firstCaseId == null
+                ? Url.Action("Index", "Case")
+                : Url.Action("Index", "Board", new { id = firstCaseId })
         });
     }
 }

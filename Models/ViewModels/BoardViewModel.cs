@@ -64,7 +64,14 @@ public class BoardViewModel
     /// Total innocent suspects in the case.
     /// </summary>
     public int TotalInnocentSuspects { get; set; }
+
+    /// <summary>
+    /// Same hint text as the live progress snapshot, for first page load.
+    /// </summary>
+    public string NextFocusHint { get; set; } = string.Empty;
     
     public int RemainingConfidence =>
         Math.Max(0, 75 - Confidence);
+    
+    public List<BoardTriedPairViewModel> TriedWrongPairs { get; set; } = new();
 }

@@ -45,6 +45,13 @@
                     @Model.CorrectEliminatedSuspects / @Model.TotalInnocentSuspects suspects cleared
                 </div>
 
+                @if (!Model.CanAccuse && !string.IsNullOrEmpty(Model.NextFocusHint))
+                {
+                    <div class="confidence-gauge__focus-hint" id="focus-hint">
+                        🔎 @Model.NextFocusHint
+                    </div>
+                }
+
                 <div class="detective-notebook">
                     <span class="detective-notebook__label">Wrong leads:</span>
                     <span id="wrong-attempts-count">@Model.WrongAttempts</span>
@@ -62,7 +69,7 @@
         }
     </div>
 
-    <p class="board-hint">Click the <strong>pin</strong> on a card to start a thread, then click a pin on another card to connect them. Click a thread to cut it.</p>
+    <p class="board-hint">Click the <strong>pin</strong> on a card to start a thread, then click a pin on another card to connect them. Click a thread to cut it. Press <strong>Esc</strong> or click empty space to cancel a thread in progress.</p>
 
     <div class="board-wrapper" id="board-container">
         <svg id="connection-svg" style="position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:1;">
@@ -164,6 +171,7 @@
     <script>
         window.boardCaseId = @Model.CaseId;
         window.initialConnections = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.Connections));
+        window.triedWrongPairs = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.TriedWrongPairs));
     </script>
     <script src="~/js/board.js"></script>
     <script src="~/js/file-modal.js"></script>

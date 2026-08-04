@@ -70,6 +70,11 @@ public class InvestigationProgressService : IInvestigationProgressService
             correctConnections, totalRequiredConnections,
             correctEliminatedSuspects, totalInnocentSuspects);
 
+        var nextFocusHint = BuildNextFocusHint(
+            confidence, confidenceThreshold,
+            correctConnections, totalRequiredConnections,
+            correctEliminatedSuspects, totalInnocentSuspects);
+
         return new InvestigationProgressSummary
         {
             Confidence = confidence,
@@ -82,10 +87,54 @@ public class InvestigationProgressService : IInvestigationProgressService
             CorrectEliminatedSuspects = correctEliminatedSuspects,
             TotalInnocentSuspects = totalInnocentSuspects,
 
+            NextFocusHint = nextFocusHint,
+
             UnlockedSuspectIds = unlockedSuspectIds,
             UnlockedEvidenceIds = unlockedEvidenceIds,
             UnlockedWitnessIds = unlockedWitnessIds
         };
+    }
+
+    /// <summary>
+    /// Points the player at whichever lever is furthest from complete —
+    /// connections or eliminations — using the same weights as confidence
+    /// itself, so the hint always matches what would move the needle most.
+    /// </summary>
+    private static string BuildNextFocusHint(
+        int confidence,
+        int confidenceThreshold,
+        int correctConnections,
+        int totalRequiredConnections,
+        int correctEliminatedSuspects,
+        int totalInnocentSuspects)
+    {
+        if (confidence >= confidenceThreshold)
+            return string.Empty;
+
+        double connectionRatio = totalRequiredConnections == 0
+            ? 1.0
+            : Math.Min(1.0, (double)correctConnections / totalRequiredConnections);
+
+        double eliminationRatio = totalInnocentSuspects == 0
+            ? 1.0
+            : Math.Min(1.0, (double)correctEliminatedSuspects / totalInnocentSuspects);
+
+        bool connectionsDone = connectionRatio >= 1.0;
+        bool eliminationsDone = eliminationRatio >= 1.0;
+
+        if (connectionsDone && eliminationsDone)
+            return "You've found everything available so far — keep investigating for new leads.";
+
+        if (connectionsDone)
+            return "Focus on clearing more suspects — you've made all the connections you can find.";
+
+        if (eliminationsDone)
+            return "Focus on the corkboard — look for more connections between your evidence.";
+
+        // Neither maxed: point at whichever is proportionally further behind.
+        return connectionRatio <= eliminationRatio
+            ? "Look for more connections on the corkboard — that's your biggest gap right now."
+            : "Try clearing more suspects — that's your biggest gap right now.";
     }
 
     /// <summary>

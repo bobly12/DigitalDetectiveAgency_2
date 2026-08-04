@@ -31,7 +31,7 @@
             <div class="suspect-lineup">
                 @foreach (var suspect in Model.Suspects)
                 {
-                    <label class="suspect-select-card" data-suspect-card>
+                    <label class="suspect-select-card" data-suspect-card data-suspect-name="@suspect.Name">
                         <img src="@suspect.ImageUrl" alt="@suspect.Name" />
                         <div class="suspect-select-card__body">
                             <input type="radio" name="SuspectId" value="@suspect.Id" required />
@@ -42,7 +42,7 @@
                 }
             </div>
 
-            <button type="submit" class="btn-stamp btn-stamp--danger">Submit Accusation</button>
+            <button type="submit" class="btn-stamp btn-stamp--danger" id="submit-accusation-btn">Submit Accusation</button>
         </form>
 
         <div style="margin-top: var(--space-md);">
@@ -53,14 +53,59 @@
     </div>
 </div>
 
+<div class="accusation-confirm-overlay" id="accusation-confirm-overlay">
+    <div class="accusation-confirm-box">
+        <h2>Final Answer?</h2>
+        <p>You're about to accuse <strong id="confirm-suspect-name"></strong>.</p>
+        <p class="accusation-confirm-warning">This cannot be undone — the case will close immediately.</p>
+        <div class="accusation-confirm-actions">
+            <button type="button" class="btn-stamp btn-stamp--ghost" id="confirm-cancel-btn">Go Back</button>
+            <button type="button" class="btn-stamp btn-stamp--danger" id="confirm-submit-btn">Yes, Accuse Them</button>
+        </div>
+    </div>
+</div>
+
 @section Scripts {
     <script>
+        const form = document.getElementById('accusation-form');
+        const overlay = document.getElementById('accusation-confirm-overlay');
+        const nameEl = document.getElementById('confirm-suspect-name');
+        let selectedName = '';
+
         // Visually highlight the selected suspect card
         document.querySelectorAll('[data-suspect-card]').forEach(card => {
             card.addEventListener('click', () => {
                 document.querySelectorAll('[data-suspect-card]').forEach(c => c.classList.remove('is-checked'));
                 card.classList.add('is-checked');
+                selectedName = card.dataset.suspectName;
             });
+        });
+
+        // Intercept submit: show confirmation instead of posting immediately
+        form.addEventListener('submit', (e) => {
+            if (overlay.classList.contains('is-submitting')) return; // already confirmed, let it through
+            e.preventDefault();
+
+            if (!form.querySelector('input[name="SuspectId"]:checked')) {
+                alert('Select a suspect before submitting.');
+                return;
+            }
+
+            nameEl.textContent = selectedName || 'this suspect';
+            overlay.classList.add('is-visible');
+        });
+
+        document.getElementById('confirm-cancel-btn').addEventListener('click', () => {
+            overlay.classList.remove('is-visible');
+        });
+
+        document.getElementById('confirm-submit-btn').addEventListener('click', () => {
+            overlay.classList.add('is-submitting');
+            form.requestSubmit();
+        });
+
+        overlay.addEventListener('click', (e) => {
+            if (e.target === overlay) overlay.classList.remove('is-visible');
         });
     </script>
 }

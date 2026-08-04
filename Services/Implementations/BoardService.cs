@@ -43,6 +43,7 @@ public class BoardService : IBoardService
         var witnesses = await _caseRepository.GetWitnessesForCaseAsync(caseId);
         var connections = await _boardRepository.GetConnectionsAsync(caseId, userId);
         var eliminatedIds = await _boardRepository.GetEliminatedSuspectIdsAsync(caseId, userId);
+        var attempts = await _boardRepository.GetAttemptsAsync(caseId, userId);
 
         var progress = await _progressService.GetInvestigationProgressAsync(caseId, userId);
 
@@ -66,6 +67,7 @@ public class BoardService : IBoardService
             TotalRequiredConnections = progress.TotalRequiredConnections,
             CorrectEliminatedSuspects = progress.CorrectEliminatedSuspects,
             TotalInnocentSuspects = progress.TotalInnocentSuspects,
+            NextFocusHint = progress.NextFocusHint,
 
             Evidence = evidence
                 .Select(e => MapEvidence(e, progress.UnlockedEvidenceIds))
@@ -90,7 +92,26 @@ public class BoardService : IBoardService
                 })
                 .ToList(),
 
-            EliminatedSuspectIds = eliminatedIds
+            EliminatedSuspectIds = eliminatedIds,
+
+            TriedWrongPairs = attempts
+                .Where(a => !a.WasCorrect)
+                .Select(a => new
+                {
+                    Key = string.CompareOrdinal($"{a.FromType}{a.FromId}", $"{a.ToType}{a.ToId}") <= 0
+                        ? $"{a.FromType}{a.FromId}|{a.ToType}{a.ToId}"
+                        : $"{a.ToType}{a.ToId}|{a.FromType}{a.FromId}",
+                    Attempt = a
+                })
+                .GroupBy(x => x.Key)
+                .Select(g => new BoardTriedPairViewModel
+                {
+                    FromType = g.First().Attempt.FromType,
+                    FromId = g.First().Attempt.FromId,
+                    ToType = g.First().Attempt.ToType,
+                    ToId = g.First().Attempt.ToId
+                })
+                .ToList()
         };
     }
 

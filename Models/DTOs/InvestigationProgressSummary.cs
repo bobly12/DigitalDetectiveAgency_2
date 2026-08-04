@@ -30,4 +30,9 @@ public class InvestigationProgressSummary
     /// Computed fresh every call - never persisted.
     /// </summary>
     public HashSet<int> UnlockedWitnessIds { get; set; } = new();
+
+    // NEW — tells the player which lever to pull next when they're stuck
+    // below the accusation threshold: more connections, more eliminations,
+    // or (if both are maxed but confidence is still short) nothing left to do.
+    public string NextFocusHint { get; set; } = string.Empty;
 }

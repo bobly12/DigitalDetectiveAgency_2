@@ -1,5 +1,6 @@
 using DigitalDetectiveAgency.Models.DTOs;
 using DigitalDetectiveAgency.Models.Entities;
+using DigitalDetectiveAgency.Repositories.Interfaces;
 using DigitalDetectiveAgency.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -11,15 +12,18 @@ namespace DigitalDetectiveAgency.Controllers;
 public class BoardController : Controller
 {
     private readonly IBoardService _boardService;
+    private readonly ICaseRepository _caseRepository;
     private readonly IInvestigationProgressService _progressService;
     private readonly UserManager<ApplicationUser> _userManager;
 
     public BoardController(
         IBoardService boardService,
+        ICaseRepository caseRepository,
         IInvestigationProgressService progressService,
         UserManager<ApplicationUser> userManager)
     {
         _boardService = boardService;
+        _caseRepository = caseRepository;
         _progressService = progressService;
         _userManager = userManager;
     }
@@ -32,10 +36,12 @@ public class BoardController : Controller
         if (user == null)
             return Challenge();
 
-        // Show tutorial only once, before the first case
-        if (id == 1 && !user.HasCompletedTutorial)
+        // Show tutorial only once, before the player's first published case
+        if (!user.HasCompletedTutorial)
         {
-            return RedirectToAction("Index", "Tutorial");
+            var firstCaseId = await _caseRepository.GetFirstPublishedCaseIdAsync();
+            if (firstCaseId == id)
+                return RedirectToAction("Index", "Tutorial");
         }
 
         var board = await _boardService.GetBoardAsync(id, user.Id);
@@ -170,7 +176,8 @@ public class BoardController : Controller
             correctEliminatedSuspects = progress.CorrectEliminatedSuspects,
             totalInnocentSuspects = progress.TotalInnocentSuspects,
             unlockedSuspectIds = progress.UnlockedSuspectIds,
-            wrongAttempts
+            wrongAttempts,
+            nextFocusHint = progress.NextFocusHint
         };
     }
 }

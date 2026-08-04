@@ -4,6 +4,19 @@
     let selectedCard = null;
     let connections = [...window.initialConnections];
 
+    // ===== Tried-wrong pair tracking =====
+    function pairKey(fromType, fromId, toType, toId) {
+        const a = `${fromType}${fromId}`;
+        const b = `${toType}${toId}`;
+        return a <= b ? `${a}|${b}` : `${b}|${a}`;
+    }
+
+    const triedWrongPairs = new Set(
+        (window.triedWrongPairs || []).map(p =>
+            pairKey(p.fromType || p.FromType, p.fromId || p.FromId, p.toType || p.ToType, p.toId || p.ToId)
+        )
+    );
+
     // ---------- Audio ----------
     const sounds = {
         pin: new Audio('/audio/pin.mp3'),
@@ -139,6 +152,22 @@
 
         if (detailEl) {
             detailEl.textContent = `${correctConn} / ${totalConn} connections  •  ${correctElim} / ${totalInnocent} suspects cleared`;
+        }
+
+        const focusHintEl = document.getElementById('focus-hint');
+        const hint = progress.nextFocusHint ?? progress.NextFocusHint ?? '';
+        if (focusHintEl) {
+            if (canAccuse || !hint) {
+                focusHintEl.remove();
+            } else {
+                focusHintEl.textContent = `🔎 ${hint}`;
+            }
+        } else if (!canAccuse && hint) {
+            const newHint = document.createElement('div');
+            newHint.className = 'confidence-gauge__focus-hint';
+            newHint.id = 'focus-hint';
+            newHint.textContent = `🔎 ${hint}`;
+            detailEl?.insertAdjacentElement('afterend', newHint);
         }
 
         const wrongAttemptsEl = document.getElementById('wrong-attempts-count');
@@ -324,7 +353,7 @@
     }
 
     // ===== Connection Feedback Helpers =====
-    function showRejectionNote(fromType, fromId, toType, toId) {
+    function showRejectionNote(fromType, fromId, toType, toId, message) {
         [findCard(fromType, fromId), findCard(toType, toId)].forEach(card => {
             if (!card) return;
             card.animate([
@@ -337,7 +366,7 @@
 
         const note = document.createElement('div');
         note.className = 'board-rejection-note';
-        note.textContent = "No link found between these.";
+        note.textContent = message || "No link found between these.";
         document.getElementById('board-container').appendChild(note);
 
         requestAnimationFrame(() => note.classList.add('is-visible'));
@@ -402,13 +431,20 @@
         const toType = card.dataset.type;
         const toId = parseInt(card.dataset.id, 10);
 
+        clearSelection();
+
+        // Already know this pair is wrong — skip the round trip entirely.
+        const key = pairKey(fromType, fromId, toType, toId);
+        if (triedWrongPairs.has(key)) {
+            showRejectionNote(fromType, fromId, toType, toId, "Already tried — no link found here.");
+            return;
+        }
+
         const res = await fetch('/Board/SaveConnection', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ caseId: window.boardCaseId, fromType, fromId, toType, toId })
         });
-
-        clearSelection();
 
         if (!res.ok) {
             alert('Something went wrong saving that connection.');
@@ -418,6 +454,7 @@
         const data = await res.json();
 
         if (data.rejected) {
+            triedWrongPairs.add(key);
             showRejectionNote(fromType, fromId, toType, toId);
             if (data.progress) applyProgress(data.progress);
             return;
@@ -457,6 +494,21 @@
                 alert('Could not toggle elimination.');
             }
         });
+    });
+
+    // ===== Cancel an in-progress connection =====
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && selectedCard) {
+            clearSelection();
+        }
+    });
+
+    document.getElementById('board-container').addEventListener('click', (e) => {
+        if (!selectedCard) return;
+        // Only cancel if the click landed on empty board space —
+        // not on a card, not on a pin (those have their own handlers).
+        if (e.target.closest('.board-card')) return;
+        clearSelection();
     });
 
     redrawAll();

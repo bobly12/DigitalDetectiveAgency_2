@@ -92,3 +92,47 @@
     margin-bottom: var(--space-md);
     text-align: left;
 }
+.accusation-confirm-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.65);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease;
+    z-index: 100;
+}
+
+.accusation-confirm-overlay.is-visible {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.accusation-confirm-box {
+    background: #1e1a16;
+    border: 1px solid #b8342a;
+    border-radius: 6px;
+    padding: var(--space-lg);
+    max-width: 420px;
+    text-align: center;
+    transform: scale(0.95);
+    transition: transform 0.2s ease;
+}
+
+.accusation-confirm-overlay.is-visible .accusation-confirm-box {
+    transform: scale(1);
+}
+
+.accusation-confirm-warning {
+    color: #e8b4b0;
+    font-size: 0.9rem;
+}
+
+.accusation-confirm-actions {
+    display: flex;
+    gap: var(--space-sm);
+    justify-content: center;
+    margin-top: var(--space-md);
+}

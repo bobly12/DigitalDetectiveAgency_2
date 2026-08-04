@@ -4,6 +4,7 @@ using DigitalDetectiveAgency.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DigitalDetectiveAgency.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260804055104_UpdateCase5ImagePathsToCase1Folder")]
+    partial class UpdateCase5ImagePathsToCase1Folder
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -410,7 +413,7 @@ namespace DigitalDetectiveAgency.Migrations
                             Id = 34,
                             CaseId = 5,
                             Description = "The murder weapon, wiped clean of prints. A faint smear on the handle doesn't match anything at the terminal it tests as floor wax, the kind used at the barangay hall.",
-                            ImageUrl = "/images/case_1/evidence/tire_iron.jpg",
+                            ImageUrl = "/images/evidence/tire_iron.jpg",
                             Name = "Tire Iron"
                         },
                         new
@@ -418,7 +421,7 @@ namespace DigitalDetectiveAgency.Migrations
                             Id = 35,
                             CaseId = 5,
                             Description = "Most of Mon's ledger was burned, but a carbon-copy undersheet survived. One legible line reads '...facilitation fee RV...' before the char damage cuts it off.",
-                            ImageUrl = "/images/case_1/evidence/burnt_ledger.jpg",
+                            ImageUrl = "/images/evidence/burnt_ledger.jpg",
                             Name = "Burnt Ledger Page"
                         },
                         new
@@ -426,7 +429,7 @@ namespace DigitalDetectiveAgency.Migrations
                             Id = 36,
                             CaseId = 5,
                             Description = "A grainy frame from the store across the street, timestamped 11:20 PM. A figure in a barong-adjacent shirt common among barangay officials passes near the terminal. The face isn't visible.",
-                            ImageUrl = "/images/case_1/evidence/cctv_still.jpg",
+                            ImageUrl = "/images/evidence/cctv_still.jpg",
                             Name = "Sari-Sari Store CCTV Still"
                         },
                         new
@@ -434,7 +437,7 @@ namespace DigitalDetectiveAgency.Migrations
                             Id = 37,
                             CaseId = 5,
                             Description = "Found in Mon's desk drawer. Dindo's name and a partial amount are written on the front proof he was there, but nothing more.",
-                            ImageUrl = "/images/case_1/evidence/payment_envelope.jpg",
+                            ImageUrl = "/images/evidence/payment_envelope.jpg",
                             Name = "Dindo's Payment Envelope"
                         },
                         new
@@ -442,7 +445,7 @@ namespace DigitalDetectiveAgency.Migrations
                             Id = 38,
                             CaseId = 5,
                             Description = "A neighbor's unrelated Facebook photo, taken in the alley behind the carinderia at 11:25 PM. Elena is visible in the background, taking out trash.",
-                            ImageUrl = "/images/case_1/evidence/alley_photo.jpg",
+                            ImageUrl = "/images/evidence/alley_photo.jpg",
                             Name = "Alley Timestamp Photo"
                         },
                         new
@@ -450,7 +453,7 @@ namespace DigitalDetectiveAgency.Migrations
                             Id = 39,
                             CaseId = 5,
                             Description = "A testy back-and-forth on Mon's phone about the renegotiated lot price. The exchange ends at 9:50 PM too early to place Ferdie at the scene.",
-                            ImageUrl = "/images/case_1/evidence/text_exchange.jpg",
+                            ImageUrl = "/images/evidence/text_exchange.jpg",
                             Name = "Text Exchange with Ferdie"
                         },
                         new
@@ -458,7 +461,7 @@ namespace DigitalDetectiveAgency.Migrations
                             Id = 40,
                             CaseId = 5,
                             Description = "Kap. Rey signed out at 10:50 PM for 'patrol.' There's no sign-back-in time until well after midnight an unaccounted gap that covers the time of the murder.",
-                            ImageUrl = "/images/case_1/evidence/barangay_logbook.jpg",
+                            ImageUrl = "/images/evidence/barangay_logbook.jpg",
                             Name = "Barangay Hall Logbook"
                         },
                         new
@@ -466,7 +469,7 @@ namespace DigitalDetectiveAgency.Migrations
                             Id = 41,
                             CaseId = 5,
                             Description = "A faint rubber-sandal print in the dust near the body. Common brand, not unique on its own but it carries the same floor wax residue found on the tire iron.",
-                            ImageUrl = "/images/case_1/evidence/shoeprint.jpg",
+                            ImageUrl = "/images/evidence/shoeprint.jpg",
                             Name = "Partial Shoeprint"
                         },
                         new
@@ -474,7 +477,7 @@ namespace DigitalDetectiveAgency.Migrations
                             Id = 42,
                             CaseId = 5,
                             Description = "A time-stamped nursing shift record placing Grace at a Quezon City hospital from before 9 PM until well past midnight. Locked-in, third-party verified.",
-                            ImageUrl = "/images/case_1/evidence/hospital_log.jpg",
+                            ImageUrl = "/images/evidence/hospital_log.jpg",
                             Name = "Hospital Shift Log"
                         });
                 });
@@ -568,7 +571,7 @@ namespace DigitalDetectiveAgency.Migrations
                             Alibi = "Says she was closing up the carinderia until past midnight, with her helper Baby there the whole time preparing for the next day. Mentions a gas delivery Baby signed for around 11 PM.",
                             CaseId = 5,
                             Description = "Mon's estranged wife, 48. Runs a small carinderia two blocks from the terminal.",
-                            ImageUrl = "/images/case_1/suspects/elena_padilla.jpg",
+                            ImageUrl = "/images/suspects/elena_padilla.jpg",
                             IsGuilty = false,
                             Motive = "Mon was finalizing the terminal lot sale without telling her she'd get nothing from it despite twenty years of marriage; the annulment was never finalized.",
                             Name = "Elena Padilla"
@@ -579,7 +582,7 @@ namespace DigitalDetectiveAgency.Migrations
                             Alibi = "Says he dropped his jeep off at the terminal around 11:15 PM and left immediately the terminal was already dark, so he never went inside, just left his keys in the drop box.",
                             CaseId = 5,
                             Description = "One of Mon's four drivers, 34. Deep in personal debt to Mon, on top of his fleet obligations.",
-                            ImageUrl = "/images/case_1/suspects/dindo_reyes.jpg",
+                            ImageUrl = "/images/suspects/dindo_reyes.jpg",
                             IsGuilty = false,
                             Motive = "Owed Mon ₱45,000 personally; Mon had started deducting it aggressively from his daily boundary, leaving little for his family.",
                             Name = "Dindo Reyes"
@@ -590,7 +593,7 @@ namespace DigitalDetectiveAgency.Migrations
                             Alibi = "Says he was at a client dinner in Makati until 10:30 PM, then went straight home to Parañaque naming the restaurant and his dinner companion without hesitation.",
                             CaseId = 5,
                             Description = "Local representative for the developer negotiating to buy the terminal lot, 45.",
-                            ImageUrl = "/images/case_1/suspects/ferdie_bautista.jpg",
+                            ImageUrl = "/images/suspects/ferdie_bautista.jpg",
                             IsGuilty = false,
                             Motive = "The sale was stalling after Mon demanded a higher price at the last minute. A collapsed deal would cost Ferdie his commission and standing with the developer.",
                             Name = "Architect Ferdie Bautista"
@@ -601,7 +604,7 @@ namespace DigitalDetectiveAgency.Migrations
                             Alibi = "Says she was on shift at a hospital in Quezon City until past midnight.",
                             CaseId = 5,
                             Description = "Mon's estranged daughter from a prior relationship, 26. Works as a nurse, rarely spoke to her father.",
-                            ImageUrl = "/images/case_1/suspects/grace_sison.jpg",
+                            ImageUrl = "/images/suspects/grace_sison.jpg",
                             IsGuilty = false,
                             Motive = "Recently reconnected with Mon, who reportedly intended to leave her a share of the terminal lot cutting into what Elena or the drivers might expect.",
                             Name = "Grace Padilla-Sison"
@@ -612,7 +615,7 @@ namespace DigitalDetectiveAgency.Migrations
                             Alibi = "Says he was doing late paperwork alone at the barangay hall no one to corroborate it, but insists the logbook proves he was there.",
                             CaseId = 5,
                             Description = "Barangay captain, 58. Has known Mon for thirty years and quietly brokered the terminal lot deal for a personal cut.",
-                            ImageUrl = "/images/case_1/suspects/rey_villamor.jpg",
+                            ImageUrl = "/images/suspects/rey_villamor.jpg",
                             IsGuilty = true,
                             Motive = "Stood to lose a facilitation fee he'd already spent if Mon backed out of the sale after deciding to cut Grace in and shrink Rey's share.",
                             Name = "Kap. Rey Villamor"
@@ -685,7 +688,7 @@ namespace DigitalDetectiveAgency.Migrations
                         {
                             Id = 19,
                             CaseId = 5,
-                            ImageUrl = "/images/case_1/witnesses/baby.jpg",
+                            ImageUrl = "/images/witnesses/baby.jpg",
                             Name = "Baby (Carinderia Helper)",
                             Statement = "Naglagay pa kami ng sinigang mix para bukas, tapos may dumating na gas delivery mga alas-onse. Si Aling Elena, saglit lang siyang lumabas maglalabas ng basura sa eskinita. Hindi naman tumagal, ten minutes lang siguro."
                         },
@@ -693,7 +696,7 @@ namespace DigitalDetectiveAgency.Migrations
                         {
                             Id = 20,
                             CaseId = 5,
-                            ImageUrl = "/images/case_1/witnesses/aling_nena.jpg",
+                            ImageUrl = "/images/witnesses/aling_nena.jpg",
                             Name = "Aling Nena (Sari-Sari Store Owner)",
                             Statement = "May CCTV kami dun sa labas, nakuhanan namin ng lumabas na parang naka-barong sa may terminal. Hindi ko masyadong nakita ang mukha. Alam mo, madalas naman dumaan si Kapitan dun kapag 'patrol' daw niya."
                         },
@@ -701,7 +704,7 @@ namespace DigitalDetectiveAgency.Migrations
                         {
                             Id = 21,
                             CaseId = 5,
-                            ImageUrl = "/images/case_1/witnesses/jun.jpg",
+                            ImageUrl = "/images/witnesses/jun.jpg",
                             Name = "Jun (Fellow Driver)",
                             Statement = "Bumalik si Dindo sa terminal after niya i-drop yung huling byahe niya. May ibinigay siyang envelope, sabi niya kay Mon daw. Mabilis lang siya, umalis din agad."
                         },
@@ -709,7 +712,7 @@ namespace DigitalDetectiveAgency.Migrations
                         {
                             Id = 22,
                             CaseId = 5,
-                            ImageUrl = "/images/case_1/witnesses/dinner_companion.jpg",
+                            ImageUrl = "/images/witnesses/dinner_companion.jpg",
                             Name = "Ferdie's Dinner Companion",
                             Statement = "We were at the restaurant together until around 10:30 he left straight after, said he was heading home to Parañaque. I remember because he complained about the traffic before he even got in his car."
                         });

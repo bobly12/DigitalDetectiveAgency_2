@@ -124,4 +124,13 @@ public class CaseRepository : ICaseRepository
 
     public async Task<List<int>> GetPublishedCaseIdsAsync() =>
         await _context.Cases.Where(c => c.IsPublished).Select(c => c.Id).ToListAsync();
+    
+    public async Task<int?> GetFirstPublishedCaseIdAsync()
+    {
+        return await _context.Cases
+            .Where(c => c.IsPublished)
+            .OrderBy(c => c.Id)
+            .Select(c => (int?)c.Id)
+            .FirstOrDefaultAsync();
+    }
 }

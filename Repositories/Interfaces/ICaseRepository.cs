@@ -30,4 +30,5 @@ public interface ICaseRepository
     Task<List<int>> GetPublishedCaseIdsAsync();
     
     Task<Case?> GetCaseByIdAsync(int caseId);
+    Task<int?> GetFirstPublishedCaseIdAsync();
 }
