@@ -13,4 +13,5 @@ public class CaseConnection
     public int FromId { get; set; }
     public string ToType { get; set; } = string.Empty;
     public int ToId { get; set; }
+    public string? Note { get; set; }
 }

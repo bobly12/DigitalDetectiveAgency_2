@@ -10,15 +10,8 @@ public class InvestigationProgressService : IInvestigationProgressService
     private readonly IBoardRepository _boardRepository;
     private readonly ICaseRepository _caseRepository;
 
-    private const int ConfidenceThreshold = 75;
     private const double ConnectionWeight = 70.0;
     private const double EliminationWeight = 30.0;
-
-    // Staged Evidence Reveal tuning constants.
-    // How many Evidence/Witness cards are visible before the player
-    // has taken any investigative action at all.
-    private const int StartingEvidenceCount = 2;
-    private const int StartingWitnessCount = 1;
 
     public InvestigationProgressService(
         IBoardRepository boardRepository,
@@ -32,7 +25,11 @@ public class InvestigationProgressService : IInvestigationProgressService
         int caseId,
         string userId)
     {
-        // Fetch everything once
+        var caseEntity = await _caseRepository.GetCaseByIdAsync(caseId);
+        var (startingEvidenceCount, startingWitnessCount, confidenceThreshold) =
+            GetDifficultySettings(caseEntity?.Difficulty ?? CaseDifficulty.Medium);
+
+        // Fetch remaining data once
         var playerConnections = await _boardRepository.GetConnectionsAsync(caseId, userId);
         var answerKey = await _boardRepository.GetAnswerKeyAsync(caseId);
         var eliminatedIds = await _boardRepository.GetEliminatedSuspectIdsAsync(caseId, userId);
@@ -44,13 +41,10 @@ public class InvestigationProgressService : IInvestigationProgressService
             .Count(pc => IsValidConnection(pc, answerKey));
 
         var totalRequiredConnections = answerKey.Count;
-
         var totalInnocentSuspects = suspects.Count(s => !s.IsGuilty);
 
         var correctEliminatedSuspects = eliminatedIds.Count(id =>
-            suspects.Any(s =>
-                s.Id == id &&
-                !s.IsGuilty));
+            suspects.Any(s => s.Id == id && !s.IsGuilty));
 
         // NOTE: unlock no longer depends on the answer key — see method below.
         var unlockedSuspectIds = CalculateUnlockedSuspectIds(playerConnections);
@@ -64,24 +58,22 @@ public class InvestigationProgressService : IInvestigationProgressService
 
         var unlockedEvidenceIds = CalculateStagedUnlockIds(
             evidence.Select(e => e.Id).OrderBy(id => id),
-            StartingEvidenceCount,
+            startingEvidenceCount,
             actionsTaken);
 
         var unlockedWitnessIds = CalculateStagedUnlockIds(
             witnesses.Select(w => w.Id).OrderBy(id => id),
-            StartingWitnessCount,
+            startingWitnessCount,
             actionsTaken);
 
         var confidence = CalculateConfidence(
-            correctConnections,
-            totalRequiredConnections,
-            correctEliminatedSuspects,
-            totalInnocentSuspects);
+            correctConnections, totalRequiredConnections,
+            correctEliminatedSuspects, totalInnocentSuspects);
 
         return new InvestigationProgressSummary
         {
             Confidence = confidence,
-            CanAccuse = confidence >= ConfidenceThreshold,
+            CanAccuse = confidence >= confidenceThreshold,
 
             PlayerConnections = playerConnections.Count,
             CorrectConnections = correctConnections,
@@ -95,6 +87,20 @@ public class InvestigationProgressService : IInvestigationProgressService
             UnlockedWitnessIds = unlockedWitnessIds
         };
     }
+
+    /// <summary>
+    /// Difficulty tuning. Easy gives more starting context and a lower bar to
+    /// accuse; Hard gives almost nothing for free and demands near-total
+    /// confidence before an accusation is allowed.
+    /// </summary>
+    private static (int StartingEvidence, int StartingWitness, int ConfidenceThreshold) GetDifficultySettings(
+        CaseDifficulty difficulty) => difficulty switch
+        {
+            CaseDifficulty.Easy => (3, 2, 65),
+            CaseDifficulty.Medium => (2, 1, 75),
+            CaseDifficulty.Hard => (1, 0, 85),
+            _ => (2, 1, 75)
+        };
 
     /// <summary>
     /// NOTE:

@@ -78,3 +78,9 @@
     color: var(--color-paper-shadow);
     margin-top: var(--space-xs);
 }
+.report-summary {
+    font-style: italic;
+    color: #d4c8b0;
+    margin: var(--space-md) 0;
+    line-height: 1.5;
+}

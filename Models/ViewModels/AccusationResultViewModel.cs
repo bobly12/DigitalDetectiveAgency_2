@@ -9,4 +9,6 @@ public class AccusationResultViewModel
     public int CaseStrengthPercent { get; set; } // board connection match %
     public bool WasCorrect { get; set; }          // NEW
     public int Score { get; set; }                // NEW - final weighted score
+    public string DetectiveSummary { get; set; } = string.Empty; // NEW
+
 }

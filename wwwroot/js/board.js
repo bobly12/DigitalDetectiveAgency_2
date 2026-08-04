@@ -11,15 +11,6 @@
         unlock: new Audio('/audio/unlock.mp3')
     };
 
-   // Object.values(sounds).forEach(sound => sound.preload = "auto");//
-
-   // function playSound(sound) {
-  //      if (!sound) return;
-    //    sound.pause();
-      //  sound.currentTime = 0;
-        //sound.play().catch(() => {});
-  //  }//
-
     // Tracks which suspects/nodes are already unlocked in state.
     const knownUnlockedSuspectIds = new Set(
         Array.from(document.querySelectorAll('.board-card[data-type="Suspect"]'))
@@ -148,6 +139,11 @@
 
         if (detailEl) {
             detailEl.textContent = `${correctConn} / ${totalConn} connections  •  ${correctElim} / ${totalInnocent} suspects cleared`;
+        }
+
+        const wrongAttemptsEl = document.getElementById('wrong-attempts-count');
+        if (wrongAttemptsEl) {
+            wrongAttemptsEl.textContent = progress.wrongAttempts ?? progress.WrongAttempts ?? 0;
         }
 
         if (accuseBtn && accuseLabel) {
@@ -327,6 +323,54 @@
         selectedCard = null;
     }
 
+    // ===== Connection Feedback Helpers =====
+    function showRejectionNote(fromType, fromId, toType, toId) {
+        [findCard(fromType, fromId), findCard(toType, toId)].forEach(card => {
+            if (!card) return;
+            card.animate([
+                { transform: "translateX(0)" },
+                { transform: "translateX(-6px)" },
+                { transform: "translateX(6px)" },
+                { transform: "translateX(0)" }
+            ], { duration: 300, easing: "ease-in-out" });
+        });
+
+        const note = document.createElement('div');
+        note.className = 'board-rejection-note';
+        note.textContent = "No link found between these.";
+        document.getElementById('board-container').appendChild(note);
+
+        requestAnimationFrame(() => note.classList.add('is-visible'));
+        setTimeout(() => {
+            note.classList.remove('is-visible');
+            setTimeout(() => note.remove(), 300);
+        }, 1400);
+    }
+
+    function showConfirmationNote(fromType, fromId, toType, toId, note) {
+        [findCard(fromType, fromId), findCard(toType, toId)].forEach(card => {
+            if (!card) return;
+            card.animate([
+                { boxShadow: "0 0 0 rgba(255,215,0,0)" },
+                { boxShadow: "0 0 20px rgba(255,215,0,.7)" },
+                { boxShadow: "0 0 0 rgba(255,215,0,0)" }
+            ], { duration: 900, easing: "ease-out" });
+        });
+
+        if (!note) return;
+
+        const banner = document.createElement('div');
+        banner.className = 'board-confirmation-note';
+        banner.textContent = note;
+        document.getElementById('board-container').appendChild(banner);
+
+        requestAnimationFrame(() => banner.classList.add('is-visible'));
+        setTimeout(() => {
+            banner.classList.remove('is-visible');
+            setTimeout(() => banner.remove(), 300);
+        }, 2200);
+    }
+
     // ===== Pin-to-pin connection behavior =====
     async function handlePinClick(e) {
         e.stopPropagation();
@@ -366,15 +410,25 @@
 
         clearSelection();
 
-        if (res.ok) {
-            const data = await res.json();
+        if (!res.ok) {
+            alert('Something went wrong saving that connection.');
+            return;
+        }
+
+        const data = await res.json();
+
+        if (data.rejected) {
+            showRejectionNote(fromType, fromId, toType, toId);
+            if (data.progress) applyProgress(data.progress);
+            return;
+        }
+
+        if (data.connected) {
             playSound(sounds.pin);
-            connections.push({ id: data.connectionId || data.ConnectionId, fromType, fromId, toType, toId });
+            connections.push({ id: data.connectionId, fromType, fromId, toType, toId });
             redrawAll();
-            applyProgress(data.progress || data.Progress);
-        } else {
-            const data = await res.json();
-            alert(data.message || data.Message || 'Could not save connection.');
+            applyProgress(data.progress);
+            showConfirmationNote(fromType, fromId, toType, toId, data.note);
         }
     }
 

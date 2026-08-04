@@ -1,4 +1,3 @@
-// Controllers/BoardController.cs
 using DigitalDetectiveAgency.Models.DTOs;
 using DigitalDetectiveAgency.Models.Entities;
 using DigitalDetectiveAgency.Services.Interfaces;
@@ -26,7 +25,6 @@ public class BoardController : Controller
     }
 
     // GET: /Board/Index/5
-    // GET: /Board/Index/5
     public async Task<IActionResult> Index(int id)
     {
         var user = await _userManager.GetUserAsync(User);
@@ -47,22 +45,37 @@ public class BoardController : Controller
 
         return View(board);
     }
+
     // POST: /Board/SaveConnection
     [HttpPost]
     public async Task<IActionResult> SaveConnection([FromBody] ConnectionRequestDto request)
     {
         var userId = _userManager.GetUserId(User)!;
-        var (success, error, connectionId) = await _boardService.SaveConnectionAsync(request, userId);
+        var (success, error, connectionId, wasCorrect, note) = await _boardService.SaveConnectionAsync(request, userId);
 
         if (!success)
-            return BadRequest(new { message = error });
+        {
+            bool isRejection = error == "These aren't connected.";
+            var rejProgress = isRejection ? await BuildProgressSnapshotAsync(request.CaseId, userId) : null;
+
+            return Ok(new
+            {
+                connected = false,
+                rejected = isRejection,
+                message = error,
+                progress = rejProgress
+            });
+        }
 
         var progress = await BuildProgressSnapshotAsync(request.CaseId, userId);
 
         return Ok(new
         {
-            message = "Connection saved.",
+            connected = true,
+            rejected = false,
+            message = "Connection confirmed.",
             connectionId,
+            note,
             progress
         });
     }
@@ -106,9 +119,6 @@ public class BoardController : Controller
     }
 
     // GET: /Board/GetSuspectFile?caseId=5&suspectId=10
-    // Only returns real Motive/Alibi if the suspect is actually unlocked —
-    // checked fresh server-side on every call. Used by board.js right after
-    // a connection unlocks a new suspect, instead of a full page reload.
     [HttpGet]
     public async Task<IActionResult> GetSuspectFile(int caseId, int suspectId)
     {
@@ -121,23 +131,6 @@ public class BoardController : Controller
         return Ok(new { motive, alibi });
     }
 
-    private async Task<object> BuildProgressSnapshotAsync(int caseId, string userId)
-    {
-        var progress = await _progressService.GetInvestigationProgressAsync(caseId, userId);
-
-        return new
-        {
-            confidence = progress.Confidence,
-            canAccuse = progress.CanAccuse,
-            remainingConfidence = Math.Max(0, 75 - progress.Confidence),
-            correctConnections = progress.CorrectConnections,
-            totalRequiredConnections = progress.TotalRequiredConnections,
-            correctEliminatedSuspects = progress.CorrectEliminatedSuspects,
-            totalInnocentSuspects = progress.TotalInnocentSuspects,
-            unlockedSuspectIds = progress.UnlockedSuspectIds
-        };
-        
-    }
     [HttpGet]
     public async Task<IActionResult> GetEvidenceFile(int caseId, int evidenceId)
     {
@@ -160,5 +153,24 @@ public class BoardController : Controller
             return NotFound();
 
         return Json(new { name, imageUrl, description });
+    }
+
+    private async Task<object> BuildProgressSnapshotAsync(int caseId, string userId)
+    {
+        var progress = await _progressService.GetInvestigationProgressAsync(caseId, userId);
+        var wrongAttempts = await _boardService.GetWrongAttemptCountAsync(caseId, userId);
+
+        return new
+        {
+            confidence = progress.Confidence,
+            canAccuse = progress.CanAccuse,
+            remainingConfidence = Math.Max(0, 75 - progress.Confidence),
+            correctConnections = progress.CorrectConnections,
+            totalRequiredConnections = progress.TotalRequiredConnections,
+            correctEliminatedSuspects = progress.CorrectEliminatedSuspects,
+            totalInnocentSuspects = progress.TotalInnocentSuspects,
+            unlockedSuspectIds = progress.UnlockedSuspectIds,
+            wrongAttempts
+        };
     }
 }

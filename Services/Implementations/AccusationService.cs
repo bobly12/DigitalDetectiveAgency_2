@@ -13,20 +13,20 @@ public class AccusationService : IAccusationService
     private readonly ICaseRepository _caseRepository;
     private readonly IBoardRepository _boardRepository;
     private readonly IScoringService _scoringService;
-    private readonly IInvestigationProgressService _progressService; // NEW
+    private readonly IInvestigationProgressService _progressService;
 
     public AccusationService(
         IAccusationRepository accusationRepository,
         ICaseRepository caseRepository,
         IBoardRepository boardRepository,
         IScoringService scoringService,
-        IInvestigationProgressService progressService) // NEW
+        IInvestigationProgressService progressService)
     {
         _accusationRepository = accusationRepository;
         _caseRepository = caseRepository;
         _boardRepository = boardRepository;
         _scoringService = scoringService;
-        _progressService = progressService; // NEW
+        _progressService = progressService;
     }
 
     public async Task<AccusationFormViewModel?> GetAccusationFormAsync(int caseId, string userId)
@@ -104,6 +104,13 @@ public class AccusationService : IAccusationService
         // Save completion + score in one call
         await _caseRepository.CompleteWithScoreAsync(playerCase, score);
 
+        var summary = BuildDetectiveSummary(
+            playerCase.Case.Title,
+            accusedSuspect.Name,
+            wasCorrect,
+            connectionMatchPercent,
+            score);
+
         return (true, null, new AccusationResultViewModel
         {
             CaseId = dto.CaseId,
@@ -111,7 +118,8 @@ public class AccusationService : IAccusationService
             AccusedSuspectName = accusedSuspect.Name,
             CaseStrengthPercent = connectionMatchPercent,
             WasCorrect = wasCorrect,
-            Score = score
+            Score = score,
+            DetectiveSummary = summary
         });
     }
 
@@ -127,5 +135,31 @@ public class AccusationService : IAccusationService
             (pc.FromType == ak.ToType && pc.FromId == ak.ToId && pc.ToType == ak.FromType && pc.ToId == ak.FromId)));
 
         return (int)Math.Round((double)matches / answerKey.Count * 100);
+    }
+
+    private static string BuildDetectiveSummary(
+        string caseTitle,
+        string accusedName,
+        bool wasCorrect,
+        int connectionMatchPercent,
+        int score)
+    {
+        var opening = wasCorrect
+            ? $"The trail led straight to {accusedName}."
+            : $"You closed the file on {accusedName} — but the real story didn't add up.";
+
+        var boardLine = connectionMatchPercent switch
+        {
+            >= 90 => "Every thread on the board held. This was a clean, airtight case.",
+            >= 70 => "Most of the connections held up, though a few threads were left loose.",
+            >= 40 => "The board told part of the story, but too many links were guesswork.",
+            _ => "The corkboard barely resembled the real chain of events."
+        };
+
+        var closing = wasCorrect
+            ? "Case closed."
+            : "The case remains open, for now.";
+
+        return $"{opening} {boardLine} {closing}";
     }
 }

@@ -51,6 +51,11 @@ public class BoardViewModel
     public int PlayerConnections { get; set; }
 
     /// <summary>
+    /// Number of incorrect connection attempts made by the player.
+    /// </summary>
+    public int WrongAttempts { get; set; }
+
+    /// <summary>
     /// Number of innocent suspects correctly eliminated.
     /// </summary>
     public int CorrectEliminatedSuspects { get; set; }

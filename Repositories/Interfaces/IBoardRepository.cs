@@ -15,4 +15,8 @@ public interface IBoardRepository
     // NEW
     Task<List<int>> GetEliminatedSuspectIdsAsync(int caseId, string userId);
     Task ToggleEliminationAsync(int caseId, int suspectId, string userId);
+    Task LogAttemptAsync(ConnectionAttempt attempt);
+    Task<List<ConnectionAttempt>> GetAttemptsAsync(int caseId, string userId);
+    Task<int> GetWrongAttemptCountAsync(int caseId, string userId);
+    
 }

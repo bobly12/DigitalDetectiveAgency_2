@@ -12,11 +12,13 @@ public class BoardService : IBoardService
     private readonly ICaseRepository _caseRepository;
     private readonly IInvestigationProgressService _progressService;
 
-    private static readonly HashSet<string> ValidTypes = new()
+    private static readonly HashSet<string> ValidTypes = new(StringComparer.OrdinalIgnoreCase)
     {
         "Evidence",
         "Suspect",
-        "Witness"
+        "Witness",
+        "Location",
+        "Clue"
     };
 
     public BoardService(
@@ -92,39 +94,50 @@ public class BoardService : IBoardService
         };
     }
 
-    public async Task<(bool Success, string? Error, int ConnectionId)> SaveConnectionAsync(
+    public async Task<(bool Success, string? Error, int ConnectionId, bool WasCorrect, string? Note)> SaveConnectionAsync(
         ConnectionRequestDto request,
         string userId)
     {
-        var playerCase = await _caseRepository.GetPlayerCaseAsync(
-            request.CaseId,
-            userId);
-
+        var playerCase = await _caseRepository.GetPlayerCaseAsync(request.CaseId, userId);
         if (playerCase == null)
-            return (false, "You are not assigned to this case.", 0);
+            return (false, "You are not assigned to this case.", 0, false, null);
 
-        if (!ValidTypes.Contains(request.FromType) ||
-            !ValidTypes.Contains(request.ToType))
-        {
-            return (false, "Invalid node type.", 0);
-        }
+        if (!ValidTypes.Contains(request.FromType) || !ValidTypes.Contains(request.ToType))
+            return (false, "Invalid node type.", 0, false, null);
 
-        if (request.FromType == request.ToType &&
-            request.FromId == request.ToId)
-        {
-            return (false, "Cannot connect a card to itself.", 0);
-        }
+        if (request.FromType == request.ToType && request.FromId == request.ToId)
+            return (false, "Cannot connect a card to itself.", 0, false, null);
 
         var exists = await _boardRepository.ConnectionExistsAsync(
-            request.CaseId,
-            userId,
-            request.FromType,
-            request.FromId,
-            request.ToType,
-            request.ToId);
-
+            request.CaseId, userId, request.FromType, request.FromId, request.ToType, request.ToId);
         if (exists)
-            return (false, "This connection already exists.", 0);
+            return (false, "This connection already exists.", 0, false, null);
+
+        var answerKey = await _boardRepository.GetAnswerKeyAsync(request.CaseId);
+
+        // Fixed bidirectional match logic typo
+        var match = answerKey.FirstOrDefault(correct =>
+            (correct.FromType == request.FromType && correct.FromId == request.FromId &&
+             correct.ToType == request.ToType && correct.ToId == request.ToId)
+            ||
+            (correct.FromType == request.ToType && correct.FromId == request.ToId &&
+             correct.ToType == request.FromType && correct.ToId == request.FromId));
+
+        bool isCorrect = match != null;
+
+        await _boardRepository.LogAttemptAsync(new ConnectionAttempt
+        {
+            ApplicationUserId = userId,
+            CaseId = request.CaseId,
+            FromType = request.FromType,
+            FromId = request.FromId,
+            ToType = request.ToType,
+            ToId = request.ToId,
+            WasCorrect = isCorrect
+        });
+
+        if (match == null)
+            return (false, "These aren't connected.", 0, false, null);
 
         var connection = new ClueConnection
         {
@@ -138,7 +151,7 @@ public class BoardService : IBoardService
 
         await _boardRepository.AddConnectionAsync(connection);
 
-        return (true, null, connection.Id);
+        return (true, null, connection.Id, true, match.Note);
     }
 
     public async Task<(bool Success, string? Error)> DeleteConnectionAsync(
@@ -237,6 +250,11 @@ public class BoardService : IBoardService
             return (false, null, null, null);
 
         return (true, witness.Name, witness.ImageUrl, witness.Statement);
+    }
+
+    public async Task<int> GetWrongAttemptCountAsync(int caseId, string userId)
+    {
+        return await _boardRepository.GetWrongAttemptCountAsync(caseId, userId);
     }
 
     private static BoardNodeViewModel MapEvidence(

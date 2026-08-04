@@ -1,4 +1,3 @@
-// Services/Interfaces/IBoardService.cs
 using DigitalDetectiveAgency.Models.DTOs;
 using DigitalDetectiveAgency.Models.ViewModels;
 
@@ -7,8 +6,15 @@ namespace DigitalDetectiveAgency.Services.Interfaces;
 public interface IBoardService
 {
     Task<BoardViewModel?> GetBoardAsync(int caseId, string userId);
-    Task<(bool Success, string? Error, int ConnectionId)> SaveConnectionAsync(ConnectionRequestDto request, string userId);
+
+    Task<(bool Success, string? Error, int ConnectionId, bool WasCorrect, string? Note)> SaveConnectionAsync(
+        ConnectionRequestDto request,
+        string userId);
+
+    Task<int> GetWrongAttemptCountAsync(int caseId, string userId);
+
     Task<(bool Success, string? Error)> DeleteConnectionAsync(int connectionId, string userId);
+
     Task<(bool Success, string? Error)> ToggleEliminationAsync(ToggleEliminationRequestDto request, string userId);
 
     /// <summary>
@@ -31,4 +37,7 @@ public interface IBoardService
     /// has unlocked the witness. Prevents client-side exposure of locked leads.
     /// </summary>
     Task<(bool Success, string? Name, string? ImageUrl, string? Description)> GetWitnessFileAsync(int caseId, int witnessId, string userId);
+    
+    // IBoardService.cs
+    
 }

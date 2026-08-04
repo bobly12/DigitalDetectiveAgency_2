@@ -1,3 +1,4 @@
+<!-- Views/Board/Index.cshtml -->
 @model DigitalDetectiveAgency.Models.ViewModels.BoardViewModel
 
 @{
@@ -42,6 +43,11 @@
                 <div class="confidence-gauge__detail" id="confidence-detail">
                     @Model.CorrectConnections / @Model.TotalRequiredConnections connections &nbsp;•&nbsp;
                     @Model.CorrectEliminatedSuspects / @Model.TotalInnocentSuspects suspects cleared
+                </div>
+
+                <div class="detective-notebook">
+                    <span class="detective-notebook__label">Wrong leads:</span>
+                    <span id="wrong-attempts-count">@Model.WrongAttempts</span>
                 </div>
             </div>
 

@@ -14,9 +14,14 @@ public class CaseRepository : ICaseRepository
         _context = context;
     }
 
+    public async Task<Case?> GetCaseByIdAsync(int caseId)
+    {
+        return await _context.Cases.FindAsync(caseId);
+    }
+
     public async Task<Case?> GetByIdAsync(int id)
     {
-        return await _context.Cases.FirstOrDefaultAsync(c => c.Id == id);
+        return await GetCaseByIdAsync(id);
     }
 
     public async Task<List<PlayerCase>> GetAssignedCasesForUserAsync(string userId)
@@ -50,7 +55,7 @@ public class CaseRepository : ICaseRepository
             .Where(e => e.CaseId == caseId)
             .ToListAsync();
     }
-    // CaseRepository.cs — add:
+
     public async Task<List<Suspect>> GetSuspectsForCaseAsync(int caseId)
     {
         return await _context.Suspects
@@ -64,8 +69,7 @@ public class CaseRepository : ICaseRepository
             .Where(w => w.CaseId == caseId)
             .ToListAsync();
     }
-    // CaseRepository.cs — add:
-    // CaseRepository.cs — replace MarkCompletedAsync with:
+
     public async Task CompleteWithScoreAsync(PlayerCase playerCase, int score)
     {
         playerCase.IsCompleted = true;
@@ -73,13 +77,13 @@ public class CaseRepository : ICaseRepository
         playerCase.Score = score;
         await _context.SaveChangesAsync();
     }
-    // CaseRepository.cs — add:
+
     public async Task SaveScoreAsync(PlayerCase playerCase, int score)
     {
         playerCase.Score = score;
         await _context.SaveChangesAsync();
     }
-    // CaseRepository.cs — add:
+
     public async Task<List<Case>> GetAllAsync() =>
         await _context.Cases.ToListAsync();
 

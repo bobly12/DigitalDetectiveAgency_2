@@ -28,4 +28,6 @@ public interface ICaseRepository
     Task<bool> UserHasPlayerCaseAsync(string userId, int caseId);
     Task CreatePlayerCaseAsync(string userId, int caseId);
     Task<List<int>> GetPublishedCaseIdsAsync();
+    
+    Task<Case?> GetCaseByIdAsync(int caseId);
 }

@@ -20,7 +20,9 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     public DbSet<CaseConnection> CaseConnections { get; set; }
     public DbSet<Accusation> Accusations { get; set; }
     public DbSet<SuspectElimination> SuspectEliminations { get; set; }
-
+ 
+    public DbSet<ConnectionAttempt> ConnectionAttempts { get; set; }
+    
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);

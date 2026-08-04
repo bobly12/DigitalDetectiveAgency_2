@@ -86,4 +86,22 @@ public class BoardRepository : IBoardRepository
 
         await _context.SaveChangesAsync();
     }
+    public async Task LogAttemptAsync(ConnectionAttempt attempt)
+    {
+        _context.ConnectionAttempts.Add(attempt);
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task<List<ConnectionAttempt>> GetAttemptsAsync(int caseId, string userId)
+    {
+        return await _context.ConnectionAttempts
+            .Where(a => a.CaseId == caseId && a.ApplicationUserId == userId)
+            .ToListAsync();
+    }
+    public async Task<int> GetWrongAttemptCountAsync(int caseId, string userId)
+    {
+        return await _context.ConnectionAttempts
+            .Where(a => a.CaseId == caseId && a.ApplicationUserId == userId && !a.WasCorrect)
+            .CountAsync();
+    }
 }
