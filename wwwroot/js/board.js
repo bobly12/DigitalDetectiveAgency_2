@@ -505,10 +505,14 @@
         });
     });
 
-    // ===== Cancel an in-progress connection =====
+    // ===== Cancel an in-progress connection or active modals =====
     document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && selectedCard) {
-            clearSelection();
+        if (e.key === 'Escape') {
+            if (selectedCard) clearSelection();
+            if (corkView && corkView.style.display !== 'none') {
+                corkView.style.display = 'none';
+                if (corkBackdrop) corkBackdrop.style.display = 'none';
+            }
         }
     });
 
@@ -516,6 +520,182 @@
         if (!selectedCard) return;
         if (e.target.closest('.board-card')) return;
         clearSelection();
+    });
+
+    // ===== Corkboard Modal View =====
+    const corkBackdrop = document.getElementById('corkboard-backdrop');
+    const closeCorkBtn = document.getElementById('close-corkboard-btn');
+    const corkView = document.getElementById('board-corkboard-view');
+    const corkSvg = document.getElementById('corkboard-svg');
+    const toggleBtn = document.getElementById('toggle-corkboard-btn');
+
+    // Deterministic pseudo-random number from a card's type+id, so layout
+    // stays stable across renders instead of reshuffling every time.
+    function seededRandom(seedStr) {
+        let hash = 0;
+        for (let i = 0; i < seedStr.length; i++) {
+            hash = (hash << 5) - hash + seedStr.charCodeAt(i);
+            hash |= 0;
+        }
+        const x = Math.sin(hash) * 10000;
+        return x - Math.floor(x);
+    }
+
+    function buildCorkboard() {
+        const corkCanvas = document.getElementById('corkboard-canvas');
+        if (!corkView || !corkSvg || !corkCanvas) return;
+
+        corkCanvas.querySelectorAll('.cork-card').forEach(el => el.remove());
+        corkCanvas.querySelectorAll('.cork-victim').forEach(el => el.remove());
+        corkSvg.innerHTML = '';
+
+        const allCards = Array.from(document.querySelectorAll('#board-grid-view .board-card'));
+        const positions = {};
+
+        const boardWidth = corkView.clientWidth || 1400;
+        const centerX = boardWidth / 2;
+
+        // ===== Victim card at the very top, centered =====
+        const victimY = 40;
+        const victimEl = document.createElement('div');
+        victimEl.className = 'cork-card cork-victim';
+        victimEl.style.left = (centerX - 90) + 'px';
+        victimEl.style.top = victimY + 'px';
+        victimEl.style.transform = 'rotate(-2deg)';
+        victimEl.innerHTML = `
+            <span class="cork-card__pin"></span>
+            <div class="cork-card__victim-photo">💀</div>
+            <span class="cork-card__label">${window.caseVictimName || 'The Victim'}</span>
+        `;
+        corkCanvas.appendChild(victimEl);
+
+        // ===== Pyramid rows below the victim =====
+        // Row sizes grow as you go down: 1 connects to victim conceptually,
+        // then widen out row by row like an inverted triangle of evidence.
+        const cardW = 160;
+        const cardH = 190;
+        const rowGapY = 210;
+        const colGapX = 190;
+
+        let remaining = allCards.length;
+        let rowIndex = 0;
+        let cardIndex = 0;
+        const rowSizes = [];
+
+        // Build row sizes: start small, grow, e.g. 2, 3, 4, 5, ... until cards run out
+        let rowSize = 2;
+        while (remaining > 0) {
+            const take = Math.min(rowSize, remaining);
+            rowSizes.push(take);
+            remaining -= take;
+            rowSize += 1;
+        }
+
+        allCards.forEach((card) => {
+            if (cardIndex >= rowSizes[rowIndex]) {
+                rowIndex++;
+                cardIndex = 0;
+            }
+
+            const thisRowCount = rowSizes[rowIndex];
+            const rowWidth = thisRowCount * colGapX;
+            const rowStartX = centerX - rowWidth / 2 + colGapX / 2;
+
+            const type = card.dataset.type;
+            const id = card.dataset.id;
+            const seed = `${type}${id}`;
+            const rand1 = seededRandom(seed);
+            const rand2 = seededRandom(seed + 'y');
+            const rand3 = seededRandom(seed + 'r');
+
+            const jitterX = (rand1 - 0.5) * 24;
+            const jitterY = (rand2 - 0.5) * 24;
+            const rotation = (rand3 - 0.5) * 14;
+
+            const x = rowStartX + cardIndex * colGapX - cardW / 2 + jitterX;
+            const y = victimY + 160 + rowIndex * rowGapY + jitterY;
+
+            positions[`${type}-${id}`] = { x: x + cardW / 2, y: y + 20 };
+
+            const isLocked = card.classList.contains('board-card--undiscovered') ||
+                card.querySelector('[data-suspect-lock]') !== null;
+
+            const img = card.querySelector('img');
+            const nameEl = card.querySelector('strong');
+            const imgSrc = img ? img.src : '';
+            const name = nameEl ? nameEl.textContent : (card.dataset.name || '???');
+
+            const el = document.createElement('div');
+            el.className = 'cork-card' + (isLocked ? ' cork-card--locked' : '');
+            el.style.left = x + 'px';
+            el.style.top = y + 'px';
+            el.style.transform = `rotate(${rotation}deg)`;
+            el.dataset.type = type;
+            el.dataset.id = id;
+
+            el.innerHTML = `
+                <span class="cork-card__pin"></span>
+                ${isLocked
+                ? `<div class="cork-card__locked-icon">🔒</div>`
+                : `<img src="${imgSrc}" alt="${name}" />`}
+                <span class="cork-card__label">${isLocked ? '???' : name}</span>
+            `;
+
+            if (!isLocked) {
+                el.addEventListener('click', () => window.openFileModal?.(card));
+            }
+
+            corkCanvas.appendChild(el);
+            cardIndex++;
+        });
+
+        // ===== Draw connection strings =====
+        connections.forEach(conn => {
+            const fromKey = `${conn.fromType || conn.FromType}-${conn.fromId || conn.FromId}`;
+            const toKey = `${conn.toType || conn.ToType}-${conn.toId || conn.ToId}`;
+            const from = positions[fromKey];
+            const to = positions[toKey];
+            if (!from || !to) return;
+
+            const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+            line.setAttribute('x1', from.x);
+            line.setAttribute('y1', from.y);
+            line.setAttribute('x2', to.x);
+            line.setAttribute('y2', to.y);
+            line.classList.add('cork-line');
+            corkSvg.appendChild(line);
+        });
+
+        const totalHeight = victimY + 160 + rowSizes.length * rowGapY + 100;
+        const totalWidth = boardWidth;
+        corkCanvas.style.width = totalWidth + 'px';
+        corkCanvas.style.height = totalHeight + 'px';
+
+        // Safe dimension fallbacks for viewport calculations
+        const availableWidth = Math.max(corkView.clientWidth - 40, 300);
+        const availableHeight = Math.max(corkView.clientHeight - 40, 300);
+        const scale = Math.min(1, availableWidth / totalWidth, availableHeight / totalHeight);
+        corkCanvas.style.transform = `scale(${Math.max(scale, 0.1)})`;
+    }
+
+    if (toggleBtn) {
+        toggleBtn.addEventListener('click', () => {
+            corkView.style.display = 'block';
+            if (corkBackdrop) corkBackdrop.style.display = 'block';
+            buildCorkboard();
+        });
+    }
+
+    if (closeCorkBtn) {
+        closeCorkBtn.addEventListener('click', () => {
+            corkView.style.display = 'none';
+            if (corkBackdrop) corkBackdrop.style.display = 'none';
+        });
+    }
+
+    corkBackdrop?.addEventListener('click', () => {
+        corkView.style.display = 'none';
+        corkBackdrop.style.display = 'none';
     });
 
     redrawAll();
