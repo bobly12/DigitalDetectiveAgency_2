@@ -24,6 +24,19 @@
         unlock: new Audio('/audio/unlock.mp3')
     };
 
+    // Plays a sound if available; never lets a missing/broken audio file
+    // break the calling function. Safe to call even with no audio files present.
+    function playSound(audio) {
+        try {
+            audio.currentTime = 0;
+            audio.play().catch(() => {
+                // Ignore playback errors (missing file, autoplay policy, etc.)
+            });
+        } catch {
+            // Ignore any synchronous errors too
+        }
+    }
+
     // Tracks which suspects/nodes are already unlocked in state.
     const knownUnlockedSuspectIds = new Set(
         Array.from(document.querySelectorAll('.board-card[data-type="Suspect"]'))
@@ -55,7 +68,6 @@
     }
 
     function findCard(type, id) {
-        // String conversion ensures matching regardless of string/number type passing
         return document.querySelector(`.board-card[data-type="${type}"][data-id="${String(id)}"]`);
     }
 
@@ -190,7 +202,6 @@
             }
         }
 
-        // Handle property name casing differences (camelCase vs PascalCase)
         const unlockedSuspects = progress.unlockedSuspectIds || progress.UnlockedSuspectIds || [];
         const unlockedEvidence = progress.unlockedEvidenceIds || progress.UnlockedEvidenceIds || [];
         const unlockedWitnesses = progress.unlockedWitnessIds || progress.UnlockedWitnessIds || [];
@@ -285,7 +296,6 @@
             }
             const data = await res.json();
 
-            // Support both camelCase and PascalCase backend models
             const name = data.name || data.Name || '';
             const imageUrl = data.imageUrl || data.ImageUrl || '';
             const description = data.description || data.Description || '';
@@ -433,7 +443,6 @@
 
         clearSelection();
 
-        // Already know this pair is wrong — skip the round trip entirely.
         const key = pairKey(fromType, fromId, toType, toId);
         if (triedWrongPairs.has(key)) {
             showRejectionNote(fromType, fromId, toType, toId, "Already tried — no link found here.");
@@ -505,8 +514,6 @@
 
     document.getElementById('board-container').addEventListener('click', (e) => {
         if (!selectedCard) return;
-        // Only cancel if the click landed on empty board space —
-        // not on a card, not on a pin (those have their own handlers).
         if (e.target.closest('.board-card')) return;
         clearSelection();
     });
