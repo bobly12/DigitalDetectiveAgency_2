@@ -12,6 +12,10 @@
     <div class="report-stamp-card">
         @if (Model.WasCorrect)
         {
+            <div class="mugshot-frame" id="mugshot-frame">
+                <img src="@Model.AccusedSuspectImageUrl" alt="@Model.AccusedSuspectName" class="mugshot-frame__photo" />
+                <div class="mugshot-frame__stamp" id="mugshot-stamp">GUILTY<br />SOLVED</div>
+            </div>
             <div class="report-verdict report-verdict--solved">CASE SOLVED ✓</div>
             <p class="report-accused">You correctly identified <strong>@Model.AccusedSuspectName</strong> as the culprit in "@Model.CaseTitle."</p>
         }
@@ -50,3 +54,45 @@
         <a asp-controller="Case" asp-action="Index" class="btn-stamp btn-stamp--primary">Back to Case Archive</a>
     </div>
 </div>
+
+@if (Model.WasCorrect)
+{
+    @section Scripts {
+        <script>
+            (function () {
+                // Fire the stamp-slam animation and a synth victory chime once the
+                // mugshot has actually painted, not on page load itself, so the
+                // slam reads as a deliberate beat rather than something you missed.
+                const stamp = document.getElementById('mugshot-stamp');
+                if (!stamp) return;
+
+                function playVictoryChime() {
+                    try {
+                        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+                        const notes = [523.25, 659.25, 783.99, 1046.50]; // C5 E5 G5 C6 — triumphant arpeggio
+                        notes.forEach((freq, i) => {
+                            const osc = ctx.createOscillator();
+                            const gain = ctx.createGain();
+                            osc.type = 'triangle';
+                            osc.frequency.value = freq;
+                            const start = ctx.currentTime + i * 0.09;
+                            gain.gain.setValueAtTime(0, start);
+                            gain.gain.linearRampToValueAtTime(0.18, start + 0.01);
+                            gain.gain.exponentialRampToValueAtTime(0.0001, start + 0.35);
+                            osc.connect(gain).connect(ctx.destination);
+                            osc.start(start);
+                            osc.stop(start + 0.4);
+                        });
+                    } catch {
+                        // Ignore — e.g. AudioContext unavailable.
+                    }
+                }
+
+                setTimeout(() => {
+                    stamp.classList.add('is-stamped');
+                    playVictoryChime();
+                }, 400);
+            })();
+        </script>
+    }
+}

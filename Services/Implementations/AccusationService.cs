@@ -116,6 +116,7 @@ public class AccusationService : IAccusationService
             CaseId = dto.CaseId,
             CaseTitle = playerCase.Case.Title,
             AccusedSuspectName = accusedSuspect.Name,
+            AccusedSuspectImageUrl = accusedSuspect.ImageUrl, // NEW - feeds the mugshot/stamp animation
             CaseStrengthPercent = connectionMatchPercent,
             WasCorrect = wasCorrect,
             Score = score,

@@ -17,4 +17,5 @@ public class Case
     public ICollection<CaseConnection> CaseConnections { get; set; } = new List<CaseConnection>();
     public ICollection<Accusation> Accusations { get; set; } = new List<Accusation>();
     public IEnumerable<SuspectElimination>? SuspectEliminations { get; set; }
+    public string VictimName { get; set; } = string.Empty;
 }

@@ -17,23 +17,80 @@
         )
     );
 
-    // ---------- Audio ----------
-    const sounds = {
-        pin: new Audio('/audio/pin.mp3'),
-        paper: new Audio('/audio/paper.mp3'),
-        unlock: new Audio('/audio/unlock.mp3')
-    };
+    // ---------- Audio (Web Audio API synth, no external files) ----------
+    let audioCtx = null;
+    function getAudioCtx() {
+        // Browsers block AudioContext until a user gesture; lazily create/resume it
+        // the first time a sound is actually requested, which is always inside a click handler.
+        if (!audioCtx) {
+            audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        }
+        if (audioCtx.state === 'suspended') {
+            audioCtx.resume();
+        }
+        return audioCtx;
+    }
 
-    // Plays a sound if available; never lets a missing/broken audio file
-    // break the calling function. Safe to call even with no audio files present.
-    function playSound(audio) {
+    // A single short tone: freq in Hz, duration in seconds, wave shape, and a
+    // simple linear/exponential decay envelope so nothing clicks or pops.
+    function tone(freq, duration, type = 'sine', gainPeak = 0.15, delay = 0) {
+        const ctx = getAudioCtx();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = type;
+        osc.frequency.value = freq;
+        const start = ctx.currentTime + delay;
+        gain.gain.setValueAtTime(0, start);
+        gain.gain.linearRampToValueAtTime(gainPeak, start + 0.01);
+        gain.gain.exponentialRampToValueAtTime(0.0001, start + duration);
+        osc.connect(gain).connect(ctx.destination);
+        osc.start(start);
+        osc.stop(start + duration + 0.02);
+    }
+
+    // Short percussive click — used for pinning a card / making a connection.
+    function playPin() {
+        tone(1200, 0.05, 'square', 0.12);
+        tone(600, 0.08, 'triangle', 0.08, 0.02);
+    }
+
+    // Paper-shuffle stinger — a quick descending filtered noise burst.
+    function playPaper() {
+        const ctx = getAudioCtx();
+        const bufferSize = ctx.sampleRate * 0.15;
+        const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+        const data = buffer.getChannelData(0);
+        for (let i = 0; i < bufferSize; i++) {
+            data[i] = (Math.random() * 2 - 1) * (1 - i / bufferSize);
+        }
+        const noise = ctx.createBufferSource();
+        noise.buffer = buffer;
+        const filter = ctx.createBiquadFilter();
+        filter.type = 'bandpass';
+        filter.frequency.setValueAtTime(2200, ctx.currentTime);
+        filter.frequency.exponentialRampToValueAtTime(400, ctx.currentTime + 0.15);
+        const gain = ctx.createGain();
+        gain.gain.setValueAtTime(0.2, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.15);
+        noise.connect(filter).connect(gain).connect(ctx.destination);
+        noise.start();
+    }
+
+    // Rising two-note chime — used when a suspect/lock unlocks.
+    function playUnlock() {
+        tone(523.25, 0.12, 'sine', 0.15);        // C5
+        tone(783.99, 0.18, 'sine', 0.15, 0.1);   // G5
+    }
+
+    const sounds = { pin: playPin, paper: playPaper, unlock: playUnlock };
+
+    // Kept as playSound(sounds.x) at every existing call site so nothing else
+    // in this file needs to change.
+    function playSound(soundFn) {
         try {
-            audio.currentTime = 0;
-            audio.play().catch(() => {
-                // Ignore playback errors (missing file, autoplay policy, etc.)
-            });
+            soundFn();
         } catch {
-            // Ignore any synchronous errors too
+            // Ignore — e.g. AudioContext not yet available in this browser.
         }
     }
 
@@ -505,13 +562,20 @@
         });
     });
 
+    // ===== Corkboard Modal View =====
+    const corkBackdrop = document.getElementById('corkboard-backdrop');
+    const closeCorkBtn = document.getElementById('close-corkboard-btn');
+    const corkView = document.getElementById('board-corkboard-view');
+    const corkSvg = document.getElementById('corkboard-svg');
+    const toggleBtn = document.getElementById('toggle-corkboard-btn');
+
     // ===== Cancel an in-progress connection or active modals =====
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') {
             if (selectedCard) clearSelection();
-            if (corkView && corkView.style.display !== 'none') {
-                corkView.style.display = 'none';
-                if (corkBackdrop) corkBackdrop.style.display = 'none';
+            if (corkView && corkView.classList.contains('is-open')) {
+                corkView.classList.remove('is-open');
+                if (corkBackdrop) corkBackdrop.classList.remove('is-open');
             }
         }
     });
@@ -521,13 +585,6 @@
         if (e.target.closest('.board-card')) return;
         clearSelection();
     });
-
-    // ===== Corkboard Modal View =====
-    const corkBackdrop = document.getElementById('corkboard-backdrop');
-    const closeCorkBtn = document.getElementById('close-corkboard-btn');
-    const corkView = document.getElementById('board-corkboard-view');
-    const corkSvg = document.getElementById('corkboard-svg');
-    const toggleBtn = document.getElementById('toggle-corkboard-btn');
 
     // Deterministic pseudo-random number from a card's type+id, so layout
     // stays stable across renders instead of reshuffling every time.
@@ -680,22 +737,24 @@
 
     if (toggleBtn) {
         toggleBtn.addEventListener('click', () => {
-            corkView.style.display = 'block';
-            if (corkBackdrop) corkBackdrop.style.display = 'block';
-            buildCorkboard();
+            corkView.classList.add('is-open');
+            if (corkBackdrop) corkBackdrop.classList.add('is-open');
+            // Wait a frame so the element's real dimensions are available
+            // (it was display:none the instant before .is-open was added).
+            requestAnimationFrame(() => buildCorkboard());
         });
     }
 
     if (closeCorkBtn) {
         closeCorkBtn.addEventListener('click', () => {
-            corkView.style.display = 'none';
-            if (corkBackdrop) corkBackdrop.style.display = 'none';
+            corkView.classList.remove('is-open');
+            if (corkBackdrop) corkBackdrop.classList.remove('is-open');
         });
     }
 
     corkBackdrop?.addEventListener('click', () => {
-        corkView.style.display = 'none';
-        corkBackdrop.style.display = 'none';
+        corkView.classList.remove('is-open');
+        corkBackdrop.classList.remove('is-open');
     });
 
     redrawAll();
