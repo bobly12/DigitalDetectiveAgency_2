@@ -4,6 +4,7 @@ using DigitalDetectiveAgency.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DigitalDetectiveAgency.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260806032056_AddVictimOccupationAndLocationToCase")]
+    partial class AddVictimOccupationAndLocationToCase
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -171,10 +174,10 @@ namespace DigitalDetectiveAgency.Migrations
                             Description = "Jeepney operator Ramon \"Mon\" Padilla is found dead behind his terminal office in Malate, struck once with a tire iron. No forced entry, no witnesses to the act itself. His ledger of quiet arrangements colorum payments, a personal loan, and a land sale he was hiding from his partners gives half the neighborhood a reason to want him gone. Only one of them was actually there.",
                             Difficulty = 2,
                             IsPublished = true,
-                            Location = "Malate, Manila",
+                            Location = "",
                             Title = "The Last Jeepney to Malate",
                             VictimName = "Ramon \"Mon\" Padilla",
-                            VictimOccupation = "Jeepney Operator"
+                            VictimOccupation = ""
                         });
                 });
 

@@ -18,4 +18,6 @@ public class Case
     public ICollection<Accusation> Accusations { get; set; } = new List<Accusation>();
     public IEnumerable<SuspectElimination>? SuspectEliminations { get; set; }
     public string VictimName { get; set; } = string.Empty;
+    public string VictimOccupation { get; set; } = string.Empty;
+    public string Location { get; set; } = string.Empty;
 }

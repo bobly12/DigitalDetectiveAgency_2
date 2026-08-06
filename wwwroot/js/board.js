@@ -94,6 +94,63 @@
         }
     }
 
+    // ===== Timer: count-up normally, countdown with fail-state if the case has a time limit =====
+    const timerEl = document.getElementById('board-timer');
+    if (timerEl) {
+        const limitSeconds = parseInt(timerEl.dataset.timeLimit, 10);
+        const hasLimit = !isNaN(limitSeconds) && limitSeconds > 0;
+        const startTime = Date.now();
+
+        const formatTime = (totalSeconds) => {
+            const m = Math.floor(totalSeconds / 60);
+            const s = totalSeconds % 60;
+            return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+        };
+
+        let failed = false;
+
+        const tick = () => {
+            if (failed) return;
+            const elapsedSeconds = Math.floor((Date.now() - startTime) / 1000);
+
+            if (hasLimit) {
+                const remaining = limitSeconds - elapsedSeconds;
+                if (remaining <= 0) {
+                    failed = true;
+                    timerEl.textContent = `⏱ 00:00`;
+                    timerEl.classList.add('board-timer--expired');
+                    showCaseFailed();
+                    return;
+                }
+                timerEl.textContent = `⏱ ${formatTime(remaining)}`;
+                if (remaining <= 30) timerEl.classList.add('board-timer--warning');
+            } else {
+                timerEl.textContent = `⏱ ${formatTime(elapsedSeconds)}`;
+            }
+        };
+
+        tick();
+        setInterval(tick, 1000);
+    }
+
+    function showCaseFailed() {
+        const overlay = document.createElement('div');
+        overlay.className = 'case-failed-overlay';
+        overlay.innerHTML = `
+            <div class="case-failed-box">
+                <h2>⏱ Time's Up</h2>
+                <p>You ran out of time to build your case. The trail's gone cold.</p>
+                <a href="/Case" class="btn-stamp btn-stamp--ghost">← Back to Case Archive</a>
+            </div>
+        `;
+        document.body.appendChild(overlay);
+
+        // Disable further connections once time expires
+        document.querySelectorAll('[data-connect-pin]').forEach(pin => {
+            pin.style.pointerEvents = 'none';
+        });
+    }
+
     // Tracks which suspects/nodes are already unlocked in state.
     const knownUnlockedSuspectIds = new Set(
         Array.from(document.querySelectorAll('.board-card[data-type="Suspect"]'))

@@ -53,9 +53,11 @@ public class BoardService : IBoardService
             CaseTitle = playerCase.Case.Title,
             CaseSummary = playerCase.Case.Description,
 
-            VictimName = string.Empty,
-            VictimOccupation = string.Empty,
-            Location = string.Empty,
+            VictimName = playerCase.Case.VictimName,
+            VictimOccupation = playerCase.Case.VictimOccupation,
+            Location = playerCase.Case.Location,
+            Difficulty = playerCase.Case.Difficulty.ToString(),
+            TimeLimitSeconds = playerCase.Case.Difficulty == CaseDifficulty.Hard ? 600 : (int?)null,
 
             IsCompleted = playerCase.IsCompleted,
             Score = playerCase.Score,

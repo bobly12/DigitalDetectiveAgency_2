@@ -132,7 +132,9 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
                 Description = "Jeepney operator Ramon \"Mon\" Padilla is found dead behind his terminal office in Malate, struck once with a tire iron. No forced entry, no witnesses to the act itself. His ledger of quiet arrangements colorum payments, a personal loan, and a land sale he was hiding from his partners gives half the neighborhood a reason to want him gone. Only one of them was actually there.",
                 Difficulty = CaseDifficulty.Hard,
                 IsPublished = true,
-                VictimName = "Ramon \"Mon\" Padilla"
+                VictimName = "Ramon \"Mon\" Padilla",
+                VictimOccupation = "Jeepney Operator",
+                Location = "Malate, Manila"
             }
         );
 
