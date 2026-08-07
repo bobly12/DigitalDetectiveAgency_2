@@ -59,3 +59,47 @@
         opacity: 1;
     }
 }
+/* ===== Staged "level complete" reveal sequence ===== */
+.report-verdict,
+.report-accused,
+.report-summary,
+.report-gauge,
+.report-note {
+    opacity: 0;
+    transform: translateY(12px);
+}
+
+.report-verdict.is-revealed,
+.report-accused.is-revealed,
+.report-summary.is-revealed,
+.report-gauge.is-revealed,
+.report-note.is-revealed {
+    animation: reportBeatIn 0.5s ease-out forwards;
+}
+
+@keyframes reportBeatIn {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.report-verdict {
+    font-family: var(--font-typewriter, 'Special Elite', 'Courier Prime', monospace);
+    font-size: 1.8rem;
+    text-align: center;
+    letter-spacing: 0.05em;
+    margin: var(--space-sm) 0;
+}
+
+.report-verdict--solved { color: var(--color-success, #4C7A4C); }
+.report-verdict--unsolved { color: var(--color-red); }
+
+.report-gauge__fill {
+    transition: none; /* the stagger handles timing, not the width transition */
+    width: 0 !important; /* JS sets the real width only once this bar's beat fires */
+}
+
+.report-gauge__fill.is-filled {
+    transition: width 0.8s cubic-bezier(0.2, 0.7, 0.3, 1);
+}

@@ -28,7 +28,8 @@
     /* Typography */
     --font-display: "Oswald", "Arial Narrow", sans-serif;
     --font-body: "Inter", -apple-system, sans-serif;
-    --font-accent: "Caveat", cursive;
+    --font-accent: "Inter", -apple-system, sans-serif;
+    --font-typewriter: "Special Elite", "Courier Prime", monospace;
 
     /* Spacing scale */
     --space-xs: 0.5rem;
@@ -44,8 +45,4 @@
     /* Radii — paper is slightly rounded, UI chrome is sharper */
     --radius-paper: 3px;
     --radius-ui: 2px;
-    --font-display: "Oswald", "Arial Narrow", sans-serif;
-    --font-body: "Inter", -apple-system, sans-serif;
-    --font-accent: "Caveat", cursive;
-    --font-typewriter: "Special Elite", "Courier Prime", monospace;
 }

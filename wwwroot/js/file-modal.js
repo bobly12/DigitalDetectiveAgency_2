@@ -27,12 +27,13 @@
     }
 
     function buildNarrationText(name, label, fields) {
-        // Concatenate everything a player would want read aloud, in reading order.
+        // Read the name and only the plain descriptive text — skip the
+        // type label (Evidence/Suspect/Witness) and skip field headings
+        // like "Motive"/"Alibi" being spoken aloud; the content itself
+        // is enough context.
         const parts = [];
-        if (label) parts.push(label);
         if (name) parts.push(name);
         fields.forEach(f => {
-            if (f.heading) parts.push(f.heading);
             if (f.text) parts.push(f.text);
         });
         return parts.join('. ');
@@ -78,6 +79,9 @@
         overlay.classList.remove('is-open');
         if (window.Narrator) window.Narrator.stop(listenBtn);
     }
+
+    // Export openModal globally so dynamically appended board cards can trigger it
+    window.openFileModal = openModal;
 
     // Attach click handlers to every card's image specifically
     document.querySelectorAll('.board-card__img').forEach(img => {

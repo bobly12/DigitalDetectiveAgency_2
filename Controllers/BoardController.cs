@@ -180,4 +180,11 @@ public class BoardController : Controller
             nextFocusHint = progress.NextFocusHint
         };
     }
+    [HttpPost]
+    public async Task<IActionResult> ResetCase([FromBody] ResetCaseRequestDto request)
+    {
+        var userId = _userManager.GetUserId(User)!;
+        await _boardService.ResetProgressAsync(request.CaseId, userId);
+        return Ok();
+    }
 }

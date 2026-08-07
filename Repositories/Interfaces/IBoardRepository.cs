@@ -19,4 +19,6 @@ public interface IBoardRepository
     Task<List<ConnectionAttempt>> GetAttemptsAsync(int caseId, string userId);
     Task<int> GetWrongAttemptCountAsync(int caseId, string userId);
     
+    Task ResetProgressAsync(int caseId, string userId);
+    
 }

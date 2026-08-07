@@ -20,8 +20,6 @@
     // ---------- Audio (Web Audio API synth, no external files) ----------
     let audioCtx = null;
     function getAudioCtx() {
-        // Browsers block AudioContext until a user gesture; lazily create/resume it
-        // the first time a sound is actually requested, which is always inside a click handler.
         if (!audioCtx) {
             audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         }
@@ -31,8 +29,6 @@
         return audioCtx;
     }
 
-    // A single short tone: freq in Hz, duration in seconds, wave shape, and a
-    // simple linear/exponential decay envelope so nothing clicks or pops.
     function tone(freq, duration, type = 'sine', gainPeak = 0.15, delay = 0) {
         const ctx = getAudioCtx();
         const osc = ctx.createOscillator();
@@ -48,13 +44,11 @@
         osc.stop(start + duration + 0.02);
     }
 
-    // Short percussive click — used for pinning a card / making a connection.
     function playPin() {
         tone(1200, 0.05, 'square', 0.12);
         tone(600, 0.08, 'triangle', 0.08, 0.02);
     }
 
-    // Paper-shuffle stinger — a quick descending filtered noise burst.
     function playPaper() {
         const ctx = getAudioCtx();
         const bufferSize = ctx.sampleRate * 0.15;
@@ -76,16 +70,13 @@
         noise.start();
     }
 
-    // Rising two-note chime — used when a suspect/lock unlocks.
     function playUnlock() {
-        tone(523.25, 0.12, 'sine', 0.15);        // C5
-        tone(783.99, 0.18, 'sine', 0.15, 0.1);   // G5
+        tone(523.25, 0.12, 'sine', 0.15);
+        tone(783.99, 0.18, 'sine', 0.15, 0.1);
     }
 
     const sounds = { pin: playPin, paper: playPaper, unlock: playUnlock };
 
-    // Kept as playSound(sounds.x) at every existing call site so nothing else
-    // in this file needs to change.
     function playSound(soundFn) {
         try {
             soundFn();
@@ -133,25 +124,29 @@
         setInterval(tick, 1000);
     }
 
-    function showCaseFailed() {
+    async function showCaseFailed() {
+        await fetch('/Board/ResetCase', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ caseId: window.boardCaseId })
+        });
+
         const overlay = document.createElement('div');
         overlay.className = 'case-failed-overlay';
         overlay.innerHTML = `
             <div class="case-failed-box">
                 <h2>⏱ Time's Up</h2>
-                <p>You ran out of time to build your case. The trail's gone cold.</p>
+                <p>You ran out of time to build your case. The trail's gone cold — your board has been reset.</p>
                 <a href="/Case" class="btn-stamp btn-stamp--ghost">← Back to Case Archive</a>
             </div>
         `;
         document.body.appendChild(overlay);
 
-        // Disable further connections once time expires
         document.querySelectorAll('[data-connect-pin]').forEach(pin => {
             pin.style.pointerEvents = 'none';
         });
     }
 
-    // Tracks which suspects/nodes are already unlocked in state.
     const knownUnlockedSuspectIds = new Set(
         Array.from(document.querySelectorAll('.board-card[data-type="Suspect"]'))
             .filter(card => !card.querySelector('[data-suspect-lock]'))
@@ -626,7 +621,6 @@
     const corkSvg = document.getElementById('corkboard-svg');
     const toggleBtn = document.getElementById('toggle-corkboard-btn');
 
-    // ===== Cancel an in-progress connection or active modals =====
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') {
             if (selectedCard) clearSelection();
@@ -643,8 +637,6 @@
         clearSelection();
     });
 
-    // Deterministic pseudo-random number from a card's type+id, so layout
-    // stays stable across renders instead of reshuffling every time.
     function seededRandom(seedStr) {
         let hash = 0;
         for (let i = 0; i < seedStr.length; i++) {
@@ -669,7 +661,6 @@
         const boardWidth = corkView.clientWidth || 1400;
         const centerX = boardWidth / 2;
 
-        // ===== Victim card at the very top, centered =====
         const victimY = 40;
         const victimEl = document.createElement('div');
         victimEl.className = 'cork-card cork-victim';
@@ -683,9 +674,6 @@
         `;
         corkCanvas.appendChild(victimEl);
 
-        // ===== Pyramid rows below the victim =====
-        // Row sizes grow as you go down: 1 connects to victim conceptually,
-        // then widen out row by row like an inverted triangle of evidence.
         const cardW = 160;
         const cardH = 190;
         const rowGapY = 210;
@@ -696,7 +684,6 @@
         let cardIndex = 0;
         const rowSizes = [];
 
-        // Build row sizes: start small, grow, e.g. 2, 3, 4, 5, ... until cards run out
         let rowSize = 2;
         while (remaining > 0) {
             const take = Math.min(rowSize, remaining);
@@ -763,7 +750,6 @@
             cardIndex++;
         });
 
-        // ===== Draw connection strings =====
         connections.forEach(conn => {
             const fromKey = `${conn.fromType || conn.FromType}-${conn.fromId || conn.FromId}`;
             const toKey = `${conn.toType || conn.ToType}-${conn.toId || conn.ToId}`;
@@ -785,7 +771,6 @@
         corkCanvas.style.width = totalWidth + 'px';
         corkCanvas.style.height = totalHeight + 'px';
 
-        // Safe dimension fallbacks for viewport calculations
         const availableWidth = Math.max(corkView.clientWidth - 40, 300);
         const availableHeight = Math.max(corkView.clientHeight - 40, 300);
         const scale = Math.min(1, availableWidth / totalWidth, availableHeight / totalHeight);
@@ -796,8 +781,6 @@
         toggleBtn.addEventListener('click', () => {
             corkView.classList.add('is-open');
             if (corkBackdrop) corkBackdrop.classList.add('is-open');
-            // Wait a frame so the element's real dimensions are available
-            // (it was display:none the instant before .is-open was added).
             requestAnimationFrame(() => buildCorkboard());
         });
     }

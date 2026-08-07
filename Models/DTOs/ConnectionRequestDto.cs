@@ -21,3 +21,8 @@ public class ToggleEliminationRequestDto
     public int CaseId { get; set; }
     public int SuspectId { get; set; }
 }
+
+public class ResetCaseRequestDto
+{
+    public int CaseId { get; set; }
+}

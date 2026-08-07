@@ -5,7 +5,7 @@
 }
 
 @section PageStyles {
-    <link rel="stylesheet" href="~/css/pages/results.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/pages/result.css" asp-append-version="true" />
 }
 
 <div class="container-report">
@@ -16,38 +16,38 @@
                 <img src="@Model.AccusedSuspectImageUrl" alt="@Model.AccusedSuspectName" class="mugshot-frame__photo" />
                 <div class="mugshot-frame__stamp" id="mugshot-stamp">GUILTY<br />SOLVED</div>
             </div>
-            <div class="report-verdict report-verdict--solved">CASE SOLVED ✓</div>
-            <p class="report-accused">You correctly identified <strong>@Model.AccusedSuspectName</strong> as the culprit in "@Model.CaseTitle."</p>
+            <div class="report-verdict report-verdict--solved" id="beat-verdict">CASE SOLVED ✓</div>
+            <p class="report-accused" id="beat-accused">You correctly identified <strong>@Model.AccusedSuspectName</strong> as the culprit in "@Model.CaseTitle."</p>
         }
         else
         {
-            <div class="report-verdict report-verdict--unsolved">CASE UNSOLVED ✕</div>
-            <p class="report-accused">You accused <strong>@Model.AccusedSuspectName</strong>, but that wasn't the culprit in "@Model.CaseTitle."</p>
+            <div class="report-verdict report-verdict--unsolved" id="beat-verdict">CASE UNSOLVED ✕</div>
+            <p class="report-accused" id="beat-accused">You accused <strong>@Model.AccusedSuspectName</strong>, but that wasn't the culprit in "@Model.CaseTitle."</p>
         }
 
-        <p class="report-summary">@Model.DetectiveSummary</p>
+        <p class="report-summary" id="beat-summary">@Model.DetectiveSummary</p>
 
-        <div class="report-gauge">
+        <div class="report-gauge" id="beat-score">
             <div class="report-gauge__label">Final Score</div>
             <div class="report-gauge__track">
                 <div class="report-gauge__fill @(Model.Score >= 70 ? "report-gauge__fill--high" : Model.Score >= 40 ? "report-gauge__fill--mid" : "report-gauge__fill--low")"
-                     style="width: @Model.Score%;">
+                     id="score-fill" data-target-width="@Model.Score">
                     @Model.Score / 100
                 </div>
             </div>
         </div>
 
-        <div class="report-gauge">
+        <div class="report-gauge" id="beat-strength">
             <div class="report-gauge__label">Case Strength (Board Accuracy)</div>
             <div class="report-gauge__track">
                 <div class="report-gauge__fill @(Model.CaseStrengthPercent >= 70 ? "report-gauge__fill--high" : Model.CaseStrengthPercent >= 40 ? "report-gauge__fill--mid" : "report-gauge__fill--low")"
-                     style="width: @Model.CaseStrengthPercent%;">
+                     id="strength-fill" data-target-width="@Model.CaseStrengthPercent">
                     @Model.CaseStrengthPercent%
                 </div>
             </div>
         </div>
 
-        <p class="report-note">Score = 70% accusation accuracy + 30% investigation board accuracy.</p>
+        <p class="report-note" id="beat-note">Score = 70% accusation accuracy + 30% investigation board accuracy.</p>
     </div>
 
     <div style="margin-top: var(--space-lg);">
@@ -55,44 +55,81 @@
     </div>
 </div>
 
-@if (Model.WasCorrect)
-{
-    @section Scripts {
-        <script>
-            (function () {
-                // Fire the stamp-slam animation and a synth victory chime once the
-                // mugshot has actually painted, not on page load itself, so the
-                // slam reads as a deliberate beat rather than something you missed.
-                const stamp = document.getElementById('mugshot-stamp');
-                if (!stamp) return;
+@section Scripts {
+    <script>
+        (function () {
+            function playVictoryChime() {
+                try {
+                    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+                    const notes = [523.25, 659.25, 783.99, 1046.50]; // C5 E5 G5 C6
+                    notes.forEach((freq, i) => {
+                        const osc = ctx.createOscillator();
+                        const gain = ctx.createGain();
+                        osc.type = 'triangle';
+                        osc.frequency.value = freq;
+                        const start = ctx.currentTime + i * 0.09;
+                        gain.gain.setValueAtTime(0, start);
+                        gain.gain.linearRampToValueAtTime(0.18, start + 0.01);
+                        gain.gain.exponentialRampToValueAtTime(0.0001, start + 0.35);
+                        osc.connect(gain).connect(ctx.destination);
+                        osc.start(start);
+                        osc.stop(start + 0.4);
+                    });
+                } catch { /* ignore */ }
+            }
 
-                function playVictoryChime() {
-                    try {
-                        const ctx = new (window.AudioContext || window.webkitAudioContext)();
-                        const notes = [523.25, 659.25, 783.99, 1046.50]; // C5 E5 G5 C6 — triumphant arpeggio
-                        notes.forEach((freq, i) => {
-                            const osc = ctx.createOscillator();
-                            const gain = ctx.createGain();
-                            osc.type = 'triangle';
-                            osc.frequency.value = freq;
-                            const start = ctx.currentTime + i * 0.09;
-                            gain.gain.setValueAtTime(0, start);
-                            gain.gain.linearRampToValueAtTime(0.18, start + 0.01);
-                            gain.gain.exponentialRampToValueAtTime(0.0001, start + 0.35);
-                            osc.connect(gain).connect(ctx.destination);
-                            osc.start(start);
-                            osc.stop(start + 0.4);
-                        });
-                    } catch {
-                        // Ignore — e.g. AudioContext unavailable.
-                    }
-                }
+            function playTick() {
+                try {
+                    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.type = 'square';
+                    osc.frequency.value = 900;
+                    gain.gain.setValueAtTime(0.08, ctx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.08);
+                    osc.connect(gain).connect(ctx.destination);
+                    osc.start();
+                    osc.stop(ctx.currentTime + 0.1);
+                } catch { /* ignore */ }
+            }
 
-                setTimeout(() => {
-                    stamp.classList.add('is-stamped');
-                    playVictoryChime();
-                }, 400);
-            })();
-        </script>
-    }
+            function reveal(id) {
+                const el = document.getElementById(id);
+                if (el) el.classList.add('is-revealed');
+            }
+
+            function fillBar(id) {
+                const el = document.getElementById(id);
+                if (!el) return;
+                const target = el.dataset.targetWidth;
+                el.classList.add('is-filled');
+                requestAnimationFrame(() => { el.style.width = target + '%'; });
+            }
+
+            const stamp = document.getElementById('mugshot-stamp');
+            const wasCorrect = !!stamp;
+
+            // The beat sequence: verdict -> (stamp slam + chime, if correct) -> summary -> score bar -> strength bar -> note
+            const beats = wasCorrect
+                ? [
+                    { delay: 200, run: () => reveal('beat-verdict') },
+                    { delay: 500, run: () => { stamp.classList.add('is-stamped'); playVictoryChime(); } },
+                    { delay: 1200, run: () => reveal('beat-accused') },
+                    { delay: 1500, run: () => reveal('beat-summary') },
+                    { delay: 1900, run: () => { reveal('beat-score'); fillBar('score-fill'); playTick(); } },
+                    { delay: 2400, run: () => { reveal('beat-strength'); fillBar('strength-fill'); playTick(); } },
+                    { delay: 2900, run: () => reveal('beat-note') }
+                ]
+                : [
+                    { delay: 200, run: () => reveal('beat-verdict') },
+                    { delay: 600, run: () => reveal('beat-accused') },
+                    { delay: 1000, run: () => reveal('beat-summary') },
+                    { delay: 1400, run: () => { reveal('beat-score'); fillBar('score-fill'); } },
+                    { delay: 1900, run: () => { reveal('beat-strength'); fillBar('strength-fill'); } },
+                    { delay: 2400, run: () => reveal('beat-note') }
+                ];
+
+            beats.forEach(b => setTimeout(b.run, b.delay));
+        })();
+    </script>
 }

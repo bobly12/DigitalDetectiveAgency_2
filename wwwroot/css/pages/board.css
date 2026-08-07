@@ -460,3 +460,20 @@
     color: #e8b4b0;
     font-family: 'Special Elite', 'Courier Prime', monospace;
 }
+.board-header-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+}
+
+.board-timer {
+    font-family: var(--font-typewriter);
+    color: #c9a86a;
+    font-size: 1.3rem;
+    font-weight: bold;
+    background: rgba(0,0,0,0.35);
+    padding: 8px 18px;
+    border-radius: 4px;
+    border: 1px solid rgba(201,168,106,0.4);
+    letter-spacing: 0.03em;
+}

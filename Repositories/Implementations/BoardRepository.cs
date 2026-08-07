@@ -104,4 +104,16 @@ public class BoardRepository : IBoardRepository
             .Where(a => a.CaseId == caseId && a.ApplicationUserId == userId && !a.WasCorrect)
             .CountAsync();
     }
+    public async Task ResetProgressAsync(int caseId, string userId)
+    {
+        var clues = _context.ClueConnections.Where(c => c.CaseId == caseId && c.ApplicationUserId == userId);
+        var eliminations = _context.SuspectEliminations.Where(e => e.CaseId == caseId && e.ApplicationUserId == userId);
+        var attempts = _context.ConnectionAttempts.Where(a => a.CaseId == caseId && a.ApplicationUserId == userId);
+
+        _context.ClueConnections.RemoveRange(clues);
+        _context.SuspectEliminations.RemoveRange(eliminations);
+        _context.ConnectionAttempts.RemoveRange(attempts);
+
+        await _context.SaveChangesAsync();
+    }
 }

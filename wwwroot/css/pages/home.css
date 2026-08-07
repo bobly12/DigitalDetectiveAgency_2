@@ -1,69 +1,58 @@
-/* home.css — Headquarters page */
-
-.hq-hero {
-    background: linear-gradient(rgba(15,17,21,0.85), rgba(15,17,21,0.95));
-    border-radius: var(--radius-paper);
-    text-align: center;
-    padding: var(--space-xl) var(--space-md);
-    margin-bottom: var(--space-lg);
+.hero-noir {
+    min-height: calc(100vh - 140px);
+    background: #0F1115;
+    display: grid;
+    grid-template-columns: 1fr 1.3fr;
+    align-items: center;
+    gap: var(--space-lg);
+    padding: var(--space-xl) var(--space-lg);
 }
 
-.hq-hero h1 {
+.hero-noir__content {
+    max-width: 480px;
+}
+
+.hero-noir__title {
     font-family: var(--font-display);
-    font-size: 3rem;
-    letter-spacing: 0.03em;
-    margin-bottom: var(--space-sm);
-}
-
-.hq-hero p {
-    color: var(--color-text-muted);
-    font-size: 1.1rem;
+    font-size: 3.6rem;
+    line-height: 1.05;
+    color: var(--color-text-on-dark);
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
     margin-bottom: var(--space-md);
 }
 
-.hq-hero__stats {
-    margin-top: var(--space-md);
-    color: var(--color-brass);
-    font-family: var(--font-display);
-    letter-spacing: 0.05em;
-}
-
-.hq-features {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: var(--space-md);
-}
-
-.hq-feature-card {
-    background-color: var(--color-panel);
-    border: 1px solid rgba(201, 162, 75, 0.15);
-    border-radius: var(--radius-ui);
-    text-align: center;
-    padding: var(--space-md);
-    transition: transform 0.15s ease;
-}
-
-.hq-feature-card:hover {
-    transform: translateY(-4px);
-}
-
-.hq-feature-card__icon {
-    font-size: 2.2rem;
-    margin-bottom: var(--space-xs);
-}
-
-.hq-feature-card h5 {
-    font-family: var(--font-display);
-    letter-spacing: 0.03em;
-}
-
-.hq-feature-card p {
+.hero-noir__subtitle {
+    font-family: var(--font-body);
     color: var(--color-text-muted);
-    font-size: 0.9rem;
+    font-size: 1.05rem;
+    line-height: 1.6;
+    margin-bottom: var(--space-lg);
+    max-width: 420px;
 }
 
-@media (max-width: 768px) {
-    .hq-features {
+.hero-noir__cta {
+    display: inline-block;
+    font-size: 1.05rem;
+    padding: 12px 28px;
+}
+
+.hero-noir__image {
+    width: 100%;
+}
+
+.hero-noir__image img {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 6px;
+}
+
+@media (max-width: 900px) {
+    .hero-noir {
         grid-template-columns: 1fr;
+    }
+    .hero-noir__title {
+        font-size: 2.4rem;
     }
 }

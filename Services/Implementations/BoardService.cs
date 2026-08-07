@@ -341,4 +341,8 @@ public class BoardService : IBoardService
             IsRevealed = revealed
         };
     }
+    public async Task ResetProgressAsync(int caseId, string userId)
+    {
+        await _boardRepository.ResetProgressAsync(caseId, userId);
+    }
 }

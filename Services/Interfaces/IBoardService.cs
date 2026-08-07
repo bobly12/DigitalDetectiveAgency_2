@@ -39,5 +39,6 @@ public interface IBoardService
     Task<(bool Success, string? Name, string? ImageUrl, string? Description)> GetWitnessFileAsync(int caseId, int witnessId, string userId);
     
     // IBoardService.cs
+    Task ResetProgressAsync(int caseId, string userId);
     
 }
