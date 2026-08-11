@@ -8,51 +8,53 @@
     <link rel="stylesheet" href="~/css/pages/case-list.css" asp-append-version="true" />
 }
 
-<div class="container-archive">
+<div class="container-wide">
     <h1 class="archive-title">Your Case Archive</h1>
 
-    @if (!Model.Any())
-    {
-        <p class="text-muted">No cases have been assigned to you yet, Detective. Check back soon.</p>
-    }
-    else
-    {
-        <div class="archive-grid">
-            @foreach (var item in Model)
-            {
-                <div class="case-folder">
-                    <div class="case-folder__tab">Case File — @item.Difficulty</div>
-                    <h5>@item.Title</h5>
+    <div class="archive-room">
+        @if (!Model.Any())
+        {
+            <p class="archive-empty">No cases have been assigned to you yet, Detective. Check back soon.</p>
+        }
+        else
+        {
+            <div class="archive-grid">
+                @foreach (var item in Model)
+                {
+                    <div class="case-folder">
+                        <div class="case-folder__tab">Case File — @item.Difficulty</div>
+                        <h5>@item.Title</h5>
 
-                    @if (item.IsCompleted)
-                    {
-                        <div class="stamp-badge stamp-badge--solved">Solved · @item.Score</div>
-                    }
-                    else if (item.IsOpened)
-                    {
-                        <div class="stamp-badge stamp-badge--progress">In Progress</div>
-                    }
-                    else
-                    {
-                        <div class="stamp-badge stamp-badge--new">New</div>
-                    }
-
-                    <div style="margin-top: var(--space-sm);">
                         @if (item.IsCompleted)
                         {
-                            <a asp-controller="Board" asp-action="Index" asp-route-id="@item.CaseId" class="btn-stamp btn-stamp--primary">
-                                View File
-                            </a>
+                            <div class="stamp-badge stamp-badge--solved">Solved · @item.Score</div>
+                        }
+                        else if (item.IsOpened)
+                        {
+                            <div class="stamp-badge stamp-badge--progress">In Progress</div>
                         }
                         else
                         {
-                            <a asp-controller="Case" asp-action="Intro" asp-route-id="@item.CaseId" class="btn-stamp btn-stamp--primary">
-                                Open File
-                            </a>
+                            <div class="stamp-badge stamp-badge--new">New</div>
                         }
+
+                        <div style="margin-top: var(--space-sm);">
+                            @if (item.IsCompleted)
+                            {
+                                <a asp-controller="Board" asp-action="Index" asp-route-id="@item.CaseId" class="btn-stamp btn-stamp--primary">
+                                    View File
+                                </a>
+                            }
+                            else
+                            {
+                                <a asp-controller="Case" asp-action="Intro" asp-route-id="@item.CaseId" class="btn-stamp btn-stamp--primary">
+                                    Open File
+                                </a>
+                            }
+                        </div>
                     </div>
-                </div>
-            }
-        </div>
-    }
+                }
+            </div>
+        }
+    </div>
 </div>

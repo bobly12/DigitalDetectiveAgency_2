@@ -1,15 +1,32 @@
 /* case-list.css — Case Archive Room */
 
+.archive-room {
+    background: linear-gradient(rgba(15,17,21,0.55), rgba(15,17,21,0.65)),
+    repeating-linear-gradient(45deg, #241f1a, #241f1a 2px, #1d1915 2px, #1d1915 4px);
+    border-radius: var(--radius-paper);
+    padding: var(--space-xl) var(--space-lg);
+    min-height: 60vh;
+}
+
 .archive-title {
     font-family: var(--font-display);
+    font-size: 2rem;
     letter-spacing: 0.03em;
+    color: var(--color-text-on-dark);
     margin-bottom: var(--space-lg);
+}
+
+.archive-empty {
+    color: var(--color-text-muted);
+    font-size: 0.95rem;
+    text-align: center;
+    padding: var(--space-xl) 0;
 }
 
 .archive-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: var(--space-md);
+    gap: var(--space-lg);
 }
 
 .case-folder {
@@ -17,10 +34,10 @@
     color: var(--color-text-on-paper);
     border-radius: var(--radius-paper) var(--radius-paper) 0 0;
     box-shadow: var(--shadow-paper);
-    padding: var(--space-md);
+    padding: var(--space-lg);
     position: relative;
     transform: rotate(-1deg);
-    transition: transform 0.15s ease;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 
 .case-folder:nth-child(3n+2) { transform: rotate(1deg); }
@@ -28,30 +45,40 @@
 
 .case-folder:hover {
     transform: rotate(0deg) translateY(-4px);
+    box-shadow: 0 14px 28px rgba(0,0,0,0.4);
 }
 
 .case-folder__tab {
     font-family: var(--font-display);
     font-size: 0.75rem;
-    letter-spacing: 0.05em;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
     color: var(--color-paper-shadow);
-    margin-bottom: var(--space-xs);
+    margin-bottom: var(--space-sm);
 }
 
 .case-folder h5 {
     font-family: var(--font-display);
-    margin: 0 0 var(--space-xs) 0;
+    font-size: 1.15rem;
+    line-height: 1.35;
+    margin: 0 0 var(--space-sm) 0;
 }
 
 .case-folder p {
-    font-size: 0.85rem;
+    font-size: 0.9rem;
+    line-height: 1.6;
+    text-align: justify;
     color: #4a4a4a;
-    margin-bottom: var(--space-sm);
+    margin-bottom: var(--space-md);
 }
 
 .case-folder .stamp-badge {
-    margin-bottom: var(--space-sm);
+    margin-bottom: var(--space-md);
+}
+
+.case-folder .btn-stamp {
+    width: 100%;
+    text-align: center;
 }
 
 @media (max-width: 900px) {

@@ -1,4 +1,3 @@
-// Repositories/Implementations/BoardRepository.cs
 using DigitalDetectiveAgency.Data;
 using DigitalDetectiveAgency.Models.Entities;
 using DigitalDetectiveAgency.Repositories.Interfaces;
@@ -86,6 +85,7 @@ public class BoardRepository : IBoardRepository
 
         await _context.SaveChangesAsync();
     }
+
     public async Task LogAttemptAsync(ConnectionAttempt attempt)
     {
         _context.ConnectionAttempts.Add(attempt);
@@ -98,12 +98,14 @@ public class BoardRepository : IBoardRepository
             .Where(a => a.CaseId == caseId && a.ApplicationUserId == userId)
             .ToListAsync();
     }
+
     public async Task<int> GetWrongAttemptCountAsync(int caseId, string userId)
     {
         return await _context.ConnectionAttempts
             .Where(a => a.CaseId == caseId && a.ApplicationUserId == userId && !a.WasCorrect)
             .CountAsync();
     }
+
     public async Task ResetProgressAsync(int caseId, string userId)
     {
         var clues = _context.ClueConnections.Where(c => c.CaseId == caseId && c.ApplicationUserId == userId);
@@ -113,6 +115,19 @@ public class BoardRepository : IBoardRepository
         _context.ClueConnections.RemoveRange(clues);
         _context.SuspectEliminations.RemoveRange(eliminations);
         _context.ConnectionAttempts.RemoveRange(attempts);
+
+        // FIX: reset the timer anchor too — otherwise a reset case (e.g. after
+        // "Time's Up") reopens with the same stale OpenedAt and expires instantly
+        // again, looping forever.
+        var playerCase = await _context.PlayerCases
+            .FirstOrDefaultAsync(pc => pc.CaseId == caseId && pc.ApplicationUserId == userId);
+
+        if (playerCase != null)
+        {
+            playerCase.OpenedAt = DateTime.UtcNow;
+            playerCase.IsCompleted = false;
+            playerCase.Score = 0;
+        }
 
         await _context.SaveChangesAsync();
     }
