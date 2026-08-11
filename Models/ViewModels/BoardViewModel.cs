@@ -74,6 +74,7 @@ public class BoardViewModel
         Math.Max(0, 75 - Confidence);
     
     public List<BoardTriedPairViewModel> TriedWrongPairs { get; set; } = new();
-    public string Difficulty { get; set; } = string.Empty; // NEW — "Easy" | "Medium" | "Hard"
-    public int? TimeLimitSeconds { get; set; } // NEW — null = no limit, e.g. 600 for Hard
+    public string Difficulty { get; set; } = string.Empty; // "Easy" | "Medium" | "Hard"
+    public int? TimeLimitSeconds { get; set; } // null = no limit, e.g. 600 for Hard
+    public DateTime OpenedAtUtc { get; set; } // NEW - anchors the timer so it doesn't reset on page reload
 }

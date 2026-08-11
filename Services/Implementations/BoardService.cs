@@ -8,6 +8,10 @@ namespace DigitalDetectiveAgency.Services.Implementations;
 
 public class BoardService : IBoardService
 {
+    // NEW - tries system: max wrong tries allowed per string connection (specific pair)
+    // before that pair locks out and can't be tried again.
+    public const int MaxConnectionTries = 3;
+
     private readonly IBoardRepository _boardRepository;
     private readonly ICaseRepository _caseRepository;
     private readonly IInvestigationProgressService _progressService;
@@ -58,6 +62,7 @@ public class BoardService : IBoardService
             Location = playerCase.Case.Location,
             Difficulty = playerCase.Case.Difficulty.ToString(),
             TimeLimitSeconds = playerCase.Case.Difficulty == CaseDifficulty.Hard ? 600 : (int?)null,
+            OpenedAtUtc = playerCase.OpenedAt ?? DateTime.UtcNow, // NEW - real anchor for the timer
 
             IsCompleted = playerCase.IsCompleted,
             Score = playerCase.Score,
@@ -111,7 +116,9 @@ public class BoardService : IBoardService
                     FromType = g.First().Attempt.FromType,
                     FromId = g.First().Attempt.FromId,
                     ToType = g.First().Attempt.ToType,
-                    ToId = g.First().Attempt.ToId
+                    ToId = g.First().Attempt.ToId,
+                    WrongTryCount = g.Count(),
+                    IsLocked = g.Count() >= MaxConnectionTries
                 })
                 .ToList()
         };
@@ -135,6 +142,16 @@ public class BoardService : IBoardService
             request.CaseId, userId, request.FromType, request.FromId, request.ToType, request.ToId);
         if (exists)
             return (false, "This connection already exists.", 0, false, null);
+
+        // NEW - 3-tries cap per specific pair (regardless of direction)
+        var pastAttempts = await _boardRepository.GetAttemptsAsync(request.CaseId, userId);
+        int wrongTriesForThisPair = pastAttempts.Count(a =>
+            !a.WasCorrect &&
+            ((a.FromType == request.FromType && a.FromId == request.FromId && a.ToType == request.ToType && a.ToId == request.ToId) ||
+             (a.FromType == request.ToType && a.FromId == request.ToId && a.ToType == request.FromType && a.ToId == request.FromId)));
+
+        if (wrongTriesForThisPair >= MaxConnectionTries)
+            return (false, "You're out of tries for this connection.", 0, false, null);
 
         var answerKey = await _boardRepository.GetAnswerKeyAsync(request.CaseId);
 

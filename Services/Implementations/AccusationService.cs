@@ -9,6 +9,10 @@ namespace DigitalDetectiveAgency.Services.Implementations;
 
 public class AccusationService : IAccusationService
 {
+    // NEW - tries system: how many accusation attempts a player gets per case
+    // before the case locks as unsolved. Bump this if a case needs to be more forgiving.
+    public const int MaxAttempts = 3;
+
     private readonly IAccusationRepository _accusationRepository;
     private readonly ICaseRepository _caseRepository;
     private readonly IBoardRepository _boardRepository;
@@ -34,15 +38,21 @@ public class AccusationService : IAccusationService
         var playerCase = await _caseRepository.GetPlayerCaseAsync(caseId, userId);
         if (playerCase == null) return null;
 
-        var existing = await _accusationRepository.GetByCaseAndUserAsync(caseId, userId);
-        if (existing != null) return null;
+        // Case is closed once it's completed (solved OR tries exhausted) - no more attempts.
+        if (playerCase.IsCompleted) return null;
 
         var suspects = await _caseRepository.GetSuspectsForCaseAsync(caseId);
+        var pastAttempts = await _accusationRepository.GetAllByCaseAndUserAsync(caseId, userId);
+
+        if (pastAttempts.Count >= MaxAttempts) return null;
 
         return new AccusationFormViewModel
         {
             CaseId = caseId,
             CaseTitle = playerCase.Case.Title,
+            MaxAttempts = MaxAttempts,
+            AttemptsUsed = pastAttempts.Count,
+            WrongSuspectIds = pastAttempts.Select(a => a.AccusedSuspectId).ToList(),
             Suspects = suspects.Select(s => new SuspectOptionViewModel
             {
                 Id = s.Id,
@@ -71,9 +81,12 @@ public class AccusationService : IAccusationService
         if (playerCase == null)
             return (false, "You are not assigned to this case.", null);
 
-        var existing = await _accusationRepository.GetByCaseAndUserAsync(dto.CaseId, userId);
-        if (existing != null)
-            return (false, "You have already submitted an accusation for this case.", null);
+        if (playerCase.IsCompleted)
+            return (false, "This case is already closed.", null);
+
+        var attemptsSoFar = await _accusationRepository.GetAttemptCountAsync(dto.CaseId, userId);
+        if (attemptsSoFar >= MaxAttempts)
+            return (false, "You're out of tries on this case.", null);
 
         // Gate on investigation progress before allowing an accusation.
         // Same InvestigationProgressService snapshot the Board page reads from,
@@ -95,32 +108,45 @@ public class AccusationService : IAccusationService
         };
         await _accusationRepository.AddAsync(accusation);
 
+        int attemptsUsed = attemptsSoFar + 1;
+        int attemptsRemaining = MaxAttempts - attemptsUsed;
+
         // Calculate case strength (board connection accuracy)
         var connectionMatchPercent = await CalculateCaseStrengthAsync(dto.CaseId, userId);
 
         bool wasCorrect = accusedSuspect.IsGuilty;
         int score = _scoringService.CalculateScore(wasCorrect, connectionMatchPercent);
 
-        // Save completion + score in one call
-        await _caseRepository.CompleteWithScoreAsync(playerCase, score);
+        // Case only locks when the player got it right OR just burned their last try.
+        bool caseClosed = wasCorrect || attemptsRemaining <= 0;
+
+        if (caseClosed)
+        {
+            await _caseRepository.CompleteWithScoreAsync(playerCase, score);
+        }
 
         var summary = BuildDetectiveSummary(
             playerCase.Case.Title,
             accusedSuspect.Name,
             wasCorrect,
             connectionMatchPercent,
-            score);
+            score,
+            caseClosed,
+            attemptsRemaining);
 
         return (true, null, new AccusationResultViewModel
         {
             CaseId = dto.CaseId,
             CaseTitle = playerCase.Case.Title,
             AccusedSuspectName = accusedSuspect.Name,
-            AccusedSuspectImageUrl = accusedSuspect.ImageUrl, // NEW - feeds the mugshot/stamp animation
+            AccusedSuspectImageUrl = accusedSuspect.ImageUrl, // feeds the mugshot/stamp animation
             CaseStrengthPercent = connectionMatchPercent,
             WasCorrect = wasCorrect,
             Score = score,
-            DetectiveSummary = summary
+            DetectiveSummary = summary,
+            MaxAttempts = MaxAttempts,
+            AttemptsUsed = attemptsUsed,
+            CaseClosed = caseClosed
         });
     }
 
@@ -143,7 +169,9 @@ public class AccusationService : IAccusationService
         string accusedName,
         bool wasCorrect,
         int connectionMatchPercent,
-        int score)
+        int score,
+        bool caseClosed,
+        int attemptsRemaining)
     {
         var opening = wasCorrect
             ? $"The trail led straight to {accusedName}."
@@ -157,9 +185,20 @@ public class AccusationService : IAccusationService
             _ => "The corkboard barely resembled the real chain of events."
         };
 
-        var closing = wasCorrect
-            ? "Case closed."
-            : "The case remains open, for now.";
+        string closing;
+        if (wasCorrect)
+        {
+            closing = "Case closed.";
+        }
+        else if (caseClosed)
+        {
+            closing = "You're out of tries — the case goes cold.";
+        }
+        else
+        {
+            var triesWord = attemptsRemaining == 1 ? "try" : "tries";
+            closing = $"The case stays open. {attemptsRemaining} {triesWord} left.";
+        }
 
         return $"{opening} {boardLine} {closing}";
     }

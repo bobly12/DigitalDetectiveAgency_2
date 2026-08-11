@@ -4,17 +4,21 @@
     let selectedCard = null;
     let connections = [...window.initialConnections];
 
-    // ===== Tried-wrong pair tracking =====
+    // ===== Tried-wrong pair tracking (3 tries per connection, then locked) =====
+    const MAX_CONNECTION_TRIES = 3;
+
     function pairKey(fromType, fromId, toType, toId) {
         const a = `${fromType}${fromId}`;
         const b = `${toType}${toId}`;
         return a <= b ? `${a}|${b}` : `${b}|${a}`;
     }
 
-    const triedWrongPairs = new Set(
-        (window.triedWrongPairs || []).map(p =>
-            pairKey(p.fromType || p.FromType, p.fromId || p.FromId, p.toType || p.ToType, p.toId || p.ToId)
-        )
+    const triedWrongPairs = new Map(
+        (window.triedWrongPairs || []).map(p => {
+            const key = pairKey(p.fromType || p.FromType, p.fromId || p.FromId, p.toType || p.ToType, p.toId || p.ToId);
+            const count = p.wrongTryCount ?? p.WrongTryCount ?? 1;
+            return [key, count];
+        })
     );
 
     // ---------- Audio (Web Audio API synth, no external files) ----------
@@ -90,7 +94,12 @@
     if (timerEl) {
         const limitSeconds = parseInt(timerEl.dataset.timeLimit, 10);
         const hasLimit = !isNaN(limitSeconds) && limitSeconds > 0;
-        const startTime = Date.now();
+
+        // FIX - anchor to the case's real open time (server) instead of Date.now(),
+        // so the timer no longer resets every time this page reloads (e.g. after
+        // navigating to Make Accusation and back).
+        const openedAtMs = Date.parse(timerEl.dataset.openedAt);
+        const startTime = isNaN(openedAtMs) ? Date.now() : openedAtMs;
 
         const formatTime = (totalSeconds) => {
             const m = Math.floor(totalSeconds / 60);
@@ -553,8 +562,9 @@
         clearSelection();
 
         const key = pairKey(fromType, fromId, toType, toId);
-        if (triedWrongPairs.has(key)) {
-            showRejectionNote(fromType, fromId, toType, toId, "Already tried — no link found here.");
+        const triesUsed = triedWrongPairs.get(key) || 0;
+        if (triesUsed >= MAX_CONNECTION_TRIES) {
+            showRejectionNote(fromType, fromId, toType, toId, "No tries left on this connection.");
             return;
         }
 
@@ -571,9 +581,21 @@
 
         const data = await res.json();
 
+        if (data.outOfTries) {
+            triedWrongPairs.set(key, MAX_CONNECTION_TRIES);
+            showRejectionNote(fromType, fromId, toType, toId, "No tries left on this connection.");
+            if (data.progress) applyProgress(data.progress);
+            return;
+        }
+
         if (data.rejected) {
-            triedWrongPairs.add(key);
-            showRejectionNote(fromType, fromId, toType, toId);
+            const newCount = (triedWrongPairs.get(key) || 0) + 1;
+            triedWrongPairs.set(key, newCount);
+            const triesLeft = MAX_CONNECTION_TRIES - newCount;
+            const note = triesLeft > 0
+                ? `Not a match. ${triesLeft} ${triesLeft === 1 ? 'try' : 'tries'} left on this connection.`
+                : "Not a match. No tries left on this connection.";
+            showRejectionNote(fromType, fromId, toType, toId, note);
             if (data.progress) applyProgress(data.progress);
             return;
         }

@@ -18,4 +18,8 @@ public class BoardTriedPairViewModel
     public int FromId { get; set; }
     public string ToType { get; set; } = string.Empty;
     public int ToId { get; set; }
+
+    // NEW - tries system
+    public int WrongTryCount { get; set; }
+    public bool IsLocked { get; set; } // true once WrongTryCount hits the cap
 }

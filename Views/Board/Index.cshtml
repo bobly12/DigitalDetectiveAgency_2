@@ -13,7 +13,7 @@
         <div class="d-flex justify-content-between align-items-center mb-3">
             <h1 class="board-title mb-0">🧵 @Model.CaseTitle</h1>
             <div class="board-header-actions">
-                <div class="board-timer" id="board-timer" data-time-limit="@(Model.TimeLimitSeconds?.ToString() ?? "")">⏱ 00:00</div>
+                <div class="board-timer" id="board-timer" data-time-limit="@(Model.TimeLimitSeconds?.ToString() ?? "")" data-opened-at="@Model.OpenedAtUtc.ToString("o")">⏱ 00:00</div>
                 <button type="button" id="toggle-corkboard-btn" class="btn-stamp btn-stamp--ghost">
                     📌 Corkboard View
                 </button>

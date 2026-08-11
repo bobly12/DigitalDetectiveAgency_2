@@ -11,7 +11,14 @@
 <div class="container-interrogation">
     <div class="interrogation-panel">
         <h1 class="interrogation-title">Who Is the Culprit?</h1>
-        <div class="interrogation-warning">⚠ This accusation is final. Choose carefully, Detective.</div>
+        <div class="interrogation-warning">⚠ Choose carefully, Detective.</div>
+        <div class="tries-indicator" id="tries-indicator">
+            @for (var i = 0; i < Model.MaxAttempts; i++)
+            {
+                <span class="tries-indicator__dot @(i < Model.AttemptsUsed ? "tries-indicator__dot--used" : "")"></span>
+            }
+            <span class="tries-indicator__label">@Model.AttemptsRemaining of @Model.MaxAttempts tries left</span>
+        </div>
 
         @if (!ViewData.ModelState.IsValid)
         {
@@ -31,12 +38,17 @@
             <div class="suspect-lineup">
                 @foreach (var suspect in Model.Suspects)
                 {
-                    <label class="suspect-select-card" data-suspect-card data-suspect-name="@suspect.Name">
+                    var alreadyWrong = Model.WrongSuspectIds.Contains(suspect.Id);
+                    <label class="suspect-select-card @(alreadyWrong ? "suspect-select-card--ruled-out" : "")" data-suspect-card data-suspect-name="@suspect.Name">
                         <img src="@suspect.ImageUrl" alt="@suspect.Name" />
                         <div class="suspect-select-card__body">
-                            <input type="radio" name="SuspectId" value="@suspect.Id" required />
+                            <input type="radio" name="SuspectId" value="@suspect.Id" required disabled="@(alreadyWrong ? "disabled" : null)" />
                             <strong>@suspect.Name</strong>
                             <p>@suspect.Description</p>
+                            @if (alreadyWrong)
+                            {
+                                <span class="suspect-select-card__ruled-out-tag">✕ Already ruled out</span>
+                            }
                         </div>
                     </label>
                 }
@@ -57,7 +69,7 @@
     <div class="accusation-confirm-box">
         <h2>Final Answer?</h2>
         <p>You're about to accuse <strong id="confirm-suspect-name"></strong>.</p>
-        <p class="accusation-confirm-warning">This cannot be undone — the case will close immediately.</p>
+        <p class="accusation-confirm-warning">This cannot be undone. @(Model.AttemptsRemaining <= 1 ? "This is your last try — if you're wrong, the case closes." : $"If you're wrong, you'll have {Model.AttemptsRemaining - 1} tries left.")</p>
         <div class="accusation-confirm-actions">
             <button type="button" class="btn-stamp btn-stamp--ghost" id="confirm-cancel-btn">Go Back</button>
             <button type="button" class="btn-stamp btn-stamp--danger" id="confirm-submit-btn">Yes, Accuse Them</button>
@@ -74,7 +86,11 @@
 
         // Visually highlight the selected suspect card
         document.querySelectorAll('[data-suspect-card]').forEach(card => {
-            card.addEventListener('click', () => {
+            card.addEventListener('click', (e) => {
+                if (card.classList.contains('suspect-select-card--ruled-out')) {
+                    e.preventDefault();
+                    return;
+                }
                 document.querySelectorAll('[data-suspect-card]').forEach(c => c.classList.remove('is-checked'));
                 card.classList.add('is-checked');
                 selectedName = card.dataset.suspectName;

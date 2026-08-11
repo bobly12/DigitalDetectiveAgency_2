@@ -62,12 +62,14 @@ public class BoardController : Controller
         if (!success)
         {
             bool isRejection = error == "These aren't connected.";
-            var rejProgress = isRejection ? await BuildProgressSnapshotAsync(request.CaseId, userId) : null;
+            bool isOutOfTries = error == "You're out of tries for this connection.";
+            var rejProgress = (isRejection || isOutOfTries) ? await BuildProgressSnapshotAsync(request.CaseId, userId) : null;
 
             return Ok(new
             {
                 connected = false,
                 rejected = isRejection,
+                outOfTries = isOutOfTries,
                 message = error,
                 progress = rejProgress
             });
@@ -176,6 +178,8 @@ public class BoardController : Controller
             correctEliminatedSuspects = progress.CorrectEliminatedSuspects,
             totalInnocentSuspects = progress.TotalInnocentSuspects,
             unlockedSuspectIds = progress.UnlockedSuspectIds,
+            unlockedEvidenceIds = progress.UnlockedEvidenceIds,   // FIX - was missing, so evidence never live-updated
+            unlockedWitnessIds = progress.UnlockedWitnessIds,     // FIX - was missing, so witnesses never live-updated
             wrongAttempts,
             nextFocusHint = progress.NextFocusHint
         };

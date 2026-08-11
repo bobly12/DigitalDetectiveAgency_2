@@ -25,7 +25,7 @@ public class AccusationController : Controller
     {
         var userId = _userManager.GetUserId(User)!;
 
-        // NEW: block direct-URL access to the form before enough evidence is gathered
+        // Block direct-URL access to the form before enough evidence is gathered
         var canAccuse = await _accusationService.CanAccuseAsync(id, userId);
         if (!canAccuse)
         {
@@ -36,7 +36,11 @@ public class AccusationController : Controller
         var form = await _accusationService.GetAccusationFormAsync(id, userId);
 
         if (form == null)
-            return Forbid();
+        {
+            // NEW - either the case is already closed (solved/failed) or tries are used up
+            TempData["BoardMessage"] = "This case is closed — no more accusations can be made.";
+            return RedirectToAction("Index", "Board", new { id });
+        }
 
         return View(form);
     }
