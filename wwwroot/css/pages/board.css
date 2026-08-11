@@ -1,4 +1,4 @@
-/* board.css â€” Evidence Wall / Investigation Board */
+/* board.css — Evidence Wall / Investigation Board */
 
 .board-wrapper {
     background: linear-gradient(rgba(15,17,21,0.4), rgba(15,17,21,0.5)),
@@ -17,6 +17,7 @@
 }
 
 .board-hint {
+    font-family: var(--font-typewriter);
     color: var(--color-text-muted);
     font-size: 0.85rem;
     margin-bottom: var(--space-lg);
@@ -52,7 +53,7 @@
     padding: var(--space-sm);
     margin-bottom: var(--space-md);
     position: relative;
-    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    transition: transform 0.18s ease, box-shadow 0.18s ease;
 }
 
 .board-card strong {
@@ -73,7 +74,7 @@
     box-shadow: 0 2px 3px rgba(0,0,0,0.5), inset 0 1px 1px rgba(255,255,255,0.4);
     cursor: pointer;
     z-index: 5;
-    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    transition: transform 0.18s ease, box-shadow 0.18s ease;
 }
 
 .board-card__pin:hover {
@@ -107,6 +108,7 @@
     outline: 3px solid var(--color-red);
     outline-offset: 2px;
     z-index: 9;
+    cursor: pointer;
 }
 
 /* ===== Connection SVG layer ===== */
@@ -117,6 +119,17 @@
 #connection-svg .conn-line:hover {
     stroke: var(--color-red-hover, #e05d50);
     stroke-width: 3;
+}
+
+.conn-line {
+    stroke-linecap: round;
+    filter: drop-shadow(0 0 3px rgba(190,40,40,.35));
+    animation: threadGlow 2s infinite alternate;
+}
+
+@keyframes threadGlow {
+    from { filter: drop-shadow(0 0 2px rgba(200,50,50,.2)); }
+    to   { filter: drop-shadow(0 0 8px rgba(255,80,80,.65)); }
 }
 
 @media (max-width: 900px) {
@@ -155,7 +168,7 @@
 }
 
 .board-card.is-eliminated::after {
-    content: "âœ•";
+    content: "✕";
     position: absolute;
     top: 50%;
     left: 50%;
@@ -234,6 +247,13 @@
     margin-top: var(--space-xs);
 }
 
+.confidence-gauge__focus-hint {
+    margin-top: 6px;
+    font-size: 0.85rem;
+    color: #c9a86a;
+    font-style: italic;
+}
+
 /* ===== Disabled accusation button ===== */
 .btn-stamp--disabled {
     opacity: 0.5;
@@ -259,48 +279,7 @@
     font-size: 0.9rem;
     margin-bottom: var(--space-md);
 }
-.conn-line{
 
-    stroke-linecap:round;
-
-    filter:drop-shadow(0 0 3px rgba(190,40,40,.35));
-
-    animation:
-            threadGlow 2s infinite alternate;
-
-}
-
-@keyframes threadGlow{
-
-    from{
-
-        filter:drop-shadow(0 0 2px rgba(200,50,50,.2));
-
-    }
-
-    to{
-
-        filter:drop-shadow(0 0 8px rgba(255,80,80,.65));
-
-    }
-
-}
-
-.board-card{
-
-    transition:
-            transform .18s,
-            box-shadow .18s;
-
-}
-
-.board-card__pin{
-
-    transition:
-            transform .18s,
-            box-shadow .18s;
-
-}
 /* Staged Evidence Reveal — undiscovered card placeholder */
 .board-card--undiscovered {
     display: flex;
@@ -337,6 +316,29 @@
     opacity: 0.8;
 }
 
+/* ===== Connection feedback banners ===== */
+.board-rejection-note {
+    position: absolute;
+    top: 16px;
+    left: 50%;
+    transform: translateX(-50%) translateY(-10px);
+    background: #2a1a1a;
+    color: #e8b4b0;
+    border: 1px solid #b8342a;
+    padding: 8px 16px;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    opacity: 0;
+    transition: opacity .3s ease, transform .3s ease;
+    pointer-events: none;
+    z-index: 50;
+}
+
+.board-rejection-note.is-visible {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
+
 .board-confirmation-note {
     position: absolute;
     top: 16px;
@@ -359,7 +361,10 @@
     opacity: 1;
     transform: translateX(-50%) translateY(0);
 }
+
+/* ===== Detective's wrong-leads counter ===== */
 .detective-notebook {
+    font-family: var(--font-typewriter);
     font-size: 0.8rem;
     color: #8a8a8a;
     opacity: 0.7;
@@ -368,63 +373,24 @@
 .detective-notebook__label {
     margin-right: 4px;
 }
-.board-rejection-note {
-    position: absolute; top: 16px; left: 50%;
-    transform: translateX(-50%) translateY(-10px);
-    background: #2a1a1a; color: #e8b4b0; border: 1px solid #b8342a;
-    padding: 8px 16px; border-radius: 4px; font-size: 0.9rem;
-    opacity: 0; transition: opacity .3s ease, transform .3s ease;
-    pointer-events: none; z-index: 50;
-}
-.board-rejection-note.is-visible { opacity: 1; transform: translateX(-50%) translateY(0); }
 
-.board-confirmation-note {
-    position: absolute; top: 16px; left: 50%;
-    transform: translateX(-50%) translateY(-10px);
-    background: #1a2a1a; color: #d4e8b4; border: 1px solid #6a9c3a;
-    padding: 8px 16px; border-radius: 4px; font-size: 0.9rem; font-style: italic;
-    opacity: 0; transition: opacity .3s ease, transform .3s ease;
-    pointer-events: none; z-index: 50;
-}
-.board-confirmation-note.is-visible { opacity: 1; transform: translateX(-50%) translateY(0); }
-
-.detective-notebook { font-size: 0.8rem; color: #8a8a8a; opacity: 0.7; }
-.detective-notebook__label { margin-right: 4px; }
-
-.board-card.is-selected {
-    cursor: pointer;
-}
-.confidence-gauge__focus-hint {
-    margin-top: 6px;
-    font-size: 0.85rem;
-    color: #c9a86a;
-    font-style: italic;
-}
-.board-hint {
-    font-family: var(--font-typewriter);
-    color: var(--color-text-muted);
-    font-size: 0.85rem;
-    margin-bottom: var(--space-lg);
+/* ===== Header timer + corkboard toggle group ===== */
+.board-header-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
 }
 
-.detective-notebook {
-    font-family: var(--font-typewriter);
-    font-size: 0.8rem;
-    color: #8a8a8a;
-    opacity: 0.7;
-}
-.detective-notebook__label { margin-right: 4px; }
-/* (delete the second duplicate .detective-notebook block further down) */
-
-/* delete the second duplicate .board-confirmation-note block further down too — keep only the first */
 .board-timer {
-    font-family: 'Special Elite', 'Courier Prime', monospace;
+    font-family: var(--font-typewriter);
     color: #c9a86a;
-    font-size: 0.9rem;
-    background: rgba(0,0,0,0.3);
-    padding: 4px 10px;
+    font-size: 1.3rem;
+    font-weight: bold;
+    background: rgba(0,0,0,0.35);
+    padding: 8px 18px;
     border-radius: 4px;
-    border: 1px solid rgba(201,168,106,0.3);
+    border: 1px solid rgba(201,168,106,0.4);
+    letter-spacing: 0.03em;
 }
 
 .board-timer--warning {
@@ -437,6 +403,7 @@
     50% { opacity: 0.5; }
 }
 
+/* ===== Timer expiry overlay ===== */
 .case-failed-overlay {
     position: fixed;
     inset: 0;
@@ -458,22 +425,5 @@
 
 .case-failed-box h2 {
     color: #e8b4b0;
-    font-family: 'Special Elite', 'Courier Prime', monospace;
-}
-.board-header-actions {
-    display: flex;
-    align-items: center;
-    gap: var(--space-sm);
-}
-
-.board-timer {
     font-family: var(--font-typewriter);
-    color: #c9a86a;
-    font-size: 1.3rem;
-    font-weight: bold;
-    background: rgba(0,0,0,0.35);
-    padding: 8px 18px;
-    border-radius: 4px;
-    border: 1px solid rgba(201,168,106,0.4);
-    letter-spacing: 0.03em;
 }
