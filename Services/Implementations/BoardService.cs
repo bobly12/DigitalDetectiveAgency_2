@@ -42,6 +42,10 @@ public class BoardService : IBoardService
         if (playerCase == null)
             return null;
 
+        // FIX: stamp OpenedAt here too, since the Board can be reached without
+        // ever hitting CaseService.OpenCaseAsync (e.g. via the Intro screen).
+        await _caseRepository.MarkOpenedAsync(playerCase);
+
         var evidence = await _caseRepository.GetEvidenceForCaseAsync(caseId);
         var suspects = await _caseRepository.GetSuspectsForCaseAsync(caseId);
         var witnesses = await _caseRepository.GetWitnessesForCaseAsync(caseId);
@@ -62,7 +66,10 @@ public class BoardService : IBoardService
             Location = playerCase.Case.Location,
             Difficulty = playerCase.Case.Difficulty.ToString(),
             TimeLimitSeconds = playerCase.Case.Difficulty == CaseDifficulty.Hard ? 600 : (int?)null,
-            OpenedAtUtc = playerCase.OpenedAt ?? DateTime.UtcNow, // NEW - real anchor for the timer
+            
+            // FIX: Explicitly specify DateTimeKind.Utc so .ToString("o") appends 'Z'.
+            // Prevents browsers in local timezones (e.g. UTC+8) from misinterpreting naive SQLite datetimes.
+            OpenedAtUtc = DateTime.SpecifyKind(playerCase.OpenedAt ?? DateTime.UtcNow, DateTimeKind.Utc),
 
             IsCompleted = playerCase.IsCompleted,
             Score = playerCase.Score,
@@ -358,6 +365,7 @@ public class BoardService : IBoardService
             IsRevealed = revealed
         };
     }
+
     public async Task ResetProgressAsync(int caseId, string userId)
     {
         await _boardRepository.ResetProgressAsync(caseId, userId);
