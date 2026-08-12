@@ -1,0 +1,122 @@
+/* hud-polish.css
+   ------------------------------------------------------------------
+   Additive "game HUD" polish pass. Loads AFTER site.css/components.css/
+   page CSS, so every rule here only overrides visual details (glow,
+   depth, motion) — it never changes layout or markup dependencies.
+   Safe to delete this single file to fully revert.
+   ------------------------------------------------------------------ */
+
+:root {
+    /* HUD glow tokens - additive, don't touch existing variables.css */
+    --glow-red: 0 0 12px rgba(214, 69, 69, 0.55);
+    --glow-brass: 0 0 12px rgba(201, 162, 75, 0.5);
+    --glow-success: 0 0 12px rgba(76, 122, 76, 0.5);
+    --ease-hud: cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+/* ===== Buttons: crisper edges, glow-on-hover instead of flat color swap ===== */
+.btn-stamp {
+    border-radius: 4px;
+    box-shadow: 0 1px 0 rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+    transition: transform 0.12s var(--ease-hud), box-shadow 0.18s var(--ease-hud), background-color 0.15s ease;
+}
+
+.btn-stamp--primary:hover,
+.btn-stamp--danger:hover {
+    box-shadow: var(--glow-red), 0 2px 0 rgba(0, 0, 0, 0.4);
+    transform: translateY(-2px);
+}
+
+.btn-stamp--ghost:hover {
+    box-shadow: var(--glow-brass);
+    transform: translateY(-2px);
+}
+
+.btn-stamp:active {
+    transform: translateY(0);
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.4);
+}
+
+.btn-stamp--disabled,
+.btn-stamp--disabled:hover {
+    box-shadow: none !important;
+    transform: none !important;
+}
+
+/* ===== Confidence gauge: segmented HUD meter instead of a plain bar ===== */
+.confidence-gauge__track {
+    background-color: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.5);
+    /* thin segment dividers, purely decorative */
+    background-image: repeating-linear-gradient(
+            90deg,
+            rgba(0, 0, 0, 0.35) 0,
+            rgba(0, 0, 0, 0.35) 1px,
+            transparent 1px,
+            transparent calc(100% / 20)
+    );
+}
+
+.confidence-gauge__fill {
+    position: relative;
+    transition: width 0.6s var(--ease-hud);
+}
+
+.confidence-gauge__fill--high { box-shadow: var(--glow-success); }
+.confidence-gauge__fill--mid  { box-shadow: var(--glow-brass); }
+.confidence-gauge__fill--low  { box-shadow: var(--glow-red); }
+
+.confidence-gauge__value {
+    font-variant-numeric: tabular-nums;
+    text-shadow: 0 0 8px rgba(237, 234, 224, 0.4);
+}
+
+/* ===== Timer: proper HUD readout ===== */
+.board-timer {
+    font-variant-numeric: tabular-nums;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(0, 0, 0, 0.3);
+    letter-spacing: 0.08em;
+}
+
+.board-timer--warning {
+    box-shadow: var(--glow-red), inset 0 1px 3px rgba(0, 0, 0, 0.6);
+}
+
+/* ===== Board cards: crisper depth on hover, snappier motion ===== */
+.board-card {
+    transition: transform 0.16s var(--ease-hud), box-shadow 0.16s var(--ease-hud);
+}
+
+.board-card:hover {
+    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.06) !important;
+}
+
+.board-card.is-selected {
+    box-shadow: var(--glow-red), 0 10px 20px rgba(0, 0, 0, 0.5);
+}
+
+.board-card__pin.is-active-pin {
+    box-shadow: var(--glow-brass), 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+/* ===== Undiscovered / locked cards: read as "locked HUD slot" not "broken" ===== */
+.board-card--undiscovered {
+    border: 1px dashed rgba(255, 255, 255, 0.15);
+}
+
+/* ===== Focus states: keyboard nav gets the same glow language as hover ===== */
+.btn-stamp:focus-visible,
+.board-card:focus-visible {
+    outline: none;
+    box-shadow: var(--glow-brass);
+}
+
+/* ===== Reduced motion: respect it, don't fight the OS setting ===== */
+@media (prefers-reduced-motion: reduce) {
+    .btn-stamp,
+    .board-card,
+    .confidence-gauge__fill {
+        transition: none !important;
+    }
+}

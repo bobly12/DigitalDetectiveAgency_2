@@ -148,3 +148,40 @@ body {
     max-width: 100%;
     padding: var(--space-md);
 }
+/* ===== Immersive Nav (case intro / board) ===== */
+.dossier-nav--immersive {
+    background: transparent;
+    border-bottom: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    padding: var(--space-sm) var(--space-lg);
+    z-index: 20;
+}
+
+.dossier-nav--immersive .dossier-nav__brand {
+    display: none;
+}
+
+.dossier-nav--immersive .dossier-nav__menu {
+    margin-left: auto;
+}
+
+.dossier-nav--immersive .dossier-nav__menu-trigger {
+    background-color: rgba(15, 17, 21, 0.55);
+    backdrop-filter: blur(4px);
+}
+
+/* ===== Fix: immersive nav shouldn't block clicks on content below it =====
+   The bar is transparent but still spans full width/height as an absolutely
+   positioned element, so it was silently eating clicks underneath it. */
+.dossier-nav--immersive {
+    pointer-events: none;
+}
+
+.dossier-nav--immersive .dossier-nav__menu,
+.dossier-nav--immersive .dossier-nav__menu-trigger,
+.dossier-nav--immersive .dossier-nav__dropdown {
+    pointer-events: auto;
+}

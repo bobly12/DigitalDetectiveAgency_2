@@ -171,3 +171,50 @@
 .cork-victim {
     z-index: 5;
 }
+/* ===== Messy-board atmosphere pass ===== */
+
+/* Warm lamp glow from upper-left, deeper vignette at the edges */
+.corkboard {
+    background-image:
+        repeating-linear-gradient(0deg, rgba(0,0,0,0.03) 0px, transparent 2px, transparent 4px),
+        repeating-linear-gradient(90deg, rgba(0,0,0,0.03) 0px, transparent 2px, transparent 4px),
+        radial-gradient(circle at 25% 20%, rgba(255, 220, 160, 0.14), transparent 45%),
+        radial-gradient(circle at 80% 70%, rgba(0,0,0,0.08), transparent 40%),
+        radial-gradient(ellipse at center, transparent 55%, rgba(0,0,0,0.35) 100%);
+}
+
+/* Cards read more "pinned in a hurry" - bigger tilt range, harder shadow */
+.cork-card {
+    box-shadow: 0 4px 10px rgba(0,0,0,0.55), 0 1px 0 rgba(255,255,255,0.05) inset;
+}
+
+.cork-card:nth-child(3n) { filter: saturate(0.95); }
+.cork-card:nth-child(5n) { filter: contrast(1.05); }
+
+/* Occasional strip of tape instead of a pin, for variety */
+.cork-card--taped .cork-card__pin {
+    display: none;
+}
+
+.cork-card--taped::before {
+    content: "";
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%) rotate(-4deg);
+    width: 56px;
+    height: 20px;
+    background: rgba(255, 250, 230, 0.55);
+    box-shadow: 0 1px 2px rgba(0,0,0,0.3);
+    z-index: 4;
+}
+
+/* String reads thicker and slightly glowing under the lamp light */
+.cork-line {
+    stroke: #b8342a;
+    stroke-width: 2.5;
+    fill: none;
+    opacity: 0.9;
+    stroke-linecap: round;
+    filter: drop-shadow(0 0 3px rgba(190,40,40,.4));
+}

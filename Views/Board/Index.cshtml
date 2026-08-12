@@ -2,6 +2,8 @@
 
 @{
     ViewData["Title"] = Model.CaseTitle;
+    ViewData["ImmersiveNav"] = true;
+
 }
 
 @section PageStyles {
@@ -16,6 +18,9 @@
                 <div class="board-timer" id="board-timer" data-time-limit="@(Model.TimeLimitSeconds?.ToString() ?? "")" data-opened-at="@Model.OpenedAtUtc.ToString("o")">⏱ 00:00</div>
                 <button type="button" id="toggle-corkboard-btn" class="btn-stamp btn-stamp--ghost">
                     📌 Corkboard View
+                </button>
+                <button type="button" id="toggle-fullscreen-btn" class="btn-stamp btn-stamp--ghost">
+                    ⛶ Fullscreen
                 </button>
             </div>
         </div>

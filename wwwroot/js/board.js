@@ -95,9 +95,6 @@
         const limitSeconds = parseInt(timerEl.dataset.timeLimit, 10);
         const hasLimit = !isNaN(limitSeconds) && limitSeconds > 0;
 
-        // FIX - anchor to the case's real open time (server) instead of Date.now(),
-        // so the timer no longer resets every time this page reloads (e.g. after
-        // navigating to Make Accusation and back).
         const openedAtMs = Date.parse(timerEl.dataset.openedAt);
         const startTime = isNaN(openedAtMs) ? Date.now() : openedAtMs;
 
@@ -109,28 +106,77 @@
 
         let failed = false;
 
-        const tick = () => {
-            if (failed) return;
-            const elapsedSeconds = Math.floor((Date.now() - startTime) / 1000);
+        const startTicking = () => {
+            const tick = () => {
+                if (failed) return;
+                const elapsedSeconds = Math.floor((Date.now() - startTime) / 1000);
 
-            if (hasLimit) {
-                const remaining = limitSeconds - elapsedSeconds;
-                if (remaining <= 0) {
-                    failed = true;
-                    timerEl.textContent = `⏱ 00:00`;
-                    timerEl.classList.add('board-timer--expired');
-                    showCaseFailed();
-                    return;
+                if (hasLimit) {
+                    const remaining = limitSeconds - elapsedSeconds;
+                    if (remaining <= 0) {
+                        failed = true;
+                        timerEl.textContent = `⏱ 00:00`;
+                        timerEl.classList.add('board-timer--expired');
+                        showCaseFailed();
+                        return;
+                    }
+                    timerEl.textContent = `⏱ ${formatTime(remaining)}`;
+                    if (remaining <= 30) timerEl.classList.add('board-timer--warning');
+                } else {
+                    timerEl.textContent = `⏱ ${formatTime(elapsedSeconds)}`;
                 }
-                timerEl.textContent = `⏱ ${formatTime(remaining)}`;
-                if (remaining <= 30) timerEl.classList.add('board-timer--warning');
-            } else {
-                timerEl.textContent = `⏱ ${formatTime(elapsedSeconds)}`;
-            }
+            };
+
+            tick();
+            setInterval(tick, 1000);
         };
 
-        tick();
-        setInterval(tick, 1000);
+        // ===== Session-based resume prompt =====
+        // sessionStorage survives a page refresh but is cleared when the tab
+        // or browser actually closes. So if this key is already set, we know
+        // this load is a refresh (or in-app navigation) - keep ticking as
+        // normal. If it's missing but the timer has already been running
+        // server-side (elapsed > a few seconds), this looks like a genuinely
+        // new browser session reopening an in-progress case - ask instead of
+        // silently resetting or silently resuming.
+        const sessionKey = `dda-session-case-${window.boardCaseId}`;
+        const alreadyInThisSession = sessionStorage.getItem(sessionKey) === 'true';
+        const elapsedSoFar = Math.floor((Date.now() - startTime) / 1000);
+
+        if (hasLimit && !alreadyInThisSession && elapsedSoFar > 5 && elapsedSoFar < limitSeconds) {
+            const remaining = limitSeconds - elapsedSoFar;
+            const overlay = document.createElement('div');
+            overlay.className = 'resume-overlay';
+            overlay.innerHTML = `
+                <div class="resume-box">
+                    <h2>🕵 Welcome Back, Detective</h2>
+                    <p>You have an investigation in progress with <strong>${formatTime(remaining)}</strong> remaining. Pick up where you left off, or start this case fresh?</p>
+                    <div class="resume-box__actions">
+                        <button type="button" class="btn-stamp btn-stamp--primary" id="resume-continue-btn">Resume Investigation</button>
+                        <button type="button" class="btn-stamp btn-stamp--ghost" id="resume-restart-btn">Start Fresh</button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(overlay);
+
+            document.getElementById('resume-continue-btn').addEventListener('click', () => {
+                sessionStorage.setItem(sessionKey, 'true');
+                overlay.remove();
+                startTicking();
+            });
+
+            document.getElementById('resume-restart-btn').addEventListener('click', async () => {
+                await fetch('/Board/ResetCase', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ caseId: window.boardCaseId })
+                });
+                window.location.reload();
+            });
+        } else {
+            sessionStorage.setItem(sessionKey, 'true');
+            startTicking();
+        }
     }
 
     async function showCaseFailed() {
@@ -820,4 +866,35 @@
     });
 
     redrawAll();
+})();
+// ===== TRUE Fullscreen toggle (Fullscreen API) =====
+(function () {
+    const btn = document.getElementById('toggle-fullscreen-btn');
+    const container = document.querySelector('.container-board');
+    if (!btn || !container) return;
+
+    function isFullscreen() {
+        return document.fullscreenElement === container;
+    }
+
+    function updateLabel() {
+        btn.innerHTML = isFullscreen()
+            ? '⛶ Exit Fullscreen'
+            : '⛶ Fullscreen';
+    }
+
+    btn.addEventListener('click', async () => {
+        try {
+            if (!isFullscreen()) {
+                await container.requestFullscreen();
+            } else {
+                await document.exitFullscreen();
+            }
+        } catch (err) {
+            console.error('Fullscreen request failed:', err);
+        }
+    });
+
+    document.addEventListener('fullscreenchange', updateLabel);
+    updateLabel();
 })();

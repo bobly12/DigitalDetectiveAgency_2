@@ -18,8 +18,7 @@
 </head>
 <body>
     <header>
-        <nav class="dossier-nav">
-            <a class="dossier-nav__brand" asp-area="" asp-controller="Home" asp-action="Index">
+        <nav class="dossier-nav @(ViewData["ImmersiveNav"] as bool? == true ? "dossier-nav--immersive" : "")">            <a class="dossier-nav__brand" asp-area="" asp-controller="Home" asp-action="Index">
                 Digital Detective Agency
             </a>
 
