@@ -14,6 +14,25 @@
         <h2 class="id-badge__name">@Model.DetectiveName</h2>
         <div class="id-badge__rank">@Model.Rank</div>
 
+        @if (Model.NextRank != null)
+        {
+            <div class="id-badge__xp">
+                <div class="id-badge__xp-track">
+                    <div class="id-badge__xp-fill" style="width: @Model.XpProgressPercent%;"></div>
+                </div>
+                <div class="id-badge__xp-label">@Model.XpProgressPercent% to @Model.NextRank</div>
+            </div>
+        }
+        else
+        {
+            <div class="id-badge__xp">
+                <div class="id-badge__xp-track">
+                    <div class="id-badge__xp-fill id-badge__xp-fill--maxed" style="width: 100%;"></div>
+                </div>
+                <div class="id-badge__xp-label">Top Rank Achieved</div>
+            </div>
+        }
+
         <div class="id-badge__stats">
             <div class="id-badge__stat-row">
                 <span class="id-badge__stat-label">Email</span>

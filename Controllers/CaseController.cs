@@ -33,7 +33,7 @@ public class CaseController : Controller
         var userId = _userManager.GetUserId(User)!;
         var caseDetail = await _caseService.OpenCaseAsync(id, userId);
 
-        if (caseDetail == null)
+        if (caseDetail == null)  
         {
             return Forbid(); // Not assigned to this player
         }

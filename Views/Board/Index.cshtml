@@ -22,6 +22,9 @@
                 <button type="button" id="toggle-fullscreen-btn" class="btn-stamp btn-stamp--ghost">
                     ⛶ Fullscreen
                 </button>
+                <button type="button" id="toggle-mute-btn" class="btn-stamp btn-stamp--ghost" title="Toggle sound">
+                    🔊
+                </button>
             </div>
         </div>
 
@@ -191,6 +194,8 @@
     </div>
 </div>
 
+<audio id="bg-music" src="~/audio/detective_music.mp3" preload="auto"></audio>
+
 @section Scripts {
     <script>
         window.boardCaseId = @Model.CaseId;
@@ -198,6 +203,7 @@
         window.initialConnections = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.Connections));
         window.triedWrongPairs = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.TriedWrongPairs));
     </script>
+    <script src="~/js/audio-system.js"></script>
     <script src="~/js/board.js"></script>
     <script src="~/js/narrator.js"></script>
     <script src="~/js/file-modal.js"></script>

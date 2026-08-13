@@ -218,3 +218,9 @@
     stroke-linecap: round;
     filter: drop-shadow(0 0 3px rgba(190,40,40,.4));
 }
+
+/* ===== Fix: hover shouldn't un-rotate the card, which shifts its
+   hitbox mid-click and can cause fast clicks to miss entirely. ===== */
+.cork-card:hover {
+    transform: scale(1.06) !important;
+}

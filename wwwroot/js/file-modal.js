@@ -40,6 +40,7 @@
     }
 
     function openModal(card) {
+        window.GameAudio?.playPaperShuffle();
         const name = card.dataset.name || '';
         const image = card.dataset.image || '';
         const label = card.dataset.label || '';
@@ -76,6 +77,7 @@
     }
 
     function closeModal() {
+        window.GameAudio?.playNavClick();
         overlay.classList.remove('is-open');
         if (window.Narrator) window.Narrator.stop(listenBtn);
     }

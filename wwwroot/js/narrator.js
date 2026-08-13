@@ -11,8 +11,8 @@
 (function () {
     const synth = window.speechSynthesis;
     const PREFERRED_VOICE_NAMES = ['Moira'];
-    const RATE = 0.5;
-    const PITCH = 0.9;
+    const RATE = 1.0;
+    const PITCH = 0.8;
 
     let cachedVoice = null;
 

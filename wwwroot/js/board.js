@@ -43,7 +43,7 @@
         gain.gain.setValueAtTime(0, start);
         gain.gain.linearRampToValueAtTime(gainPeak, start + 0.01);
         gain.gain.exponentialRampToValueAtTime(0.0001, start + duration);
-        osc.connect(gain).connect(ctx.destination);
+        osc.connect(gain).connect((window.GameAudio ? window.GameAudio.getMasterGain() : ctx.destination));
         osc.start(start);
         osc.stop(start + duration + 0.02);
     }
@@ -70,7 +70,7 @@
         const gain = ctx.createGain();
         gain.gain.setValueAtTime(0.2, ctx.currentTime);
         gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.15);
-        noise.connect(filter).connect(gain).connect(ctx.destination);
+        noise.connect(filter).connect(gain).connect((window.GameAudio ? window.GameAudio.getMasterGain() : ctx.destination));
         noise.start();
     }
 
@@ -132,13 +132,6 @@
         };
 
         // ===== Session-based resume prompt =====
-        // sessionStorage survives a page refresh but is cleared when the tab
-        // or browser actually closes. So if this key is already set, we know
-        // this load is a refresh (or in-app navigation) - keep ticking as
-        // normal. If it's missing but the timer has already been running
-        // server-side (elapsed > a few seconds), this looks like a genuinely
-        // new browser session reopening an in-progress case - ask instead of
-        // silently resetting or silently resuming.
         const sessionKey = `dda-session-case-${window.boardCaseId}`;
         const alreadyInThisSession = sessionStorage.getItem(sessionKey) === 'true';
         const elapsedSoFar = Math.floor((Date.now() - startTime) / 1000);
@@ -471,29 +464,38 @@
                 ? [{ heading: null, text: description }]
                 : [{ heading: null, text: `"${description}"` }];
 
-            placeholder.classList.remove('board-card--undiscovered');
-            placeholder.dataset.name = name;
-            placeholder.dataset.image = imageUrl;
-            placeholder.dataset.label = type;
-            placeholder.dataset.fields = JSON.stringify(fields);
-
-            placeholder.innerHTML = `
-                <span class="board-card__pin" data-connect-pin title="Click to start or complete a connection"></span>
-                <img src="${imageUrl}" alt="${name}" class="board-card__img" />
-                <strong>${name}</strong>
-            `;
-
-            placeholder.querySelector('[data-connect-pin]').addEventListener('click', handlePinClick);
-            placeholder.querySelector('.board-card__img').addEventListener('click', (e) => {
-                e.stopPropagation();
-                window.openFileModal?.(placeholder);
-            });
-
+            // ===== Card flip reveal (3D) =====
+            // Start the flip animation FIRST, then swap the actual content
+            // at the 350ms midpoint - the exact moment the card is rotated
+            // edge-on (90deg) and effectively invisible. That's what makes
+            // it read as "the card turns over to reveal something new"
+            // instead of just wobbling an already-visible card.
             playSound(sounds.paper);
-            placeholder.animate([
-                { opacity: 0.4, transform: "scale(.96)" },
-                { opacity: 1, transform: "scale(1)" }
-            ], { duration: 400 });
+            console.log('[FLIP DEBUG] adding flip class to', placeholder, 'at', Date.now());
+            placeholder.classList.add('board-card--flipping');
+            console.log('[FLIP DEBUG] class list after add:', placeholder.className);
+
+            setTimeout(() => {
+                placeholder.classList.remove('board-card--undiscovered');
+                placeholder.dataset.name = name;
+                placeholder.dataset.image = imageUrl;
+                placeholder.dataset.label = type;
+                placeholder.dataset.fields = JSON.stringify(fields);
+
+                placeholder.innerHTML = `
+                    <span class="board-card__pin" data-connect-pin title="Click to start or complete a connection"></span>
+                    <img src="${imageUrl}" alt="${name}" class="board-card__img" />
+                    <strong>${name}</strong>
+                `;
+
+                placeholder.querySelector('[data-connect-pin]').addEventListener('click', handlePinClick);
+                placeholder.querySelector('.board-card__img').addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    window.openFileModal?.(placeholder);
+                });
+            }, 350);
+
+            setTimeout(() => placeholder.classList.remove('board-card--flipping'), 700);
 
         } catch (err) {
             console.error(`[Board] Error revealing ${type} ${id}:`, err);
@@ -847,6 +849,7 @@
 
     if (toggleBtn) {
         toggleBtn.addEventListener('click', () => {
+            window.GameAudio?.playPaperShuffle();
             corkView.classList.add('is-open');
             if (corkBackdrop) corkBackdrop.classList.add('is-open');
             requestAnimationFrame(() => buildCorkboard());
@@ -855,6 +858,7 @@
 
     if (closeCorkBtn) {
         closeCorkBtn.addEventListener('click', () => {
+            window.GameAudio?.playNavClick();
             corkView.classList.remove('is-open');
             if (corkBackdrop) corkBackdrop.classList.remove('is-open');
         });
@@ -897,4 +901,28 @@
 
     document.addEventListener('fullscreenchange', updateLabel);
     updateLabel();
+})();
+// ===== Mute toggle + background music =====
+(function () {
+    const muteBtn = document.getElementById('toggle-mute-btn');
+    if (!muteBtn || !window.GameAudio) return;
+
+    function updateMuteLabel() {
+        muteBtn.textContent = window.GameAudio.isMuted() ? '🔇' : '🔊';
+    }
+
+    muteBtn.addEventListener('click', () => {
+        window.GameAudio.setMuted(!window.GameAudio.isMuted());
+        updateMuteLabel();
+    });
+
+    updateMuteLabel();
+
+    // Music needs a user gesture to start in most browsers - kick it off
+    // on the first click anywhere on the page, then never again.
+    const startOnce = () => {
+        window.GameAudio.startMusic();
+        document.removeEventListener('click', startOnce);
+    };
+    document.addEventListener('click', startOnce);
 })();
