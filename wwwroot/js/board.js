@@ -185,10 +185,13 @@
             <div class="case-failed-box">
                 <h2>⏱ Time's Up</h2>
                 <p>You ran out of time to build your case. The trail's gone cold — your board has been reset.</p>
-                <a href="/Case" class="btn-stamp btn-stamp--ghost">← Back to Case Archive</a>
+                <button type="button" class="btn-stamp btn-stamp--ghost" id="case-failed-restart-btn">Start Fresh</button>
             </div>
         `;
         document.body.appendChild(overlay);
+        document.getElementById('case-failed-restart-btn').addEventListener('click', () => {
+            window.location.reload();
+        });
 
         document.querySelectorAll('[data-connect-pin]').forEach(pin => {
             pin.style.pointerEvents = 'none';
