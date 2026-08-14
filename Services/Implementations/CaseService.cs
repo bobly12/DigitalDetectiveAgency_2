@@ -1,3 +1,4 @@
+using DigitalDetectiveAgency.Models.Entities;
 using DigitalDetectiveAgency.Models.ViewModels;
 using DigitalDetectiveAgency.Repositories.Interfaces;
 using DigitalDetectiveAgency.Services.Interfaces;
@@ -91,7 +92,10 @@ public class CaseService : ICaseService
         {
             CaseId = playerCase.Case.Id,
             Title = playerCase.Case.Title,
-            StoryBeats = beats
+            StoryBeats = beats,
+            Difficulty = playerCase.Case.Difficulty,
+            TimeLimitSeconds = playerCase.Case.Difficulty == CaseDifficulty.Hard ? 600 : (int?)null,
+            MaxAttempts = AccusationService.MaxAttempts
         };
     }
 }

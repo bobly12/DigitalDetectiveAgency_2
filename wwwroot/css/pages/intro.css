@@ -1,8 +1,9 @@
 /* intro.css — Cinematic Case Opening */
 
 .intro-screen {
-    min-height: 80vh;
+    height: calc(100vh - 200px);
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
     text-align: center;
@@ -18,6 +19,8 @@
     color: var(--color-brass);
     font-size: 1rem;
     text-transform: uppercase;
+    text-align: center;
+    max-width: 700px;
     position: absolute;
     top: var(--space-lg);
     left: 50%;
@@ -26,11 +29,14 @@
 }
 
 .intro-beat {
-    max-width: 640px;
+    max-width: 650px;
+    margin-left: auto;
+    margin-right: auto;
     font-family: var(--font-accent);
     font-size: 1.6rem;
     line-height: 1.6;
     color: var(--color-text-on-dark);
+    text-align: center;
     opacity: 0;
     transition: opacity 0.6s ease;
 }
@@ -49,6 +55,23 @@
     opacity: 1;
 }
 
+.intro-narrate {
+    margin-top: var(--space-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-sm);
+}
+
+.intro-narrate select {
+    background: rgba(0,0,0,0.4);
+    color: var(--color-text-on-dark);
+    border: 1px solid rgba(201,162,75,0.35);
+    border-radius: var(--radius-ui);
+    font-size: 0.8rem;
+    padding: 4px 8px;
+}
+
 .intro-skip {
     position: absolute;
     bottom: var(--space-md);
@@ -58,25 +81,84 @@
     text-decoration: underline;
     cursor: pointer;
 }
-/* Add to wwwroot/css/pages/intro.css â€” centers the title and story beats.
-   If .intro-screen isn't already flex/column, this rule set adds it. */
-.intro-screen {
+
+/* ===== Folder-open gate ===== */
+.case-folder-gate {
     display: flex;
-    flex-direction: column;
     align-items: center;
     justify-content: center;
-    text-align: center;
-    min-height: 70vh;
+    cursor: pointer;
+    perspective: 1200px;
 }
 
-.intro-screen__title {
-    text-align: center;
-    max-width: 700px;
+.case-folder-visual {
+    position: relative;
+    width: 260px;
+    transform-origin: top center;
+    transition: transform 0.5s cubic-bezier(0.2, 0.7, 0.3, 1), opacity 0.5s ease;
 }
 
-.intro-beat {
+.case-folder-gate:hover .case-folder-visual {
+    transform: translateY(-4px);
+}
+
+.case-folder-visual__tab {
+    position: absolute;
+    top: -22px;
+    left: 20px;
+    width: 110px;
+    height: 26px;
+    background: #b8925a;
+    border-radius: 6px 6px 0 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-display);
+    font-size: 0.65rem;
+    letter-spacing: 0.08em;
+    color: #2a1f14;
+    text-transform: uppercase;
+    box-shadow: 0 -2px 4px rgba(0,0,0,0.2) inset;
+}
+
+.case-folder-visual__body {
+    background: linear-gradient(155deg, #c9a06a, #a9793f);
+    border-radius: 4px;
+    padding: 40px 24px;
     text-align: center;
-    max-width: 650px;
-    margin-left: auto;
-    margin-right: auto;
-}           
+    box-shadow: 0 10px 24px rgba(0,0,0,0.5), 0 1px 0 rgba(255,255,255,0.15) inset;
+    border: 1px solid rgba(0,0,0,0.2);
+}
+
+.case-folder-visual__label {
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    color: #2a1f14;
+    letter-spacing: 0.02em;
+    margin-bottom: var(--space-sm);
+}
+
+.case-folder-visual__hint {
+    font-family: var(--font-typewriter, monospace);
+    font-size: 0.75rem;
+    color: rgba(42,31,20,0.65);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.case-folder-gate.is-opening .case-folder-visual {
+    transform: rotateX(-100deg) translateY(-20px);
+    opacity: 0;
+}
+
+.case-folder-visual__meta {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    font-family: var(--font-typewriter, monospace);
+    font-size: 0.7rem;
+    color: rgba(42,31,20,0.75);
+    margin-bottom: var(--space-sm);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}

@@ -13,8 +13,32 @@
 <div class="intro-screen" id="intro-screen">
     <div class="intro-screen__title">Case File — @Model.Title</div>
 
-    <div>
+    <div class="case-folder-gate" id="intro-gate">
+        <div class="case-folder-visual">
+            <div class="case-folder-visual__tab">Case File</div>
+            <div class="case-folder-visual__body">
+                <div class="case-folder-visual__label">@Model.Title</div>
+                <div class="case-folder-visual__meta">
+                    <span>Difficulty: @Model.Difficulty</span>
+                    <span>Tries: @Model.MaxAttempts</span>
+                    @if (Model.TimeLimitSeconds.HasValue)
+                    {
+                        <span>Time Limit: @(Model.TimeLimitSeconds / 60):00</span>
+                    }
+                </div>
+                <div class="case-folder-visual__hint">Click to open</div>
+            </div>
+        </div>
+    </div>
+
+    <div id="intro-content" style="display:none;">
         <p class="intro-beat" id="intro-beat"></p>
+
+        <div class="intro-narrate" id="intro-narrate">
+            <button class="btn-stamp btn-stamp--ghost" id="intro-narrate-btn" type="button">🔊 Listen</button>
+            <select id="intro-voice-select" title="Narrator voice"></select>
+        </div>
+
         <div class="intro-continue" id="intro-continue">
             <button class="btn-stamp btn-stamp--primary" id="intro-continue-btn">Continue →</button>
         </div>
@@ -26,6 +50,7 @@
 </div>
 
 @section Scripts {
+    <script src="~/js/narrator.js" asp-append-version="true"></script>
     <script>
         const beats = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.StoryBeats));
         let index = 0;
@@ -33,8 +58,47 @@
         const beatEl = document.getElementById('intro-beat');
         const continueWrap = document.getElementById('intro-continue');
         const continueBtn = document.getElementById('intro-continue-btn');
+        const narrateBtn = document.getElementById('intro-narrate-btn');
+        const voiceSelect = document.getElementById('intro-voice-select');
+
+        function populateVoices() {
+            if (!window.Narrator) return;
+            const voices = window.Narrator.listVoices();
+            if (voices.length === 0) return;
+
+            voiceSelect.innerHTML = '';
+            voices.forEach(v => {
+                const opt = document.createElement('option');
+                opt.value = v.name;
+                opt.textContent = v.name;
+                if (v.name === window.Narrator.currentVoiceName) opt.selected = true;
+                voiceSelect.appendChild(opt);
+            });
+        }
+
+        if (window.Narrator && window.Narrator.isSupported) {
+            if (window.Narrator.voicesLoaded) populateVoices();
+            document.addEventListener('dda-voices-ready', populateVoices, { once: true });
+
+            voiceSelect.addEventListener('change', () => {
+                window.Narrator.setVoice(voiceSelect.value);
+                window.Narrator.speak(beatEl.textContent, narrateBtn);
+            });
+
+            narrateBtn.addEventListener('click', () => {
+                if (narrateBtn.classList.contains('is-speaking')) {
+                    window.Narrator.stop(narrateBtn);
+                } else {
+                    window.Narrator.speak(beatEl.textContent, narrateBtn);
+                }
+            });
+        } else {
+            document.getElementById('intro-narrate').style.display = 'none';
+        }
 
         function showBeat(i) {
+            if (window.Narrator) window.Narrator.stop(narrateBtn);
+
             beatEl.classList.remove('is-visible');
             continueWrap.classList.remove('is-visible');
 
@@ -46,6 +110,10 @@
                 continueBtn.textContent = isLast ? 'Begin Investigation →' : 'Continue →';
 
                 setTimeout(() => continueWrap.classList.add('is-visible'), 300);
+
+                if (window.Narrator && window.Narrator.isSupported) {
+                    window.Narrator.speak(beats[i], narrateBtn);
+                }
             }, 250);
         }
 
@@ -54,10 +122,19 @@
                 index++;
                 showBeat(index);
             } else {
+                if (window.Narrator) window.Narrator.stop(narrateBtn);
                 window.location.href = '@Url.Action("Index", "Board", new { id = Model.CaseId })';
             }
         });
 
-        showBeat(0);
+        const gateEl = document.getElementById('intro-gate');
+        gateEl.addEventListener('click', () => {
+            gateEl.classList.add('is-opening');
+            setTimeout(() => {
+                gateEl.style.display = 'none';
+                document.getElementById('intro-content').style.display = 'block';
+                showBeat(0);
+            }, 450);
+        });
     </script>
 }
