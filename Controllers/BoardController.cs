@@ -65,11 +65,33 @@ public class BoardController : Controller
             bool isOutOfTries = error == "You're out of tries for this connection.";
             var rejProgress = (isRejection || isOutOfTries) ? await BuildProgressSnapshotAsync(request.CaseId, userId) : null;
 
+            if (isRejection || isOutOfTries)
+            {
+                var caseEntity = await _caseRepository.GetByIdAsync(request.CaseId);
+                var wrongAttempts = await _boardService.GetWrongAttemptCountAsync(request.CaseId, userId);
+
+                if (caseEntity != null && caseEntity.Difficulty == CaseDifficulty.Hard && wrongAttempts >= 3)
+                {
+                    await _boardService.ResetProgressAsync(request.CaseId, userId);
+
+                    return Ok(new
+                    {
+                        connected = false,
+                        rejected = isRejection,
+                        outOfTries = isOutOfTries,
+                        caseLost = true,
+                        message = "Too many wrong leads. The trail's gone cold — your board has been reset.",
+                        progress = (object?)null
+                    });
+                }
+            }
+
             return Ok(new
             {
                 connected = false,
                 rejected = isRejection,
                 outOfTries = isOutOfTries,
+                caseLost = false,
                 message = error,
                 progress = rejProgress
             });

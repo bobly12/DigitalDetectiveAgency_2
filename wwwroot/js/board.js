@@ -636,6 +636,26 @@
 
         const data = await res.json();
 
+        if (data.caseLost) {
+            const overlay = document.createElement('div');
+            overlay.className = 'case-failed-overlay';
+            overlay.innerHTML = `
+                <div class="case-failed-box">
+                    <h2>🔍 Case Lost</h2>
+                    <p>${data.message}</p>
+                    <button type="button" class="btn-stamp btn-stamp--ghost" id="case-lost-restart-btn">Start Fresh</button>
+                </div>
+            `;
+            document.body.appendChild(overlay);
+            document.getElementById('case-lost-restart-btn').addEventListener('click', () => {
+                window.location.reload();
+            });
+            document.querySelectorAll('[data-connect-pin]').forEach(pin => {
+                pin.style.pointerEvents = 'none';
+            });
+            return;
+        }
+
         if (data.outOfTries) {
             triedWrongPairs.set(key, MAX_CONNECTION_TRIES);
             showRejectionNote(fromType, fromId, toType, toId, "No tries left on this connection.");
