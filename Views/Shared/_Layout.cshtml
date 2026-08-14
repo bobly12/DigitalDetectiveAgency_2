@@ -21,7 +21,6 @@
         <nav class="dossier-nav @(ViewData["ImmersiveNav"] as bool? == true ? "dossier-nav--immersive" : "")">            <a class="dossier-nav__brand" asp-area="" asp-controller="Home" asp-action="Index">
                 Digital Detective Agency
             </a>
-
             <div class="dossier-nav__menu">
                 <button class="dossier-nav__menu-trigger" type="button" aria-haspopup="true">
                     ☰ Menu
@@ -40,17 +39,16 @@
             </div>
         </nav>
     </header>
-
     <main role="main">
         @RenderBody()
     </main>
-
     <footer class="dossier-footer">
         <div>&copy; 2026 Digital Detective Agency — Confidential Case Files — <a asp-controller="Home" asp-action="Privacy">Privacy</a></div>
     </footer>
-
+    <audio id="bg-music" src="~/audio/detective_music.mp3" preload="auto" loop data-volume="@(ViewData["MusicVolume"] ?? 20)"></audio>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/audio-system.js" asp-append-version="true"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>

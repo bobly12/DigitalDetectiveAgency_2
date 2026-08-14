@@ -657,9 +657,13 @@
         }
     }
 
-    document.querySelectorAll('[data-connect-pin]').forEach(pin => {
-        pin.addEventListener('click', handlePinClick);
-    });
+    const boardIsReadOnly = document.querySelector('.container-board')?.classList.contains('is-read-only');
+
+    if (!boardIsReadOnly) {
+        document.querySelectorAll('[data-connect-pin]').forEach(pin => {
+            pin.addEventListener('click', handlePinClick);
+        });
+    }
 
     // ===== Suspect elimination behavior =====
     document.querySelectorAll('[data-eliminate-suspect]').forEach(btn => {
@@ -796,8 +800,11 @@
             const imgSrc = img ? img.src : '';
             const name = nameEl ? nameEl.textContent : (card.dataset.name || '???');
 
+            const rand4 = seededRandom(seed + 't');
+            const isTaped = rand4 < 0.3;
+
             const el = document.createElement('div');
-            el.className = 'cork-card' + (isLocked ? ' cork-card--locked' : '');
+            el.className = 'cork-card' + (isLocked ? ' cork-card--locked' : '') + (isTaped ? ' cork-card--taped' : '');
             el.style.left = x + 'px';
             el.style.top = y + 'px';
             el.style.transform = `rotate(${rotation}deg)`;
@@ -827,11 +834,14 @@
             const to = positions[toKey];
             if (!from || !to) return;
 
-            const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-            line.setAttribute('x1', from.x);
-            line.setAttribute('y1', from.y);
-            line.setAttribute('x2', to.x);
-            line.setAttribute('y2', to.y);
+            const dist = Math.hypot(to.x - from.x, to.y - from.y);
+            const sag = Math.min(60, dist * 0.18);
+            const midX = (from.x + to.x) / 2;
+            const midY = (from.y + to.y) / 2 + sag;
+
+            const line = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+            line.setAttribute('d', `M ${from.x} ${from.y} Q ${midX} ${midY} ${to.x} ${to.y}`);
+            line.setAttribute('fill', 'none');
             line.classList.add('cork-line');
             corkSvg.appendChild(line);
         });
@@ -912,17 +922,31 @@
     }
 
     muteBtn.addEventListener('click', () => {
-        window.GameAudio.setMuted(!window.GameAudio.isMuted());
+        const newMuted = !window.GameAudio.isMuted();
+        window.GameAudio.setMuted(newMuted);
+        const musicEl = document.getElementById('bg-music');
+        if (musicEl) musicEl.muted = newMuted;
         updateMuteLabel();
     });
 
     updateMuteLabel();
 
-    // Music needs a user gesture to start in most browsers - kick it off
-    // on the first click anywhere on the page, then never again.
-    const startOnce = () => {
-        window.GameAudio.startMusic();
-        document.removeEventListener('click', startOnce);
+    // The <audio> element autoplays MUTED on page load (browsers allow
+    // silent autoplay, just not audible autoplay). The moment the player
+    // does ANYTHING - click, key, touch - we unmute what's already playing,
+    // so there's no loading delay: it just goes silent -> audible instantly.
+    const musicEl = document.getElementById('bg-music');
+    const unmuteOnce = () => {
+        if (musicEl) {
+            musicEl.muted = window.GameAudio.isMuted(); // respect a saved mute preference
+            if (musicEl.paused) musicEl.play().catch(() => {});
+        }
+        window.GameAudio.getCtx(); // wakes the AudioContext too, for SFX
+        document.removeEventListener('click', unmuteOnce);
+        document.removeEventListener('keydown', unmuteOnce);
+        document.removeEventListener('touchstart', unmuteOnce);
     };
-    document.addEventListener('click', startOnce);
+    document.addEventListener('click', unmuteOnce);
+    document.addEventListener('keydown', unmuteOnce);
+    document.addEventListener('touchstart', unmuteOnce);
 })();

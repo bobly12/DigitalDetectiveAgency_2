@@ -48,6 +48,7 @@ ViewData["Title"] = "Case Closed";
                      id="score-fill" data-target-width="@Model.Score">
                     @Model.Score / 100
                 </div>
+                <div class="report-gauge__value-overlay">@Model.Score / 100</div>
             </div>
         </div>
 
@@ -58,6 +59,7 @@ ViewData["Title"] = "Case Closed";
                      id="strength-fill" data-target-width="@Model.CaseStrengthPercent">
                     @Model.CaseStrengthPercent%
                 </div>
+                <div class="report-gauge__value-overlay">@Model.CaseStrengthPercent%</div>
             </div>
         </div>
 
@@ -123,8 +125,13 @@ ViewData["Title"] = "Case Closed";
         function fillBar(id) {
             const el = document.getElementById(id);
             if (!el) return;
-            const target = el.dataset.targetWidth;
+            const target = Math.max(0, Math.min(100, parseFloat(el.dataset.targetWidth) || 0));
+            el.style.width = '0%';
             el.classList.add('is-filled');
+            // Force a reflow so the browser registers the 0% start before
+            // animating to the real target - without this, some browsers
+            // collapse the 0% -> target% transition into a single frame.
+            void el.offsetWidth;
             requestAnimationFrame(() => { el.style.width = target + '%'; });
         }
 

@@ -44,6 +44,9 @@
                                 <a asp-controller="Board" asp-action="Index" asp-route-id="@item.CaseId" class="btn-stamp btn-stamp--primary">
                                     View File
                                 </a>
+                                <a asp-controller="Accusation" asp-action="ViewResult" asp-route-id="@item.CaseId" class="btn-stamp btn-stamp--ghost">
+                                    View Report
+                                </a>
                             }
                             else
                             {

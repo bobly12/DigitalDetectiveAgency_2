@@ -91,6 +91,7 @@
                     e.preventDefault();
                     return;
                 }
+                window.GameAudio?.playNavClick();
                 document.querySelectorAll('[data-suspect-card]').forEach(c => c.classList.remove('is-checked'));
                 card.classList.add('is-checked');
                 selectedName = card.dataset.suspectName;

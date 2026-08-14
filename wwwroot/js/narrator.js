@@ -13,7 +13,6 @@
     const PREFERRED_VOICE_NAMES = ['Moira'];
     const RATE = 1.0;
     const PITCH = 0.8;
-
     let cachedVoice = null;
 
     function loadVoices() {

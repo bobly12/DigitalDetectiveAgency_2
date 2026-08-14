@@ -62,4 +62,14 @@ public class AccusationController : Controller
 
         return View("Result", result);
     }
+
+    // GET: /Accusation/ViewResult/5 - re-view a completed case's score without resubmitting
+    public async Task<IActionResult> ViewResult(int id)
+    {
+        var userId = _userManager.GetUserId(User)!;
+        var result = await _accusationService.GetStoredResultAsync(id, userId);
+        if (result == null) return NotFound();
+
+        return View("Result", result);
+    }
 }

@@ -150,6 +150,57 @@ public class AccusationService : IAccusationService
         });
     }
 
+    // NEW - reconstructs the same result screen for an already-completed case,
+    // so a player can revisit their score without resubmitting an accusation.
+    public async Task<AccusationResultViewModel?> GetStoredResultAsync(int caseId, string userId)
+    {
+        var playerCase = await _caseRepository.GetPlayerCaseAsync(caseId, userId);
+        if (playerCase == null || !playerCase.IsCompleted) return null;
+
+        var pastAttempts = await _accusationRepository.GetAllByCaseAndUserAsync(caseId, userId);
+        if (pastAttempts.Count == 0) return null;
+
+        var suspects = await _caseRepository.GetSuspectsForCaseAsync(caseId);
+
+        // The correct attempt if one exists, otherwise the last attempt made
+        // (covers the "ran out of tries, never got it right" case).
+        var correctAttempt = pastAttempts.FirstOrDefault(a =>
+            suspects.FirstOrDefault(s => s.Id == a.AccusedSuspectId)?.IsGuilty == true);
+        var displayAttempt = correctAttempt ?? pastAttempts.Last();
+
+        var accusedSuspect = suspects.FirstOrDefault(s => s.Id == displayAttempt.AccusedSuspectId);
+        if (accusedSuspect == null) return null;
+
+        bool wasCorrect = accusedSuspect.IsGuilty;
+        var connectionMatchPercent = await CalculateCaseStrengthAsync(caseId, userId);
+        int attemptsUsed = pastAttempts.Count;
+        int attemptsRemaining = MaxAttempts - attemptsUsed;
+
+        var summary = BuildDetectiveSummary(
+            playerCase.Case.Title,
+            accusedSuspect.Name,
+            wasCorrect,
+            connectionMatchPercent,
+            playerCase.Score ?? 0,
+            caseClosed: true,
+            attemptsRemaining);
+
+        return new AccusationResultViewModel
+        {
+            CaseId = caseId,
+            CaseTitle = playerCase.Case.Title,
+            AccusedSuspectName = accusedSuspect.Name,
+            AccusedSuspectImageUrl = accusedSuspect.ImageUrl,
+            CaseStrengthPercent = connectionMatchPercent,
+            WasCorrect = wasCorrect,
+            Score = playerCase.Score ?? 0,
+            DetectiveSummary = summary,
+            MaxAttempts = MaxAttempts,
+            AttemptsUsed = attemptsUsed,
+            CaseClosed = true
+        };
+    }
+
     private async Task<int> CalculateCaseStrengthAsync(int caseId, string userId)
     {
         var answerKey = await _boardRepository.GetAnswerKeyAsync(caseId);

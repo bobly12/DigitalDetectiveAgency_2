@@ -523,3 +523,15 @@
     .board-card--flipping { animation: none; }
 }
 
+
+/* ===== Read-only board for completed cases ===== */
+.container-board.is-read-only [data-connect-pin],
+.container-board.is-read-only [data-eliminate-suspect] {
+    pointer-events: none;
+    opacity: 0.5;
+    cursor: default;
+}
+
+.container-board.is-read-only .board-card {
+    cursor: default;
+}

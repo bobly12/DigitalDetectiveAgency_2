@@ -168,7 +168,7 @@
     color: #fff;
     white-space: nowrap;
     transition: none;
-    width: 0 !important;
+    width: 0;
 }
 
 .report-gauge__fill.is-filled {
@@ -200,4 +200,35 @@
 
 @keyframes reportBeatIn {
     to { opacity: 1; transform: translateY(0); }
+}
+
+/* ===== Score bar readability fix =====
+   The label used to live INSIDE the fill div, so on a low fill % it sat
+   on the plain gray track with poor contrast, or got clipped entirely.
+   Now it's a separate overlay centered over the whole track, always
+   fully opaque and readable regardless of how much is filled. */
+.report-gauge__track {
+    position: relative;
+    overflow: visible;
+}
+
+.report-gauge__fill {
+    min-width: 4px; /* always show a visible sliver even at very low % */
+    text-indent: -9999px; /* hide the old inline text without deleting markup */
+}
+
+.report-gauge__value-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    color: #2a2419;
+    text-shadow: 0 1px 2px rgba(255,255,255,0.6), 0 0 6px rgba(255,255,255,0.4);
+    pointer-events: none;
+    z-index: 2;
 }

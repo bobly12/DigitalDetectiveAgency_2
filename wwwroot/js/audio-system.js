@@ -1,7 +1,7 @@
 // wwwroot/js/audio-system.js
 // Shared audio controller: one AudioContext, one master gain node that
-// every sound (board connections, nav clicks, ambient hum) routes through.
-// Muting here mutes everything, everywhere, in one place.
+// every sound (board connections, nav clicks, ambient hum, music) routes
+// through. Muting here mutes everything, everywhere, in one place.
 (function () {
     let ctx = null;
     let masterGain = null;
@@ -20,7 +20,7 @@
     }
 
     function getMasterGain() {
-        getCtx(); // ensures masterGain exists
+        getCtx();
         return masterGain;
     }
 
@@ -33,7 +33,6 @@
         document.dispatchEvent(new CustomEvent('dda-mute-changed', { detail: { muted } }));
     }
 
-    // ---------- Simple UI sounds (click, paper shuffle) ----------
     function tone(freq, duration, type = 'sine', gainPeak = 0.12, delay = 0) {
         const c = getCtx();
         const osc = c.createOscillator();
@@ -79,13 +78,10 @@
         } catch { /* ignore */ }
     }
 
-    // ---------- Ambient office hum (rain-ish noise bed + faint tick) ----------
     function startAmbient() {
-        if (ambientNodes) return; // already running
+        if (ambientNodes) return;
         try {
             const c = getCtx();
-
-            // Soft filtered noise bed = distant rain / room tone
             const bufferSize = c.sampleRate * 2;
             const buffer = c.createBuffer(1, bufferSize, c.sampleRate);
             const data = buffer.getChannelData(0);
@@ -101,12 +97,11 @@
             noiseFilter.frequency.value = 600;
 
             const noiseGain = c.createGain();
-            noiseGain.gain.value = 0.025; // deliberately very quiet - ambience, not a soundtrack
+            noiseGain.gain.value = 0.025;
 
             noise.connect(noiseFilter).connect(noiseGain).connect(getMasterGain());
             noise.start();
 
-            // Faint clock tick every ~1.1s
             let tickTimer = setInterval(() => {
                 tone(2200, 0.02, 'square', 0.02);
             }, 1100);
@@ -134,7 +129,8 @@
         const c = getCtx();
         const source = c.createMediaElementSource(musicEl);
         const musicGain = c.createGain();
-        musicGain.gain.value = 0.25;
+        const volPercent = parseFloat(musicEl.dataset.volume);
+        musicGain.gain.value = isNaN(volPercent) ? 0.2 : volPercent / 100;
         source.connect(musicGain).connect(getMasterGain());
     }
 
@@ -164,7 +160,12 @@
         stopMusic
     };
 
-    // Apply saved mute state immediately once the context exists (lazily -
-    // browsers block audio until a user gesture, so this just pre-sets the
-    // gain value for whenever the first sound actually plays).
+    function firstGestureStart() {
+        window.GameAudio.startMusic();
+        if (document.getElementById('connection-svg')) {
+            window.GameAudio.startAmbient();
+        }
+        document.removeEventListener('click', firstGestureStart);
+    }
+    document.addEventListener('click', firstGestureStart);
 })();

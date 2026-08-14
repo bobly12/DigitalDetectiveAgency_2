@@ -1,11 +1,10 @@
 @{
     ViewData["Title"] = "Digital Detective Agency";
+    ViewData["MusicVolume"] = 50;
 }
-
 @section PageStyles {
     <link rel="stylesheet" href="~/css/pages/home.css" asp-append-version="true" />
 }
-
 <section class="hero-noir">
     <div class="hero-noir__content">
         <h1 class="hero-noir__title">
@@ -21,7 +20,6 @@
             🔍 Start Investigating
         </a>
     </div>
-
     <div class="hero-noir__image">
         <img src="~/images/home/noir-landing.png" alt="Detective corkboard with magnifying glass" />
     </div>
