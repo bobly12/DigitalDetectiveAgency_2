@@ -290,6 +290,7 @@
         const fillEl = document.getElementById('confidence-fill');
         const valueEl = document.getElementById('confidence-value');
         const detailEl = document.getElementById('confidence-detail');
+        const pillEl = document.getElementById('confidence-pill');
         const accuseBtn = document.getElementById('accuse-btn');
         const accuseLabel = document.getElementById('accuse-btn-label');
 
@@ -322,6 +323,9 @@
             ], { duration: 350 });
         }
 
+        if (pillEl) {
+            pillEl.textContent = confidence + '%';
+        }
         if (detailEl) {
             detailEl.textContent = `${correctConn} / ${totalConn} connections  •  ${correctElim} / ${totalInnocent} suspects cleared`;
         }
@@ -914,6 +918,34 @@
 
     document.addEventListener('fullscreenchange', updateLabel);
     updateLabel();
+})();
+// ===== Case Briefing popup toggle =====
+(function () {
+    const openBtn = document.getElementById('open-briefing-btn');
+    const closeBtn = document.getElementById('close-briefing-btn');
+    const overlay = document.getElementById('case-briefing-overlay');
+    if (!openBtn || !closeBtn || !overlay) return;
+
+    function openBriefing() {
+        overlay.style.display = 'flex';
+    }
+
+    function closeBriefing() {
+        overlay.style.display = 'none';
+    }
+
+    openBtn.addEventListener('click', openBriefing);
+    closeBtn.addEventListener('click', closeBriefing);
+
+    overlay.addEventListener('click', (e) => {
+        if (e.target === overlay) closeBriefing();
+    });
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && overlay.style.display === 'flex') {
+            closeBriefing();
+        }
+    });
 })();
 // ===== Mute toggle + background music =====
 (function () {

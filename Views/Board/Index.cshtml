@@ -18,7 +18,11 @@
                 @if (!Model.IsCompleted)
                 {
                     <div class="board-timer" id="board-timer" data-time-limit="@(Model.TimeLimitSeconds?.ToString() ?? "")" data-opened-at="@Model.OpenedAtUtc.ToString("o")">⏱ 00:00</div>
+                    <div class="confidence-pill" id="confidence-pill">@Model.Confidence%</div>
                 }
+                <button type="button" id="open-briefing-btn" class="btn-stamp btn-stamp--ghost">
+                    📋 Case Briefing
+                </button>
                 <button type="button" id="toggle-corkboard-btn" class="btn-stamp btn-stamp--ghost">
                     📌 Corkboard View
                 </button>
@@ -29,12 +33,6 @@
                     🔊
                 </button>
             </div>
-        </div>
-
-        <p class="board-case-summary">@Model.CaseSummary</p>
-        <div class="board-victim-line">
-            <strong>Victim:</strong> @Model.VictimName (@Model.VictimOccupation) &nbsp;|&nbsp;
-            <strong>Location:</strong> @Model.Location
         </div>
 
         @if (TempData["BoardMessage"] != null)
@@ -48,34 +46,6 @@
         }
         else
         {
-            <div class="confidence-gauge">
-                <div class="confidence-gauge__label">
-                    Investigation Confidence
-                    <span class="confidence-gauge__value" id="confidence-value">@Model.Confidence%</span>
-                </div>
-                <div class="confidence-gauge__track">
-                    <div class="confidence-gauge__fill @(Model.Confidence >= 75 ? "confidence-gauge__fill--high" : Model.Confidence >= 40 ? "confidence-gauge__fill--mid" : "confidence-gauge__fill--low")"
-                         id="confidence-fill"
-                         style="width: @Model.Confidence%;"></div>
-                </div>
-                <div class="confidence-gauge__detail" id="confidence-detail">
-                    @Model.CorrectConnections / @Model.TotalRequiredConnections connections &nbsp;•&nbsp;
-                    @Model.CorrectEliminatedSuspects / @Model.TotalInnocentSuspects suspects cleared
-                </div>
-
-                @if (!Model.CanAccuse && !string.IsNullOrEmpty(Model.NextFocusHint))
-                {
-                    <div class="confidence-gauge__focus-hint" id="focus-hint">
-                        🔎 @Model.NextFocusHint
-                    </div>
-                }
-
-                <div class="detective-notebook">
-                    <span class="detective-notebook__label">Wrong leads:</span>
-                    <span id="wrong-attempts-count">@Model.WrongAttempts</span>
-                </div>
-            </div>
-
             <a asp-controller="Accusation" asp-action="Create" asp-route-id="@Model.CaseId"
                id="accuse-btn"
                class="btn-stamp btn-stamp--danger @(Model.CanAccuse ? "" : "btn-stamp--disabled")"
@@ -87,7 +57,51 @@
         }
     </div>
 
-    <p class="board-hint">Click the <strong>pin</strong> on a card to start a thread, then click a pin on another card to connect them. Click a thread to cut it. Press <strong>Esc</strong> or click empty space to cancel a thread in progress.</p>
+    <!-- Case Briefing popup (hidden by default) -->
+    <div id="case-briefing-overlay" class="case-briefing-overlay" style="display:none;">
+        <div class="case-briefing-box">
+            <button type="button" id="close-briefing-btn" class="case-briefing-close">✕</button>
+            <h2 class="board-title">🧵 @Model.CaseTitle</h2>
+            <p class="board-case-summary">@Model.CaseSummary</p>
+            <div class="board-victim-line">
+                <strong>Victim:</strong> @Model.VictimName (@Model.VictimOccupation) &nbsp;|&nbsp;
+                <strong>Location:</strong> @Model.Location
+            </div>
+
+            @if (!Model.IsCompleted)
+            {
+                <div class="confidence-gauge">
+                    <div class="confidence-gauge__label">
+                        Investigation Confidence
+                        <span class="confidence-gauge__value" id="confidence-value">@Model.Confidence%</span>
+                    </div>
+                    <div class="confidence-gauge__track">
+                        <div class="confidence-gauge__fill @(Model.Confidence >= 75 ? "confidence-gauge__fill--high" : Model.Confidence >= 40 ? "confidence-gauge__fill--mid" : "confidence-gauge__fill--low")"
+                             id="confidence-fill"
+                             style="width: @Model.Confidence%;"></div>
+                    </div>
+                    <div class="confidence-gauge__detail" id="confidence-detail">
+                        @Model.CorrectConnections / @Model.TotalRequiredConnections connections &nbsp;•&nbsp;
+                        @Model.CorrectEliminatedSuspects / @Model.TotalInnocentSuspects suspects cleared
+                    </div>
+
+                    @if (!Model.CanAccuse && !string.IsNullOrEmpty(Model.NextFocusHint))
+                    {
+                        <div class="confidence-gauge__focus-hint" id="focus-hint">
+                            🔎 @Model.NextFocusHint
+                        </div>
+                    }
+
+                    <div class="detective-notebook">
+                        <span class="detective-notebook__label">Wrong leads:</span>
+                        <span id="wrong-attempts-count">@Model.WrongAttempts</span>
+                    </div>
+                </div>
+            }
+
+            <p class="board-hint">Click the <strong>pin</strong> on a card to start a thread, then click a pin on another card to connect them. Click a thread to cut it. Press <strong>Esc</strong> or click empty space to cancel a thread in progress.</p>
+        </div>
+    </div>
 
     <!-- Column Grid View Container -->
     <div id="board-grid-view">
